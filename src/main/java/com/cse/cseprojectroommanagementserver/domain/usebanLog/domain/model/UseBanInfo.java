@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.domain.usebannedtable.domain.model;
+package com.cse.cseprojectroommanagementserver.domain.usebanLog.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UseBan {
+public class UseBanInfo {
 
     @Id @GeneratedValue
     private Long useBanId;

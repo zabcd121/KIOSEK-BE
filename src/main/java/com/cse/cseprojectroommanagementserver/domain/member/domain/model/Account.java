@@ -16,6 +16,5 @@ public class Account {
 
     private String loginId;
     private String password;
-    private File QRCode;
 
 }

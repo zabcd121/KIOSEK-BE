@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Table extends BaseEntity {
+public class Desk extends BaseEntity {
 
     @Id @GeneratedValue
     private Long tableId;
