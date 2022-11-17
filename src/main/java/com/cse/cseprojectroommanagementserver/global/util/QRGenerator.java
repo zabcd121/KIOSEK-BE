@@ -1,59 +1,78 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class QRGenerator {
     private static final int WIDTH = 200;
     private static final int HEIGHT = 200;
     private static final int DARK_COLOR = 0x00000000;
     private static final int LIGHT_COLOR = 0xFFFFFFFF;
+    private static final String EXTENSION = ".png";
+    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
+    private final PasswordEncoder passwordEncoder;
 
-
-    private final String accountQRDir;
-
-    public QRGenerator(@Value("${file,account-qr-dir}") String qrDir) {
-        this.accountQRDir = qrDir;
-    }
-    
-    // QR코드 이미지 생성
-//    public static String getQRCodeImage(String text, int width, int height, int qrDarkColor, int qrLightColor) throws WriterException, IOException {
-//        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-//        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
-//
-//        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-//
-//        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
-//
-//        return Base64.getEncoder().encodeToString(pngOutputStream.toByteArray());
-//    }
-
-    public void createAccountQRCodeImage(String content) throws WriterException, IOException {
-        createQRCodeImage(content, WIDTH, HEIGHT, DARK_COLOR, LIGHT_COLOR);
+    public Image createAccountQRCodeImage(String fileOriName) throws WriterException, IOException, QRNotCreatedException {
+            return createQRCodeImage(fileOriName, ACCOUNT_QR_DIR);
     }
 
-    private void createQRCodeImage(String content, int width, int height, int qrDarkColor, int qrLightColor) throws WriterException, IOException {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height); //텍스트, 바코드 포맷,가로,세로
+    private Image createQRCodeImage(String fileOriName, String fixedDir){
+        try {
+            RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+            String content = generator.generate(30);
 
-        MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor , qrLightColor); //진한색, 연한색
-        BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix , config);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, WIDTH, HEIGHT); //텍스트, 바코드 포맷,가로,세로
 
-        File file =  File.createTempFile(content, ".png", new File(accountQRDir));
-        ImageIO.write(qrImage, "png", file); //temp 위치에 qr이 이미지 생성됨.
-        InputStream is = new FileInputStream(file.getAbsolutePath()); //S3에 업로드 하기위한 작업
+            MatrixToImageConfig config = new MatrixToImageConfig(DARK_COLOR, LIGHT_COLOR); //진한색, 연한색
+            BufferedImage bufferedQrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
 
-        is.close();
+            /**
+             * prefix content -> 다른 의미있는거로 변경하기
+             */
+            String destinationFileName = UUID.randomUUID().toString();
+            String fileUrl = fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
+            log.info(fileUrl);
+
+            File destinationFile = new File(fileUrl + destinationFileName + EXTENSION);
+            destinationFile.getParentFile().mkdirs();
+
+            File file = File.createTempFile(destinationFileName, EXTENSION, new File(fileUrl));
+            ImageIO.write(bufferedQrImage, "png", file); //temp 위치에 qr이 이미지 생성됨.
+            return Image.builder()
+                    .fileLocalName(destinationFileName)
+                    .fileOriName(fileOriName)
+                    .fileUrl(fileUrl)
+                    .content(passwordEncoder.encode(content))
+                    .build();
+
+        } catch(WriterException | IOException e) {
+            throw new QRNotCreatedException("qr 코드 생성에 실패했습니다.");
+        }
+
+
+        /*InputStream is = new FileInputStream(file.getAbsolutePath()); //S3에 업로드 하기위한 작업
+        is.close();*/
+
+
     }
 }

@@ -1,15 +1,14 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.Image;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
+import lombok.*;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccountQR {
 
@@ -18,4 +17,10 @@ public class AccountQR {
 
     @Embedded
     private Image qrCodeImg;
+
+    @Setter
+    @OneToOne(mappedBy = "accountQR", fetch = FetchType.LAZY)
+    private Member member;
+
+
 }

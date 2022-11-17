@@ -1,7 +1,13 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
 import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
@@ -33,13 +39,20 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if(exception == null) {
             log.error("null token");
             setResponse(response, ACCESS_DENIED);
-        }
-        else if(exception instanceof ExpiredJwtException) {
-            log.error("jwt 만료");
+        } else if(exception instanceof TokenNotPassedException) {
+            log.error(TOKEN_NOT_PASSED.getMessage());
+            setResponse(response, TOKEN_NOT_PASSED);
+        } else if(exception instanceof TokenNotBearerException) {
+            log.error(TOKEN_NOT_BEARER.getMessage());
+            setResponse(response, TOKEN_NOT_BEARER);
+        } else if(exception instanceof SignatureException) {
+            log.error(TOKEN_WRONG_SIGNATURE.getMessage());
+            setResponse(response, TOKEN_WRONG_SIGNATURE);
+        } else if(exception instanceof ExpiredJwtException) {
+            log.error(TOKEN_EXPIRED.getMessage());
             setResponse(response, TOKEN_EXPIRED);
-        }
-        else {
-            log.error("else");
+        } else {
+            log.error(TOKEN_WRONG_TYPE.getMessage());
             setResponse(response, TOKEN_WRONG_TYPE);
         }
 

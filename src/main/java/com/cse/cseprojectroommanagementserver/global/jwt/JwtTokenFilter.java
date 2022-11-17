@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -45,16 +46,23 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request, AUTHORIZATION_HEADER);
 
         try{
-            if ( jwt != null && jwtTokenProvider.validateToken(jwt)) {
+            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
                 String isLogout = (String) redisTemplate.opsForValue().get(jwt);
 
-                if(ObjectUtils.isEmpty(isLogout)) {
+                if (ObjectUtils.isEmpty(isLogout)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
                 }
             }
-        } catch (SignatureException e) {
+
+        } /*catch(TokenNotPassedException e) {
+            request.setAttribute("exception", e);
+            log.info("catch token not passed exception");
+        } catch (TokenNotBearerException e) {
+            request.setAttribute("exception", e);
+        }*/
+        catch (SignatureException e) {
             request.setAttribute("exception", e);
         } catch (MalformedJwtException e) {
             request.setAttribute("exception", e);
@@ -70,13 +78,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request, String header) {
-        String bearerToken = request.getHeader(header);
-        if(bearerToken == null) {
-            throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
-        } else if(!bearerToken.startsWith(BEARER)) {
-            throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
-        }
 
-        return bearerToken.substring(7);
+            /*String bearerToken = request.getHeader(header);
+
+            if(bearerToken == null || bearerToken.equals("")) {
+                log.info("bearer token not passed");
+                throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
+            }
+
+            if(!bearerToken.startsWith(BEARER)) {
+                throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
+            }
+
+            return bearerToken.substring(7);*/
+
+        String bearerToken = request.getHeader(header);
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+
     }
 }

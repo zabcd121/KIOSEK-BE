@@ -2,9 +2,12 @@ package com.cse.cseprojectroommanagementserver.global.config;
 
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtAccessDeniedHandler;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtAuthenticationEntryPoint;
+import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenFilter;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,7 +41,6 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web -> web.ignoring().mvcMatchers(
-
         ));
     }
 
@@ -70,6 +72,10 @@ public class SecurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler) // 권한 부족시 오류 처리
                 .and()
                 .apply(new JwtTokenFilterConfig(jwtTokenProvider))
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/members/**")
+                .permitAll()
                 .and().build();
 
 

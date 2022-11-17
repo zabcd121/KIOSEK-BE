@@ -46,6 +46,10 @@ dependencies {
     // zxing
     implementation group: 'com.google.zxing', name: 'javase', version: '3.5.0'
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-text
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+
+
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 }
