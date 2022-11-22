@@ -8,7 +8,7 @@ public class FixedOperationPolicy implements Verifiable<Integer> {
 
     private FixedOperationPolicyType operationPolicyType;
 
-    private Integer limitSetValue;
+    private Integer setValue;
 
     @Override
     public void verify(Integer value) {

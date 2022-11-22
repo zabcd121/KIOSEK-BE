@@ -4,7 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,19 +22,19 @@ class MemberTest {
 
     Member member;
     Account account;
-    Image image;
+    QRImage QRImage;
 
     @BeforeEach
     void setUp() {
         account = Account.builder().loginId(loginId).password(password).build();
-        image = Image.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
+        QRImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
 
         member = Member.builder()
                 .account(account)
                 .name(name)
                 .email(email)
                 .roleType(RoleType.ROLE_MEMBER)
-                .accountQR(AccountQR.builder().qrCodeImg(image).build())
+                .accountQR(AccountQR.builder().qrCodeImg(QRImage).build())
                 .build();
 
         member.getAccountQR().setMember(member);
@@ -45,7 +45,7 @@ class MemberTest {
     void createMember() {
 
         //when
-        Member createdMember = Member.createMember(account, email, name, image);
+        Member createdMember = Member.createMember(account, email, name, QRImage);
 
         //then
         assertEquals(member.getAccountQR().getMember().getAccount(), createdMember.getAccountQR().getMember().getAccount());

@@ -7,7 +7,7 @@ public enum FixedOperationPolicyType {
      * 2. 오늘부터 최대 몇 주 뒤까지 예약 가능한지
      */
     MAX_COUNT_PER_DAY(1),
-    MAX_PERIOD(1);
+    MAX_PERIOD_ENABLE_RESERVATION(1);
 
     private final Integer setValue;
 
