@@ -1,10 +1,12 @@
 package com.cse.cseprojectroommanagementserver.global.common.dto;
 
 import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ResponseSuccess<T> {
     private String code;

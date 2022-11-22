@@ -41,13 +41,21 @@ dependencies {
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+    /*implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'*/
 
     // zxing
     implementation group: 'com.google.zxing', name: 'javase', version: '3.5.0'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+
+    // swagger
+    implementation (group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2')
+    implementation (group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2') {
+        exclude module: 'swagger-annotations' exclude module: 'swagger-models'
+    }
+    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.5.21'
+    implementation group: 'io.swagger', name: 'swagger-models', version: '1.5.21'
 
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"

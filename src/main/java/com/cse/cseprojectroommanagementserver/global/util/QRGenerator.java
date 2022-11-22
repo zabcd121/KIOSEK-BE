@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -31,11 +31,11 @@ public class QRGenerator {
     private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
     private final PasswordEncoder passwordEncoder;
 
-    public Image createAccountQRCodeImage(String fileOriName) throws WriterException, IOException, QRNotCreatedException {
+    public QRImage createAccountQRCodeImage(String fileOriName) throws WriterException, IOException, QRNotCreatedException {
             return createQRCodeImage(fileOriName, ACCOUNT_QR_DIR);
     }
 
-    private Image createQRCodeImage(String fileOriName, String fixedDir){
+    private QRImage createQRCodeImage(String fileOriName, String fixedDir){
         try {
             RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
             String content = generator.generate(30);
@@ -58,7 +58,7 @@ public class QRGenerator {
 
             File file = File.createTempFile(destinationFileName, EXTENSION, new File(fileUrl));
             ImageIO.write(bufferedQrImage, "png", file); //temp 위치에 qr이 이미지 생성됨.
-            return Image.builder()
+            return QRImage.builder()
                     .fileLocalName(destinationFileName)
                     .fileOriName(fileOriName)
                     .fileUrl(fileUrl)

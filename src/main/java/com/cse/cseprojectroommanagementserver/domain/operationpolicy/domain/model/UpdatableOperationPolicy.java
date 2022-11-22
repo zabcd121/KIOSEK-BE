@@ -11,10 +11,10 @@ import javax.persistence.*;
 public class UpdatableOperationPolicy extends BaseEntity implements Verifiable<Integer> {
 
     @Id @GeneratedValue
-    private Long updatableOperationPolicyId;
+    private Long operationPolicyId;
 
     @Enumerated(value = EnumType.STRING)
-    private UpdatableOperationPolicyType policyType;
+    private UpdatableOperationPolicyType operationPolicyType;
 
     private Integer setValue;
 

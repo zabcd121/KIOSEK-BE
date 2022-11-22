@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
 import com.cse.cseprojectroommanagementserver.global.common.BaseEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +18,10 @@ public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ACCOUNT_QR")
+    private AccountQR accountQR;
+
     @Embedded
     private Account account;
 
@@ -26,10 +30,6 @@ public class Member extends BaseEntity {
 
     private String name;
     private String email;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNT_QR")
-    private AccountQR accountQR;
 
     public void changeAccountQR(AccountQR accountQR) {
         if(this.accountQR != null) {
@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
         return roleList;
     }
 
-    public static Member createMember(Account account, String email, String name, Image accountQRCodeImage) {
+    public static Member createMember(Account account, String email, String name, QRImage accountQRCodeImage) {
         Member member = Member.builder()
                 .account(account)
                 .email(email)
