@@ -2,6 +2,8 @@ package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.MemberAuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
@@ -20,42 +22,39 @@ public class MemberApiController {
 
     @GetMapping("{loginId}/duplicated-loginid")
     public ResponseSuccessNoResult isDuplicatedLoginId(@PathVariable String loginId) {
-        boolean isDuplicated = memberAuthService.isDuplicatedLoginId(loginId);
-
-        if(isDuplicated) {
-            return new ResponseSuccessNoResult(LOGIN_ID_DUPLICATED.getCode(), LOGIN_ID_DUPLICATED.getMessage());
+        if(!memberAuthService.isDuplicatedLoginId(loginId)) {
+            return new ResponseSuccessNoResult(LOGIN_ID_NOT_DUPLICATED);
+        } else {
+            throw new LoginIdDuplicatedException(LOGIN_ID_DUPLICATED);
         }
-        return new ResponseSuccessNoResult(LOGIN_ID_NOT_DUPLICATED.getCode(), LOGIN_ID_NOT_DUPLICATED.getMessage());
     }
 
     @GetMapping("/{email}/duplicated-email")
     public ResponseSuccessNoResult isDuplicatedEmail(@PathVariable String email) {
-        boolean isDuplicated = memberAuthService.isDuplicatedEmail(email);
-
-        if(isDuplicated) {
-            return new ResponseSuccessNoResult(EMAIL_DUPLICATED.getCode(), EMAIL_DUPLICATED.getMessage());
+        if(!memberAuthService.isDuplicatedEmail(email)) {
+            return new ResponseSuccessNoResult(EMAIL_NOT_DUPLICATED);
+        } else {
+            throw new EmailDuplicatedException(EMAIL_DUPLICATED);
         }
-        return new ResponseSuccessNoResult(EMAIL_NOT_DUPLICATED.getCode(), EMAIL_NOT_DUPLICATED.getMessage());
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseSuccessNoResult signup(@RequestBody @Validated MemberDto.SignupRequest signupDto) {
         memberAuthService.signup(signupDto);
-        return new ResponseSuccessNoResult(SIGNUP_SUCCESS.getCode(), SIGNUP_SUCCESS.getMessage());
+        return new ResponseSuccessNoResult(SIGNUP_SUCCESS);
     }
 
     @PostMapping("/login")
     public ResponseSuccess login(@RequestBody @Validated MemberDto.LoginRequest loginRequest) {
         MemberDto.LoginResponse loginResponse = memberAuthService.login(loginRequest);
-        return new ResponseSuccess(LOGIN_SUCCESS.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse);
+        return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }
 
     @DeleteMapping("/logout")
     public ResponseSuccessNoResult logout(@RequestBody MemberDto.TokensDto tokensDto) {
         memberAuthService.logout(tokensDto);
-        return new ResponseSuccessNoResult(LOGOUT_SUCCESS.getCode(), LOGOUT_SUCCESS.getMessage());
+        return new ResponseSuccessNoResult(LOGOUT_SUCCESS);
     }
 
     /**
