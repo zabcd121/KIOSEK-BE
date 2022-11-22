@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Builder
 @Embeddable
-public class Image {
+public class QRImage {
     @Column(nullable = false)
     private String fileLocalName;
 
