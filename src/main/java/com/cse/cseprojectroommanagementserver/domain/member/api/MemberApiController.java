@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -40,19 +41,19 @@ public class MemberApiController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseSuccessNoResult signup(@RequestBody @Validated MemberDto.SignupRequest signupDto) {
+    public ResponseSuccessNoResult signup(@RequestBody @Validated SignupRequest signupDto) {
         memberAuthService.signup(signupDto);
         return new ResponseSuccessNoResult(SIGNUP_SUCCESS);
     }
 
     @PostMapping("/login")
-    public ResponseSuccess login(@RequestBody @Validated MemberDto.LoginRequest loginRequest) {
-        MemberDto.LoginResponse loginResponse = memberAuthService.login(loginRequest);
+    public ResponseSuccess login(@RequestBody @Validated LoginRequest loginRequest) {
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }
 
     @DeleteMapping("/logout")
-    public ResponseSuccessNoResult logout(@RequestBody MemberDto.TokensDto tokensDto) {
+    public ResponseSuccessNoResult logout(@RequestBody TokensDto tokensDto) {
         memberAuthService.logout(tokensDto);
         return new ResponseSuccessNoResult(LOGOUT_SUCCESS);
     }
@@ -63,7 +64,7 @@ public class MemberApiController {
      * @return TokenResponseDto : Access token과 Refresh token 모두 재발급해준다.
      */
     @PostMapping("/token/reissue")
-    public MemberDto.TokensDto reissueAccessToken(@RequestParam String refreshToken){
+    public TokensDto reissueAccessToken(@RequestParam String refreshToken){
         return memberAuthService.reissueAccessToken(refreshToken);
     }
 

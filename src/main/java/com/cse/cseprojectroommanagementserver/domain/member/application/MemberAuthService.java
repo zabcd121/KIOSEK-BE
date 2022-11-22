@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
@@ -45,7 +46,7 @@ public class MemberAuthService {
     private final RedisTemplate redisTemplate;
 
     @Transactional
-    public void signup(MemberDto.SignupRequest signupDto) {
+    public void signup(SignupRequest signupDto) {
         if (!isDuplicatedLoginId(signupDto.getLoginId()) && !isDuplicatedEmail(signupDto.getEmail())) {
             try {
                 QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage(signupDto.getLoginId());
@@ -69,7 +70,7 @@ public class MemberAuthService {
     }
 
     @Transactional
-    public MemberDto.LoginResponse login(MemberDto.LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         String loginIdEntered = loginRequest.getLoginId();
         String passwordEntered = loginRequest.getPassword();
 
@@ -87,7 +88,7 @@ public class MemberAuthService {
         redisTemplate.opsForValue()
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
 
-        MemberDto.TokensDto tokensDto = MemberDto.TokensDto.builder()
+        TokensDto tokensDto = TokensDto.builder()
                 .accessToken(BEARER + jwtTokenProvider.createAccessToken(authentication))
                 .refreshToken(BEARER + refreshToken)
                 .build();
@@ -95,13 +96,13 @@ public class MemberAuthService {
         Member member = memberRepository.findByAccountLoginId(loginIdEntered).orElseGet(null);
 
 
-        MemberDto.LoginMemberInfoResponse loginMemberInfoResponse = MemberDto.LoginMemberInfoResponse.builder()
+        LoginMemberInfoResponse loginMemberInfoResponse = LoginMemberInfoResponse.builder()
                 .memberId(member.getMemberId())
                 .name(member.getName())
                 .roleType(member.getRoleType())
                 .build();
 
-        return MemberDto.LoginResponse.builder()
+        return LoginResponse.builder()
                 .memberInfo(loginMemberInfoResponse)
                 .tokenInfo(tokensDto)
                 .build();
@@ -109,7 +110,7 @@ public class MemberAuthService {
     }
 
     @Transactional
-    public MemberDto.TokensDto reissueAccessToken(String refreshToken) {
+    public TokensDto reissueAccessToken(String refreshToken) {
         log.info("refresh: {}", refreshToken);
 
         String resolvedRefreshToken = resolveToken(refreshToken);
@@ -133,7 +134,7 @@ public class MemberAuthService {
                 TimeUnit.MILLISECONDS);
 
 
-        return MemberDto.TokensDto.builder()
+        return TokensDto.builder()
                 .accessToken(BEARER + newAccessToken)
                 .refreshToken(BEARER + newRefreshToken)
                 .build();
@@ -144,7 +145,7 @@ public class MemberAuthService {
      * @param tokensDto
      */
     @Transactional
-    public void logout(MemberDto.TokensDto tokensDto) {
+    public void logout(TokensDto tokensDto) {
         String resolvedAccessToken = resolveToken(tokensDto.getAccessToken());
 
         jwtTokenProvider.validateToken(resolvedAccessToken);
