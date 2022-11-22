@@ -4,6 +4,8 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.NotExistsEqualRefreshToken;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.TokenNotBearerTypeException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
 @Service
@@ -52,17 +55,17 @@ public class MemberAuthService {
 
                 memberRepository.save(signupMember);
             } catch (WriterException | IOException | QRNotCreatedException e) {
-                throw new AccountQRNotCreatedException(ACCOUNT_QR_CREATE_FAIL.getMessage());
+                throw new AccountQRNotCreatedException(ACCOUNT_QR_CREATE_FAIL);
             }
         }
     }
 
     public boolean isDuplicatedLoginId(String loginId) {
-        return memberRepository.existsByAccountLoginId(loginId);
+        return memberRepository.existsByAccountLoginId(loginId) ? true : false;
     }
 
     public boolean isDuplicatedEmail(String email) {
-        return memberRepository.existsByEmail(email);
+        return memberRepository.existsByEmail(email) ? true: false;
     }
 
     @Transactional
@@ -82,7 +85,7 @@ public class MemberAuthService {
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
         redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
+                .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
 
         MemberDto.TokensDto tokensDto = MemberDto.TokensDto.builder()
                 .accessToken(BEARER + jwtTokenProvider.createAccessToken(authentication))
@@ -115,24 +118,24 @@ public class MemberAuthService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
 
-        String findRedisRefreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new RuntimeException("not equals refresh token");
+            throw new NotExistsEqualRefreshToken(REFRESH_TOKEN_NOT_EXIST_IN_STORE);
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
         String newRefreshToken = jwtTokenProvider.createRefreshToken(authentication);
         redisTemplate.opsForValue().set(
-                "RT:" + authentication.getName(),
+                RT + authentication.getName(),
                 newRefreshToken,
                 jwtTokenProvider.getExpiration(newRefreshToken),
                 TimeUnit.MILLISECONDS);
 
 
         return MemberDto.TokensDto.builder()
-                .accessToken("Bearer " + newAccessToken)
-                .refreshToken("Bearer " + newRefreshToken)
+                .accessToken(BEARER + newAccessToken)
+                .refreshToken(BEARER + newRefreshToken)
                 .build();
     }
 
@@ -148,8 +151,8 @@ public class MemberAuthService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedAccessToken);
 
-        if(redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
-            redisTemplate.delete("RT:" + authentication.getName());
+        if(redisTemplate.opsForValue().get(RT + authentication.getName()) != null) {
+            redisTemplate.delete(RT + authentication.getName());
         }
 
         // 남은 유효시간동안만 블랙리스트에 저장하고 그 뒤에는 자동으로 삭제되도록 하면 후에 해커가 탈취한 토큰으로 로그인을 시도하더라도 만료돼서 인증 실패함
@@ -162,9 +165,9 @@ public class MemberAuthService {
 
     private String resolveToken(String token) {
         log.info(token);
-        if (token.startsWith("Bearer "))
+        if (token.startsWith(BEARER))
             return token.substring(7);
-        throw new RuntimeException("not valid refresh token !!");
+        throw new TokenNotBearerTypeException(TOKEN_NOT_BEARER);
     }
 
 
