@@ -6,10 +6,10 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.request.SignupRequest;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedEmailException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedLoginIdException;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.google.zxing.WriterException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -48,13 +49,13 @@ class MemberAuthServiceTest {
 
     Account account;
 
-    Image image;
+    QRImage QRImage;
     AccountQR accountQR;
 
     @BeforeEach
     void setUp() {
 //        when(passwordEncoder.encode(any())).thenReturn("ex1234!");
-        image = Image.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
+        QRImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
 
 
         signupDto = SignupRequest.builder()
@@ -74,24 +75,24 @@ class MemberAuthServiceTest {
                 .name(signupDto.getName())
                 .email(signupDto.getEmail())
                 .roleType(RoleType.ROLE_MEMBER)
-                .accountQR(AccountQR.builder().qrCodeImg(image).build())
+                .accountQR(AccountQR.builder().qrCodeImg(QRImage).build())
                 .build();
         member.getAccountQR().setMember(member);
 
     }
 
     @Test
-    @DisplayName("중복 아이디가 존재하는 경우 DuplicatedEmailException 예외를 반환한다.")
+    @DisplayName("중복 아이디가 존재하는 경우 True를 반환한다.")
     void isDuplicatedLoginId() {
         //given
         given(memberRepository.existsByAccountLoginId(any())).willReturn(true);
 
         //then
-        assertThrows(DuplicatedLoginIdException.class, () -> memberAuthService.isDuplicatedLoginId(member.getLoginId()));
+        assertThrows(LoginIdDuplicatedException.class, () -> memberAuthService.isDuplicatedLoginId(member.getLoginId()));
     }
 
     @Test
-    @DisplayName("중복 아이디가 존재하지 않는 경우 false를 반환한다.")
+    @DisplayName("중복 아이디가 존재하지 않는 경우 False를 반환한다.")
     void isNotDuplicatedLoginId() {
         //given
         given(memberRepository.existsByAccountLoginId(any())).willReturn(false);
@@ -107,7 +108,7 @@ class MemberAuthServiceTest {
         given(memberRepository.existsByEmail(any())).willReturn(true);
 
         //then
-        assertThrows(DuplicatedEmailException.class, () -> memberAuthService.isDuplicatedEmail(member.getEmail()));
+        assertThrows(EmailDuplicatedException.class, () -> memberAuthService.isDuplicatedEmail(member.getEmail()));
     }
 
     @Test
@@ -124,7 +125,7 @@ class MemberAuthServiceTest {
     @DisplayName("회원 가입시 로직사이에 생성되는 회원과 실제 DB에 저장되어 반환되는 회원 인스턴스가 동일한 정보를 가지고 있는지 확인한다.")
     void signup() throws IOException, WriterException {
         //given
-        given(qrGenerator.createAccountQRCodeImage(any())).willReturn(image);
+        given(qrGenerator.createAccountQRCodeImage(any())).willReturn(QRImage);
         given(memberRepository.save(any())).willReturn(member);
 
         //when
@@ -132,7 +133,7 @@ class MemberAuthServiceTest {
 
         //then
         Member expectedMember = member;
-        Member createdMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), image);
+        Member createdMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), QRImage);
 
         assertEquals(createdMember.getAccount(), expectedMember.getAccount());
         assertEquals(createdMember.getEmail(), expectedMember.getEmail());
