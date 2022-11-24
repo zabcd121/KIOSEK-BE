@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.MemberAuthService;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -20,29 +21,30 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 public class MemberApiController {
 
     private final MemberAuthService memberAuthService;
+    private final SignupService signupService;
 
     @GetMapping("{loginId}/duplicated-loginid")
     public ResponseSuccessNoResult isDuplicatedLoginId(@PathVariable String loginId) {
-        if(!memberAuthService.isDuplicatedLoginId(loginId)) {
+        if(!signupService.isDuplicatedLoginId(loginId)) {
             return new ResponseSuccessNoResult(LOGIN_ID_NOT_DUPLICATED);
         } else {
-            throw new LoginIdDuplicatedException(LOGIN_ID_DUPLICATED);
+            throw new LoginIdDuplicatedException();
         }
     }
 
     @GetMapping("/{email}/duplicated-email")
     public ResponseSuccessNoResult isDuplicatedEmail(@PathVariable String email) {
-        if(!memberAuthService.isDuplicatedEmail(email)) {
+        if(!signupService.isDuplicatedEmail(email)) {
             return new ResponseSuccessNoResult(EMAIL_NOT_DUPLICATED);
         } else {
-            throw new EmailDuplicatedException(EMAIL_DUPLICATED);
+            throw new EmailDuplicatedException();
         }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseSuccessNoResult signup(@RequestBody @Validated SignupRequest signupDto) {
-        memberAuthService.signup(signupDto);
+        signupService.signup(signupDto);
         return new ResponseSuccessNoResult(SIGNUP_SUCCESS);
     }
 
