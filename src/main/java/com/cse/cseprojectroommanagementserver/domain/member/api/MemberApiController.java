@@ -23,8 +23,8 @@ public class MemberApiController {
     private final MemberAuthService memberAuthService;
     private final SignupService signupService;
 
-    @GetMapping("{loginId}/duplicated-loginid")
-    public ResponseSuccessNoResult isDuplicatedLoginId(@PathVariable String loginId) {
+    @GetMapping("/duplicated-loginid")
+    public ResponseSuccessNoResult isDuplicatedLoginId(@RequestParam String loginId) {
         if(!signupService.isDuplicatedLoginId(loginId)) {
             return new ResponseSuccessNoResult(LOGIN_ID_NOT_DUPLICATED);
         } else {
@@ -32,8 +32,8 @@ public class MemberApiController {
         }
     }
 
-    @GetMapping("/{email}/duplicated-email")
-    public ResponseSuccessNoResult isDuplicatedEmail(@PathVariable String email) {
+    @GetMapping("/duplicated-email")
+    public ResponseSuccessNoResult isDuplicatedEmail(@RequestParam String email) {
         if(!signupService.isDuplicatedEmail(email)) {
             return new ResponseSuccessNoResult(EMAIL_NOT_DUPLICATED);
         } else {
