@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.usebanLog.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.Desk;
+import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -19,5 +19,5 @@ public class UseBanLog implements Serializable {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DESK_ID")
-    private Desk bannedDesk;
+    private ProjectTable bannedProjectTable;
 }
