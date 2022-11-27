@@ -1,33 +1,30 @@
 package com.cse.cseprojectroommanagementserver.domain.member.application;
 
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.NoAuthorityToLoginException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.NotExistsEqualRefreshToken;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.TokenNotBearerTypeException;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import com.cse.cseprojectroommanagementserver.global.util.AccountQRNotCreatedException;
-import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
-import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
-import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
@@ -36,77 +33,66 @@ import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberAuthService {
+public class AuthService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final MemberSearchRepository memberSearchRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDetailsService memberDetailsService;
-    private final QRGenerator qrGenerator;
     private final RedisTemplate redisTemplate;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void signup(SignupRequest signupDto) {
-        if (!isDuplicatedLoginId(signupDto.getLoginId()) && !isDuplicatedEmail(signupDto.getEmail())) {
-            try {
-                QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage(signupDto.getLoginId());
-                Account account = Account.builder().loginId(signupDto.getLoginId()).password(passwordEncoder.encode(signupDto.getPassword())).build();
+    public LoginResponse login(LoginRequest loginRequest, RoleType allowedRoleType) {
+        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginRequest.getLoginId());
 
-                Member signupMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), accountQRCodeImage);
+        isMatchingPassword(loginRequest.getPassword(), userDetails);
 
-                memberRepository.save(signupMember);
-            } catch (WriterException | IOException | QRNotCreatedException e) {
-                throw new AccountQRNotCreatedException(ACCOUNT_QR_CREATE_FAIL);
-            }
-        }
-    }
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) userDetails.getAuthorities();
+        String role = authorities.get(0).getAuthority();
 
-    public boolean isDuplicatedLoginId(String loginId) {
-        return memberRepository.existsByAccountLoginId(loginId) ? true : false;
-    }
-
-    public boolean isDuplicatedEmail(String email) {
-        return memberRepository.existsByEmail(email) ? true: false;
-    }
-
-    @Transactional
-    public LoginResponse login(LoginRequest loginRequest) {
-        String loginIdEntered = loginRequest.getLoginId();
-        String passwordEntered = loginRequest.getPassword();
-
-        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginIdEntered);
-
-        if (!passwordEncoder.matches(passwordEntered, userDetails.getPassword())) {
-            throw new BadCredentialsException(userDetails.getUsername() + " " + PASSWORD_INVALID.getMessage());
+        if(!role.equals(allowedRoleType.toString())) {
+            throw new NoAuthorityToLoginException();
         }
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 
+        String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
+        saveRefreshTokenInRedis(refreshToken, authentication);
 
+        Member member = memberSearchRepository.findByAccountLoginId(loginRequest.getLoginId()).orElseGet(null);
+
+        return LoginResponse.builder()
+                .memberInfo(getLoginMemberInfoResponse(member))
+                .tokenInfo(getTokensDto(accessToken, refreshToken))
+                .build();
+    }
+
+    private void saveRefreshTokenInRedis(String refreshToken, Authentication authentication) {
         redisTemplate.opsForValue()
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
+    }
 
-        TokensDto tokensDto = TokensDto.builder()
-                .accessToken(BEARER + jwtTokenProvider.createAccessToken(authentication))
-                .refreshToken(BEARER + refreshToken)
-                .build();
-
-        Member member = memberRepository.findByAccountLoginId(loginIdEntered).orElseGet(null);
-
-
-        LoginMemberInfoResponse loginMemberInfoResponse = LoginMemberInfoResponse.builder()
+    private LoginMemberInfoResponse getLoginMemberInfoResponse(Member member) {
+        return LoginMemberInfoResponse.builder()
                 .memberId(member.getMemberId())
                 .name(member.getName())
                 .roleType(member.getRoleType())
                 .build();
+    }
 
-        return LoginResponse.builder()
-                .memberInfo(loginMemberInfoResponse)
-                .tokenInfo(tokensDto)
+    private TokensDto getTokensDto(String accessToken, String refreshToken) {
+        return TokensDto.builder()
+                .accessToken(BEARER + accessToken)
+                .refreshToken(BEARER + refreshToken)
                 .build();
+    }
 
+    private void isMatchingPassword(String requestPassword, UserDetails userDetails) {
+        if (!passwordEncoder.matches(requestPassword, userDetails.getPassword())) {
+            throw new BadCredentialsException(userDetails.getUsername() + " " + PASSWORD_INVALID.getMessage());
+        }
     }
 
     @Transactional
@@ -122,7 +108,7 @@ public class MemberAuthService {
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new NotExistsEqualRefreshToken(REFRESH_TOKEN_NOT_EXIST_IN_STORE);
+            throw new NotExistsEqualRefreshToken();
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
@@ -168,7 +154,7 @@ public class MemberAuthService {
         log.info(token);
         if (token.startsWith(BEARER))
             return token.substring(7);
-        throw new TokenNotBearerTypeException(TOKEN_NOT_BEARER);
+        throw new TokenNotBearerTypeException();
     }
 
 
