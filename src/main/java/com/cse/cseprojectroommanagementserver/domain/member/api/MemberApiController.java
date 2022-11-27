@@ -1,7 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
-import com.cse.cseprojectroommanagementserver.domain.member.application.MemberAuthService;
+import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
@@ -20,7 +21,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 @RequiredArgsConstructor
 public class MemberApiController {
 
-    private final MemberAuthService memberAuthService;
+    private final AuthService authService;
     private final SignupService signupService;
 
     @GetMapping("/duplicated-loginid")
@@ -35,7 +36,7 @@ public class MemberApiController {
     @GetMapping("/duplicated-email")
     public ResponseSuccessNoResult isDuplicatedEmail(@RequestParam String email) {
         if(!signupService.isDuplicatedEmail(email)) {
-            return new ResponseSuccessNoResult(EMAIL_NOT_DUPLICATED);
+            return new ResponseSuccessNoResult(EMAIL_USABLE);
         } else {
             throw new EmailDuplicatedException();
         }
@@ -49,14 +50,14 @@ public class MemberApiController {
     }
 
     @PostMapping("/login")
-    public ResponseSuccess login(@RequestBody @Validated LoginRequest loginRequest) {
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
+    public ResponseSuccess<LoginRequest> login(@RequestBody @Validated LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.login(loginRequest, RoleType.ROLE_MEMBER);
         return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }
 
     @DeleteMapping("/logout")
     public ResponseSuccessNoResult logout(@RequestBody TokensDto tokensDto) {
-        memberAuthService.logout(tokensDto);
+        authService.logout(tokensDto);
         return new ResponseSuccessNoResult(LOGOUT_SUCCESS);
     }
 
@@ -66,8 +67,9 @@ public class MemberApiController {
      * @return TokenResponseDto : Access token과 Refresh token 모두 재발급해준다.
      */
     @PostMapping("/token/reissue")
-    public TokensDto reissueAccessToken(@RequestParam String refreshToken){
-        return memberAuthService.reissueAccessToken(refreshToken);
+    public ResponseSuccess<TokensDto> reissueAccessToken(@RequestParam String refreshToken){
+        TokensDto tokensDto = authService.reissueAccessToken(refreshToken);
+        return new ResponseSuccess(TOKEN_REISSUED, tokensDto);
     }
 
 
