@@ -4,7 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,19 +22,19 @@ class MemberTest {
 
     Member member;
     Account account;
-    QRImage QRImage;
+    Image Image;
 
     @BeforeEach
     void setUp() {
         account = Account.builder().loginId(loginId).password(password).build();
-        QRImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
+        Image = Image.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
 
         member = Member.builder()
                 .account(account)
                 .name(name)
                 .email(email)
                 .roleType(RoleType.ROLE_MEMBER)
-                .accountQR(AccountQR.builder().qrCodeImg(QRImage).build())
+                .accountQR(AccountQR.builder().qrCodeImg(Image).build())
                 .build();
 
         member.getAccountQR().setMember(member);
@@ -45,7 +45,7 @@ class MemberTest {
     void createMember() {
 
         //when
-        Member createdMember = Member.createMember(account, email, name, QRImage);
+        Member createdMember = Member.createMember(account, email, name, Image);
 
         //then
         assertEquals(member.getAccountQR().getMember().getAccount(), createdMember.getAccountQR().getMember().getAccount());
@@ -53,7 +53,7 @@ class MemberTest {
         assertEquals(member.getAccount(), createdMember.getAccount());
         assertEquals(member.getEmail(), createdMember.getEmail());
         assertEquals(member.getName(), createdMember.getName());
-        assertEquals(member.getAccountQR().getQrCodeImg(), createdMember.getAccountQR().getQrCodeImg());
+        assertEquals(member.getAccountQR().getImage(), createdMember.getAccountQR().getImage());
         assertEquals(member.getRoleType(), createdMember.getRoleType());
 
     }
