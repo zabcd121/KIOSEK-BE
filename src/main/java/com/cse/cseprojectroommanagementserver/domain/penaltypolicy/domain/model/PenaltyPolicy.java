@@ -1,24 +1,27 @@
 package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.BaseEntity;
+import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//import java.time.LocalDate;
-//
-//@Entity
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-//public class PenaltyPolicy extends BaseEntity {
-//
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long penaltyPolicyId;
-//
-//    private int allowedViolationCnt;
-//    private int numberOfSuspensionDay;
-//    private int version;
-//    private LocalDate revisionDate;
-//}
+import javax.persistence.*;
+
+@Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PenaltyPolicy extends BaseTimeEntity {
+
+    @Id @GeneratedValue
+    private Long penaltyPolicyId;
+
+    private Integer violationCountToImposePenalty;
+    private Integer numberOfSuspensionDay;
+
+    @Enumerated(EnumType.STRING)
+    private AppliedStatus appliedStatus;
+
+}
