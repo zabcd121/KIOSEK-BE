@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.BaseEntity;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member extends BaseEntity {
+public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
         return roleList;
     }
 
-    public static Member createMember(Account account, String email, String name, QRImage accountQRCodeImage) {
+    public static Member createMember(Account account, String email, String name, Image accountQRCodeImage) {
         Member member = Member.builder()
                 .account(account)
                 .email(email)
@@ -64,7 +64,7 @@ public class Member extends BaseEntity {
                 .roleType(RoleType.ROLE_MEMBER)
                 .build();
 
-        member.changeAccountQR(AccountQR.builder().qrCodeImg(accountQRCodeImage).build());
+        member.changeAccountQR(AccountQR.builder().image(accountQRCodeImage).build());
         return member;
     }
 
