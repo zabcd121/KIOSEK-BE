@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -10,6 +10,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -28,14 +29,31 @@ public class QRGenerator {
     private static final int DARK_COLOR = 0x00000000;
     private static final int LIGHT_COLOR = 0xFFFFFFFF;
     private static final String EXTENSION = ".png";
-    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
+
+    @Value("${fileDir.inbound}")
+    private String inbound;
+
+    @Value("${fileDir.outbound}")
+    private String outbound;
+
+    @Value("${fileDir.account}")
+    private String accountQRDir;
+
+    @Value("${fileDir.reservation}")
+    private String reservationQRDir; //    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
+
     private final PasswordEncoder passwordEncoder;
 
-    public QRImage createAccountQRCodeImage(String fileOriName) throws WriterException, IOException, QRNotCreatedException {
-            return createQRCodeImage(fileOriName, ACCOUNT_QR_DIR);
+    public Image createAccountQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+            return createQRCodeImage(accountQRDir);
     }
 
-    private QRImage createQRCodeImage(String fileOriName, String fixedDir){
+    public Image createReservationQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+        return createQRCodeImage(reservationQRDir);
+    }
+
+
+    private Image createQRCodeImage(String fixedDir){
         try {
             RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
             String content = generator.generate(30);
@@ -49,8 +67,9 @@ public class QRGenerator {
             /**
              * prefix content -> 다른 의미있는거로 변경하기
              */
+            String fileOriName = UUID.randomUUID().toString();
             String destinationFileName = UUID.randomUUID().toString();
-            String fileUrl = fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
+            String fileUrl = outbound + fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
             log.info(fileUrl);
 
             File destinationFile = new File(fileUrl + destinationFileName + EXTENSION);
@@ -58,10 +77,10 @@ public class QRGenerator {
 
             File file = File.createTempFile(destinationFileName, EXTENSION, new File(fileUrl));
             ImageIO.write(bufferedQrImage, "png", file); //temp 위치에 qr이 이미지 생성됨.
-            return QRImage.builder()
-                    .fileLocalName(destinationFileName)
-                    .fileOriName(fileOriName)
-                    .fileUrl(fileUrl)
+            return Image.builder()
+                    .fileLocalName(destinationFileName + EXTENSION)
+                    .fileOriName(fileOriName + EXTENSION)
+                    .fileUrl(inbound + fileUrl)
                     .content(passwordEncoder.encode(content))
                     .build();
 

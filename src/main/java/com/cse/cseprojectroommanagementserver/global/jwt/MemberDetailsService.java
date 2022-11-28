@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final MemberSearchRepository memberSearchRepository;
 
     /**
      * Spring-Security의 유저 인증 처리 과정중 유저객체를 만드는 과정
@@ -32,7 +32,7 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("MemberDetailsService loadUserByUsername: 진입");
-        Member member = memberRepository.findByAccountLoginId(username)
+        Member member = memberSearchRepository.findByAccountLoginId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("loginId : " + username + " was not found"));
 
         log.info("loadUserByUsername 통과 ");
