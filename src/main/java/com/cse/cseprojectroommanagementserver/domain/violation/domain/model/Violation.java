@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.violation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,8 @@ public class Violation {
     @JoinColumn(name = "reservation_id")
     private Reservation targetReservation;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "penalty_id")
+    private Penalty penalty;
 
 }
