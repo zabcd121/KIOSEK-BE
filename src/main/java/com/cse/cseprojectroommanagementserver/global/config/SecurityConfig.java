@@ -41,6 +41,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web -> web.ignoring().mvcMatchers(
+                "/api/**"
         ));
     }
 

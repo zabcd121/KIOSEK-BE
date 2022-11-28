@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.BaseEntity;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,17 +11,16 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AccountQR extends BaseEntity {
+public class AccountQR extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long accountQRId;
 
     @Embedded
-    private QRImage qrCodeImg;
+    private Image image;
 
     @Setter
     @OneToOne(mappedBy = "accountQR", fetch = FetchType.LAZY)
     private Member member;
-
 
 }

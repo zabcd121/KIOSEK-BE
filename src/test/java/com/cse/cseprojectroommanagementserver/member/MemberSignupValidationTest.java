@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.member;
 
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto;
+import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
