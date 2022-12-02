@@ -3,8 +3,8 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
-import com.cse.cseprojectroommanagementserver.global.util.AccountQRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.ACCOUNT_QR_CREATE_FAIL;
 
 @Service
 @Slf4j
@@ -33,14 +32,14 @@ public class SignupService {
     public void signup(SignupRequest signupDto) {
         if (!isDuplicatedLoginId(signupDto.getLoginId()) && !isDuplicatedEmail(signupDto.getEmail())) {
             try {
-                Image accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
+                QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
                 Account account = Account.builder().loginId(signupDto.getLoginId()).password(passwordEncoder.encode(signupDto.getPassword())).build();
 
                 Member signupMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), accountQRCodeImage);
 
                 signupRepository.save(signupMember);
             } catch (WriterException | IOException | QRNotCreatedException e) {
-                throw new AccountQRNotCreatedException(ACCOUNT_QR_CREATE_FAIL);
+                throw new AccountQRNotCreatedException();
             }
         }
     }

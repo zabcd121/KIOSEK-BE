@@ -5,7 +5,6 @@ import org.springframework.core.convert.converter.Converter;
 
 
 public class ReservationStatusRequestConverter implements Converter<String, ReservationStatus> {
-
     @Override
     public ReservationStatus convert(String reservationStatusCode) {
         return ReservationStatus.ofCode(reservationStatusCode);

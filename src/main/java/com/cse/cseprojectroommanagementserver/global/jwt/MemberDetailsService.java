@@ -1,7 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 
-    private final MemberSearchRepository memberSearchRepository;
+    private final MemberSearchableRepository memberSearchRepository;
 
     /**
      * Spring-Security의 유저 인증 처리 과정중 유저객체를 만드는 과정

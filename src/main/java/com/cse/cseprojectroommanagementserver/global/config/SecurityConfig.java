@@ -38,10 +38,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 현장예약 api는 인증과 동시에 예약이라 ignore해야 함.
+     */
     @Bean
     public WebSecurityCustomizer configure() {
         return (web -> web.ignoring().mvcMatchers(
-                "/api/**"
+                "/api/**", "/images/**"
         ));
     }
 

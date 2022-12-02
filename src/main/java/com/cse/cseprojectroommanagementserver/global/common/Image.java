@@ -5,13 +5,13 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-@EqualsAndHashCode
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+//@EqualsAndHashCode
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
 @Embeddable
-public class Image {
+public class Image{
     @Column(nullable = false)
     private String fileLocalName;
 
@@ -21,6 +21,5 @@ public class Image {
     @Column(nullable = false)
     private String fileUrl;
 
-    @Column(nullable = false)
-    private String content;
+
 }

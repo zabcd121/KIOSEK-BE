@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -36,27 +35,27 @@ public class QRGenerator {
     @Value("${fileDir.outbound}")
     private String outbound;
 
-    @Value("${fileDir.account}")
+    @Value("${fileDir.accounts}")
     private String accountQRDir;
 
-    @Value("${fileDir.reservation}")
+    @Value("${fileDir.reservations}")
     private String reservationQRDir; //    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
 
-    private final PasswordEncoder passwordEncoder;
-
-    public Image createAccountQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+    public QRImage createAccountQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
             return createQRCodeImage(accountQRDir);
     }
 
-    public Image createReservationQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+    public QRImage createReservationQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
         return createQRCodeImage(reservationQRDir);
     }
 
 
-    private Image createQRCodeImage(String fixedDir){
+    private QRImage createQRCodeImage(String fixedDir){
         try {
             RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
             String content = generator.generate(30);
+            log.info("content: {}", content);
+
 
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, WIDTH, HEIGHT); //텍스트, 바코드 포맷,가로,세로
@@ -69,29 +68,28 @@ public class QRGenerator {
              */
             String fileOriName = UUID.randomUUID().toString();
             String destinationFileName = UUID.randomUUID().toString();
-            String fileUrl = outbound + fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
-            log.info(fileUrl);
+            String fileUrl = fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
+            log.info("fileUrL: ,{}", fileUrl);
+            log.info("destinationFileName: ,{}", destinationFileName);
 
-            File destinationFile = new File(fileUrl + destinationFileName + EXTENSION);
+
+            File destinationFile = new File(outbound + fileUrl + destinationFileName + EXTENSION);
             destinationFile.getParentFile().mkdirs();
 
-            File file = File.createTempFile(destinationFileName, EXTENSION, new File(fileUrl));
+            File file = new File(outbound + fileUrl + destinationFileName + EXTENSION);
+//            File file = File.createTempFile(destinationFileName, EXTENSION, new File(outbound + fileUrl));
             ImageIO.write(bufferedQrImage, "png", file); //temp 위치에 qr이 이미지 생성됨.
-            return Image.builder()
+
+            return QRImage.builder()
                     .fileLocalName(destinationFileName + EXTENSION)
                     .fileOriName(fileOriName + EXTENSION)
                     .fileUrl(inbound + fileUrl)
-                    .content(passwordEncoder.encode(content))
+                    .content(content)
                     .build();
 
         } catch(WriterException | IOException e) {
             throw new QRNotCreatedException("qr 코드 생성에 실패했습니다.");
         }
-
-
-        /*InputStream is = new FileInputStream(file.getAbsolutePath()); //S3에 업로드 하기위한 작업
-        is.close();*/
-
 
     }
 }

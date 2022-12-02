@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface MemberSearchRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByAccountLoginId(String loginId);
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+
 }

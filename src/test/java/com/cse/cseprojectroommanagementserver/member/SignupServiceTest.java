@@ -8,7 +8,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleTyp
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.google.zxing.WriterException;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,13 +48,13 @@ public class SignupServiceTest {
 
     Account account;
 
-    Image Image;
+    QRImage QRImage;
     AccountQR accountQR;
 
     @BeforeEach
     void setUp() {
 //        when(passwordEncoder.encode(any())).thenReturn("ex1234!");
-        Image = Image.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
+        QRImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
 
 
         signupDto = SignupRequest.builder()
@@ -74,7 +74,7 @@ public class SignupServiceTest {
                 .name(signupDto.getName())
                 .email(signupDto.getEmail())
                 .roleType(RoleType.ROLE_MEMBER)
-                .accountQR(AccountQR.builder().image(Image).build())
+                .accountQR(AccountQR.builder().qrImage(QRImage).build())
                 .build();
         member.getAccountQR().setMember(member);
 
@@ -124,7 +124,7 @@ public class SignupServiceTest {
     @DisplayName("회원 가입시 로직사이에 생성되는 회원과 실제 DB에 저장되어 반환되는 회원 인스턴스가 동일한 정보를 가지고 있는지 확인한다.")
     void signup() throws IOException, WriterException {
         //given
-        given(qrGenerator.createAccountQRCodeImage()).willReturn(Image);
+        given(qrGenerator.createAccountQRCodeImage()).willReturn(QRImage);
         given(signupRepository.save(any())).willReturn(member);
 
         //when
@@ -132,12 +132,12 @@ public class SignupServiceTest {
 
         //then
         Member expectedMember = member;
-        Member createdMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), Image);
+        Member createdMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), QRImage);
 
         assertEquals(createdMember.getAccount(), expectedMember.getAccount());
         assertEquals(createdMember.getEmail(), expectedMember.getEmail());
         assertEquals(createdMember.getName(), expectedMember.getName());
-        assertEquals(createdMember.getAccountQR().getImage(), expectedMember.getAccountQR().getImage());
+        assertEquals(createdMember.getAccountQR().getQrImage(), expectedMember.getAccountQR().getQrImage());
 
         then(qrGenerator).should(times(1)).createAccountQRCodeImage();
         then(signupRepository).should(times(1)).save(any());

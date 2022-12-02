@@ -50,7 +50,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/login")
-    public ResponseSuccess<LoginRequest> login(@RequestBody @Validated LoginRequest loginRequest) {
+    public ResponseSuccess<LoginResponse> login(@RequestBody @Validated LoginRequest loginRequest) {
         LoginResponse loginResponse = authService.login(loginRequest, RoleType.ROLE_MEMBER);
         return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }
@@ -71,7 +71,5 @@ public class MemberApiController {
         TokensDto tokensDto = authService.reissueAccessToken(refreshToken);
         return new ResponseSuccess(TOKEN_REISSUED, tokensDto);
     }
-
-
 
 }
