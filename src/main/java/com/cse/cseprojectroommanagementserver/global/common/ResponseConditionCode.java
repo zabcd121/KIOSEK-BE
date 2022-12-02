@@ -41,21 +41,40 @@ public enum ResponseConditionCode {
     TOKEN_EXPIRED("0210", "만료된 토큰이 전달되었습니다."),
     TOKEN_UNSUPPORTED("0211", "지원되지 않는 토큰이 전달되었습니다."),
     ACCESS_DENIED("0212", "접근 거부"),
-    REFRESH_TOKEN_NOT_EXIST_IN_STORE("0213", "refresh 토큰이 저장소에 존재하지 않습니다."),
+    REFRESH_TOKEN_NOT_EXIST_IN_STORE("0213", "refresh 토큰이 만료되었습니다."),
     TOKEN_REISSUED("0214", "토큰이 재발급 되었습니다."),
 
     /**
      * Reservation: 03
      */
-    RESERVATION_SUCCESS("0200", "예약 성공"),
-    RESERVATION_FAIL_PENALTY_USER("0201", "계정 정지 상태이므로 예약이 불가능합니다."),
-    RESERVATION_FAIL_RESERVATION_DUPLICATED("0202", "중복된 예약이 존재합니다."),
-    RESERVATION_FAIL_EXCEED_MAX_TIME("0203", "예약가능 최대시간을 초과하였습니다."),
-    RESERVATION_FAIL_EXCEED_MAX_COUNT("0204", "하루에 최대 예약 가능한 횟수를 초과하였습니다."),
-    RESERVATION_FAIL_EXCEED_MAX_PERIOD("0205", "현재 예약 불가능한 날짜입니다."),
-    RESERVATION_START_TIME_EMPTY("0206", "예약 시작시간을 입력해주세요."),
-    RESERVATION_END_TIME_EMPTY("0207", "예약 종료시간을 입력해주세요."),
-    RESERVATION_SEARCH_SUCCESS("0208", "예약 조회 성공");
+    RESERVATION_SUCCESS("0300", "예약 성공"),
+    RESERVATION_FAIL_PENALTY_USER("0301", "계정 정지 상태이므로 예약이 불가능합니다."),
+    RESERVATION_FAIL_RESERVATION_DUPLICATED("0302", "중복된 예약이 존재합니다."),
+    RESERVATION_FAIL_EXCEED_MAX_TIME("0303", "예약가능 최대시간을 초과하였습니다."),
+    RESERVATION_FAIL_EXCEED_MAX_COUNT("0304", "하루에 최대 예약 가능한 횟수를 초과하였습니다."),
+    RESERVATION_FAIL_EXCEED_MAX_PERIOD("0305", "현재 예약 불가능한 날짜입니다."),
+    RESERVATION_START_TIME_EMPTY("0306", "예약 시작시간을 입력해주세요."),
+    RESERVATION_END_TIME_EMPTY("0307", "예약 종료시간을 입력해주세요."),
+    RESERVATION_SEARCH_SUCCESS("0308", "예약 조회 성공"),
+    RESERVATION_SEARCH_FAIL("0309", "예약 조회 실패"),
+    RESERVATION_CANCEL_SUCCESS("0310", "예약 취소 성공"),
+    RESERVATION_CANCEL_FAIL("0311", "예약 취소 실패"),
+    RESERVATION_QR_CREATE_FAIL("0312", "예약 QR 생성 실패"),
+    RESERVATION_QR_AUTH_SUCCESS("0313", "예약 QR 인증 성공"),
+    RESERVATION_QR_CHECKIN_FAIL("0314", "예약 QR 체크인 실패"),
+    IN_USE_TABLE("0315", "사용중인 테이블입니다."),
+    NOT_IN_USE_TABLE("0316", "예약 확인 후 사용해주세요"),
+
+    /**
+     * Table Return: 04
+     */
+    RETURN_SUCCESS("0400", "반납 성공"),
+    RETURN_FAIL("0400", "반납 실패"),
+
+    /**
+     * Project Room: 05
+     */
+    PROJECT_ROOM_SEARCH_SUCCESS("0500", "프로젝트실 조회 성공");
 
     private final String code;
     private final String message;

@@ -4,8 +4,8 @@ import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.P
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
+
 import static com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.QPenalty.*;
 
 @Repository

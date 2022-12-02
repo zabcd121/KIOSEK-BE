@@ -2,16 +2,13 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.NoAuthorityToLoginException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.NotExistsEqualRefreshToken;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.TokenNotBearerTypeException;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,12 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
@@ -35,7 +30,7 @@ import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberSearchRepository memberSearchRepository;
+    private final MemberSearchableRepository memberSearchRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDetailsService memberDetailsService;
     private final RedisTemplate redisTemplate;
@@ -43,19 +38,7 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest, RoleType allowedRoleType) {
-        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginRequest.getLoginId());
-
-        isMatchingPassword(loginRequest.getPassword(), userDetails);
-
-        List<GrantedAuthority> authorities = (List<GrantedAuthority>) userDetails.getAuthorities();
-        String role = authorities.get(0).getAuthority();
-
-        if(!role.equals(allowedRoleType.toString())) {
-            throw new NoAuthorityToLoginException();
-        }
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        Authentication authentication = authenticateMember(loginRequest.getLoginId(), loginRequest.getPassword(), allowedRoleType);
 
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
@@ -67,32 +50,6 @@ public class AuthService {
                 .memberInfo(getLoginMemberInfoResponse(member))
                 .tokenInfo(getTokensDto(accessToken, refreshToken))
                 .build();
-    }
-
-    private void saveRefreshTokenInRedis(String refreshToken, Authentication authentication) {
-        redisTemplate.opsForValue()
-                .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
-    }
-
-    private LoginMemberInfoResponse getLoginMemberInfoResponse(Member member) {
-        return LoginMemberInfoResponse.builder()
-                .memberId(member.getMemberId())
-                .name(member.getName())
-                .roleType(member.getRoleType())
-                .build();
-    }
-
-    private TokensDto getTokensDto(String accessToken, String refreshToken) {
-        return TokensDto.builder()
-                .accessToken(BEARER + accessToken)
-                .refreshToken(BEARER + refreshToken)
-                .build();
-    }
-
-    private void isMatchingPassword(String requestPassword, UserDetails userDetails) {
-        if (!passwordEncoder.matches(requestPassword, userDetails.getPassword())) {
-            throw new BadCredentialsException(userDetails.getUsername() + " " + PASSWORD_INVALID.getMessage());
-        }
     }
 
     @Transactional
@@ -149,13 +106,71 @@ public class AuthService {
 
     }
 
+    public Member getMatchedMember(String loginId, String password) {
+        Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
+        matchingPassword(password, member.getPassword());
+
+        return member;
+    }
+
+    public Member getMatchedMember(String accountQRContents) {
+        return memberSearchRepository.findByAccountQRContents(accountQRContents)
+                .orElseThrow(() -> new InvalidAccountQRException());
+    }
+
+
+    private Authentication authenticateMember(String loginId, String password, RoleType allowedRoleType){
+        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
+
+        matchingPassword(password, userDetails.getPassword());
+
+        String role = "";
+        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+            role = authority.getAuthority();
+            log.info("role = {}", role);
+        }
+
+        if(!role.equals(allowedRoleType.toString())) {
+            throw new NoAuthorityToLoginException();
+        }
+
+        return new UsernamePasswordAuthenticationToken(
+                userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+    }
+
+    private void saveRefreshTokenInRedis(String refreshToken, Authentication authentication) {
+        redisTemplate.opsForValue()
+                .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
+    }
+
+    private LoginMemberInfoResponse getLoginMemberInfoResponse(Member member) {
+        return LoginMemberInfoResponse.builder()
+                .memberId(member.getMemberId())
+                .name(member.getName())
+                .roleType(member.getRoleType())
+                .build();
+    }
+
+    private TokensDto getTokensDto(String accessToken, String refreshToken) {
+        return TokensDto.builder()
+                .accessToken(BEARER + accessToken)
+                .refreshToken(BEARER + refreshToken)
+                .build();
+    }
+
+    private boolean matchingPassword(String requestPassword, String originPassword) {
+        if(!passwordEncoder.matches(requestPassword, originPassword)) {
+            throw new InvalidPasswordException();
+        }
+        return true;
+    }
 
     private String resolveToken(String token) {
+        log.info(token);
         log.info(token);
         if (token.startsWith(BEARER))
             return token.substring(7);
         throw new TokenNotBearerTypeException();
     }
-
 
 }

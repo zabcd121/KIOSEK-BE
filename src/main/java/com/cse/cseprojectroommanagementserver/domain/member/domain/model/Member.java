@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +19,7 @@ public class Member extends BaseTimeEntity {
     private Long memberId;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNT_QR")
+    @JoinColumn(name = "account_qr")
     private AccountQR accountQR;
 
     @Embedded
@@ -56,7 +56,7 @@ public class Member extends BaseTimeEntity {
         return roleList;
     }
 
-    public static Member createMember(Account account, String email, String name, Image accountQRCodeImage) {
+    public static Member createMember(Account account, String email, String name, QRImage accountQRCodeImage) {
         Member member = Member.builder()
                 .account(account)
                 .email(email)
@@ -64,7 +64,7 @@ public class Member extends BaseTimeEntity {
                 .roleType(RoleType.ROLE_MEMBER)
                 .build();
 
-        member.changeAccountQR(AccountQR.builder().image(accountQRCodeImage).build());
+        member.changeAccountQR(AccountQR.builder().qrImage(accountQRCodeImage).build());
         return member;
     }
 
