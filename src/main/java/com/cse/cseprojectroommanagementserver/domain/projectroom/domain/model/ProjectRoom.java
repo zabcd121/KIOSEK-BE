@@ -1,19 +1,19 @@
 package com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model;
 
+import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class ProjectRoom extends BaseTimeEntity {
 
     @Id @GeneratedValue
@@ -21,4 +21,6 @@ public class ProjectRoom extends BaseTimeEntity {
 
     private String buildingName;
     private String roomName;
+    private Integer priority;
+
 }
