@@ -2,10 +2,13 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ImpossibleCheckInTImeException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Means.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
 
 @Entity
 @Builder
@@ -24,7 +28,8 @@ import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvi
 @EntityListeners(AuditingEntityListener.class)
 public class Reservation extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,14 +63,14 @@ public class Reservation extends BaseTimeEntity {
     private Means means;
 
     public void changeReservationQR(ReservationQR reservationQR) {
-        if(this.reservationQR != null) {
+        if (this.reservationQR != null) {
             this.reservationQR.changeReservation(null);
         }
         this.reservationQR = reservationQR;
         this.reservationQR.changeReservation(this);
     }
 
-    public static Reservation createReservation(Member member, ProjectTable projectTable, Image qrImage, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public static Reservation createReservation(Member member, ProjectTable projectTable, QRImage qrImage, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .projectTable(projectTable)
@@ -75,7 +80,7 @@ public class Reservation extends BaseTimeEntity {
                 .means(WEB)
                 .build();
 
-        reservation.changeReservationQR(ReservationQR.builder().image(qrImage).build());
+        reservation.changeReservationQR(ReservationQR.builder().qrImage(qrImage).build());
 
         return reservation;
     }
@@ -91,9 +96,34 @@ public class Reservation extends BaseTimeEntity {
                 .build();
     }
 
-    public void changeStatusToReturned(TableReturn tableReturn) {
+    public void cancel() {
+        this.reservationStatus = CANCELED;
+    }
+
+    public void changeTableReturnToReturned(TableReturn tableReturn) {
         this.tableReturn = tableReturn;
         this.reservationStatus = RETURNED;
+    }
+
+    public void changeTableReturnToNotReturned(TableReturn tableReturn) {
+        this.tableReturn = tableReturn;
+        this.reservationStatus = NOT_RETURNED;
+    }
+
+    public void changeStatusToReturnWaiting() {
+        this.reservationStatus = reservationStatus;
+    }
+
+
+
+    public void checkIn() {
+        if (LocalDateTime.now().isBefore(this.startDateTime.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
+                || LocalDateTime.now().isAfter(this.startDateTime.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
+            throw new ImpossibleCheckInTImeException();
+        }
+
+        this.checkInTime = LocalDateTime.now();
+        this.reservationStatus = IN_USE;
     }
 
 }
