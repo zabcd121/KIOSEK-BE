@@ -2,10 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model
 
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,15 +10,22 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class PenaltyPolicy extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long penaltyPolicyId;
 
-    private Integer violationCountToImposePenalty;
+    @Embedded
+    private ViolationCountToImposePenalty violationCountToImposePenalty;
+
     private Integer numberOfSuspensionDay;
 
     @Enumerated(EnumType.STRING)
     private AppliedStatus appliedStatus;
+
+    public boolean isPenaltyTarget(int countOfViolations) {
+        return this.violationCountToImposePenalty.isPenaltyTarget(countOfViolations);
+    }
 
 }
