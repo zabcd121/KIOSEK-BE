@@ -80,7 +80,7 @@ public class MemberControllerAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ResponseError invalidPWExHandler(BadCredentialsException ex) {
+    public ResponseError invalidPWExHandler(InvalidPasswordException ex) {
         log.error("[exceptionHandler] member", ex);
         return new ResponseError(PASSWORD_INVALID);
     }
@@ -115,8 +115,17 @@ public class MemberControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError notBearerTokenException(TokenNotBearerTypeException ex) {
+    public ResponseError notBearerTokenExHandler(TokenNotBearerTypeException ex) {
         log.error("[exceptionHandler] member", ex);
         return new ResponseError(TOKEN_NOT_BEARER);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notCreatedAccountQRExHandler(AccountQRNotCreatedException ex) {
+        log.error("[exceptionHandler] member", ex);
+        return new ResponseError(ACCOUNT_QR_CREATE_FAIL);
+    }
+
+
 }
