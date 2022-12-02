@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ public class ReservationQR {
     private Reservation reservation;
 
     @Embedded
-    private Image image;
+    private QRImage qrImage;
 
     public void changeReservation(Reservation reservation) {
         this.reservation = reservation;
