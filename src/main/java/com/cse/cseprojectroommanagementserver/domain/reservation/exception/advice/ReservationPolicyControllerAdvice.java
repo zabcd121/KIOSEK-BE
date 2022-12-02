@@ -1,8 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.exception.advice;
 
+import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidAccountQRException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidPasswordException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.NotExistsMemberException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.api.ReservationApiController;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.PenaltyMemberReserveFailException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.*;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
@@ -81,6 +83,55 @@ public class ReservationPolicyControllerAdvice {
     public ResponseError exceedTodaysMaxCountExHandler(ExceedMaxPeriodEnableReservationException ex) {
         log.error("[exceptionHandler] ExceedMaxPeriodEnableReservationException", ex);
         return new ResponseError(RESERVATION_FAIL_EXCEED_MAX_PERIOD);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notExistsQRExHandler(CurrentCheckInImpossibleReservationQRException ex) {
+        log.error("[exceptionHandler] NotExistsEqualReservationQRException", ex);
+        return new ResponseError(RESERVATION_QR_CHECKIN_FAIL);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notCreatedAccountQRExHandler(ReservationQRNotCreatedException ex) {
+        log.error("[exceptionHandler] ReservationQRNotCreatedException", ex);
+        return new ResponseError(RESERVATION_QR_CREATE_FAIL);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notExistsReservationExHandler(NotExistsReservationException ex) {
+        log.error("[exceptionHandler] NotExistsReservationException", ex);
+        return new ResponseError(RESERVATION_SEARCH_FAIL);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notExistsReservationExHandler(InvalidAccountQRException ex) {
+        log.error("[exceptionHandler] InvalidAccountQRException", ex);
+        return new ResponseError(RESERVATION_SEARCH_FAIL);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError notExistsMemberExHandler(NotExistsMemberException ex) {
+        log.error("[exceptionHandler] NotExistsMemberException", ex);
+        return new ResponseError(LOGIN_ID_NOT_EXIST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError InvalidPasswordExHandler(InvalidPasswordException ex) {
+        log.error("[exceptionHandler] InvalidPasswordExHandler", ex);
+        return new ResponseError(PASSWORD_INVALID);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError IsNotInUSeTableExHandler(IsNotInUseTableException ex) {
+        log.error("[exceptionHandler] IsNotInUseTableException", ex);
+        return new ResponseError(NOT_IN_USE_TABLE);
     }
 
 
