@@ -5,13 +5,13 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-//@EqualsAndHashCode
-@AllArgsConstructor
+@EqualsAndHashCode
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
 @Embeddable
-public class Image{
+public class QRImage {
     @Column(nullable = false)
     private String fileLocalName;
 
@@ -20,6 +20,8 @@ public class Image{
 
     @Column(nullable = false)
     private String fileUrl;
+    @Column(nullable = false)
+    private String content;
 
 
 }
