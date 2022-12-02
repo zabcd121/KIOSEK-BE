@@ -33,6 +33,45 @@ public class ReservationRequestDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
+    @Getter
+    public static class OnsiteReservationRequestByQR {
+        private String accountQRContents;
+        private Long projectTableId;
+
+        @NotBlank
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
+        @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
+        private LocalDateTime startDateTime;
+
+        @NotBlank
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
+        @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
+        private LocalDateTime endDateTime;
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    public static class OnsiteReservationRequestByLoginForm {
+        private String loginId;
+        private String password;
+        private Long projectTableId;
+
+        @NotBlank
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
+        @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
+        private LocalDateTime startDateTime;
+
+        @NotBlank
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
+        @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
+        private LocalDateTime endDateTime;
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
     @Getter @Setter
     public static class FirstAndLastDateTimeRequest {
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
@@ -40,5 +79,13 @@ public class ReservationRequestDto {
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime lastDateTime;
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    public static class QRAuthRequest {
+        private String qrContent;
     }
 }
