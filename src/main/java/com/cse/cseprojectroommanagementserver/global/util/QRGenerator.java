@@ -25,7 +25,7 @@ import java.util.UUID;
 public class QRGenerator {
     private static final int WIDTH = 200;
     private static final int HEIGHT = 200;
-    private static final int DARK_COLOR = 0x00000000;
+    private static final int DARK_COLOR = 0xFF000000; //rgba 투명도 조절해야 검은색이 채워짐
     private static final int LIGHT_COLOR = 0xFFFFFFFF;
     private static final String EXTENSION = ".png";
 
