@@ -37,3 +37,6 @@ out/
 .vscode/
 
 application.yml
+keystore.p12
+Dockerfile
+docker-compose.yml
