@@ -106,14 +106,25 @@ public class AuthService {
 
     }
 
-    public Member getMatchedMember(String loginId, String password) {
+    public LoginMemberInfoResponse searchMemberInfo(String resolvedAccessToken) {
+        String loginId = jwtTokenProvider.getSubject(resolvedAccessToken);
+        Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
+
+        return LoginMemberInfoResponse.builder()
+                .memberId(member.getMemberId())
+                .name(member.getName())
+                .roleType(member.getRoleType())
+                .build();
+    }
+
+    public Member searchMatchedMember(String loginId, String password) {
         Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
         matchingPassword(password, member.getPassword());
 
         return member;
     }
 
-    public Member getMatchedMember(String accountQRContents) {
+    public Member searchMatchedMember(String accountQRContents) {
         return memberSearchRepository.findByAccountQRContents(accountQRContents)
                 .orElseThrow(() -> new InvalidAccountQRException());
     }
@@ -165,7 +176,7 @@ public class AuthService {
         return true;
     }
 
-    private String resolveToken(String token) {
+    public String resolveToken(String token) {
         log.info(token);
         log.info(token);
         if (token.startsWith(BEARER))
