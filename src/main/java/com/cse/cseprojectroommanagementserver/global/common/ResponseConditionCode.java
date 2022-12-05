@@ -76,7 +76,12 @@ public enum ResponseConditionCode {
     /**
      * Project Room: 05
      */
-    PROJECT_ROOM_SEARCH_SUCCESS("0500", "프로젝트실 조회 성공");
+    PROJECT_ROOM_SEARCH_SUCCESS("0500", "프로젝트실 조회 성공"),
+
+    /**
+     * Complaint: 06
+     */
+    COMPLAIN_SUCCESS("0600", "불편사항 접수 성공");
 
     private final String code;
     private final String message;
