@@ -12,7 +12,6 @@ import static com.cse.cseprojectroommanagementserver.domain.projecttable.dto.Pro
 
 public class ProjectRoomResponse {
 
-    @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter @Setter
