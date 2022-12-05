@@ -15,7 +15,7 @@ public class ReservationMaxCountPerDay {
 
     public boolean checkPolicy(Long countTodayMemberCreatedReservation) {
         if(maxCountPerDay <= countTodayMemberCreatedReservation) {
-            throw new ExceedTodaysMaxCountEnableReservationException("하루에 최대 예약가능한 " + maxCountPerDay +  "횟수를 초과하였습니다.");
+            throw new ExceedTodaysMaxCountEnableReservationException("하루에 최대 " + maxCountPerDay +  "회 예약 가능합니다.");
         }
         return true;
     }

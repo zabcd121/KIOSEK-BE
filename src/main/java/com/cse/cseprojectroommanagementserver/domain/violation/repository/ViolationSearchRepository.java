@@ -28,7 +28,17 @@ public class ViolationSearchRepository implements ViolationSearchableRepository 
                 .select(violation)
                 .from(violation)
                 .where(violation.targetMember.memberId.eq(memberId)
-                        .and(violation.processingStatus.eq(PENALIZED)))
+                        .and(violation.processingStatus.eq(NON_PENALIZED)))
                 .fetch();
+    }
+
+    @Override
+    public Long countNotPenalizedViolationsByMemberId(Long memberId) {
+        return queryFactory
+                .select(violation.count())
+                .from(violation)
+                .where(violation.targetMember.memberId.eq(memberId)
+                        .and(violation.processingStatus.eq(NON_PENALIZED)))
+                .fetchOne();
     }
 }

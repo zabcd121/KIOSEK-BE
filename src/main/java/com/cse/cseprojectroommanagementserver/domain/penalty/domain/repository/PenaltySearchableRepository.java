@@ -1,6 +1,11 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
+
+import java.util.Optional;
+
 public interface PenaltySearchableRepository {
 
-    public boolean existsByMemberId(Long memberId);
+    boolean existsByMemberId(Long memberId);
+    Optional<Penalty> findInProgressByMemberId(Long memberId);
 }

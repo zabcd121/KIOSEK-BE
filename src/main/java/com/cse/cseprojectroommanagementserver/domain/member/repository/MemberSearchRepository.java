@@ -39,4 +39,15 @@ public class MemberSearchRepository implements MemberSearchableRepository {
                         .fetchOne()
         );
     }
+
+    @Override
+    public Member findMemberWithAccountQRByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(member)
+                .join(member.accountQR, accountQR).fetchJoin()
+                .where(member.memberId.eq(memberId))
+                .fetchOne();
+    }
+
+
 }

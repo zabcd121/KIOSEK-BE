@@ -25,9 +25,6 @@ public class FileConfig implements WebMvcConfigurer {
          * images/complaint/2022/01/01/qr.img
          * images/** 로 들어오면 -> Ueers/doucments/qrCode/images/** 로 매핑 해주도록 하면 됨
          */
-//        registry
-//                .addResourceHandler("/images/**")
-//                .addResourceLocations("file:///Users/khs/Documents/images/");
         registry
                 .addResourceHandler(inBoundDir + "/**")
                 .addResourceLocations("file://" + outBoundDir + "/");
