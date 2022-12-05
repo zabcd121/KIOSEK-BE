@@ -26,4 +26,13 @@ public class Complaint {
     private String content;
 
     private Image image;
+
+    public static Complaint createComplaint(ProjectRoom projectRoom, String subject, String content, Image image) {
+        return Complaint.builder()
+                .projectRoom(projectRoom)
+                .subject(subject)
+                .content(content)
+                .image(image)
+                .build();
+    }
 }
