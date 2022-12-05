@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ViolationSearchableRepository {
     List<Violation> findNotPenalizedViolationsByMemberId(Long memberId);
+    Long countNotPenalizedViolationsByMemberId(Long memberId);
 }

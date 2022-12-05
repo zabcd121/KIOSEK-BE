@@ -116,8 +116,9 @@ public class Reservation extends BaseTimeEntity {
 
 
 
-    public void checkIn() {
-        if (LocalDateTime.now().isBefore(this.startDateTime.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
+    public void checkIn(boolean isPreviousReservationInUse) {
+        if (!isPreviousReservationInUse
+                || LocalDateTime.now().isBefore(this.startDateTime.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
                 || LocalDateTime.now().isAfter(this.startDateTime.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
             throw new ImpossibleCheckInTImeException();
         }

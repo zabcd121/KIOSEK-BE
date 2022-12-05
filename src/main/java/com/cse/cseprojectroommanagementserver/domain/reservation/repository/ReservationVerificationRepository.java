@@ -52,6 +52,16 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
                 .fetchOne();
     }
 
+    @Override
+    public boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startDateTime) {
+        return queryFactory
+                .from(reservation)
+                .where(reservation.projectTable.tableId.eq(tableId)
+                        .and(reservation.endDateTime.eq(startDateTime).and(reservation.reservationStatus.eq(IN_USE))))
+                .select(reservation.reservationId)
+                .fetchFirst() != null;
+    }
+
 
     private BooleanBuilder startBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return nullSafeBuilder(() -> reservation.startDateTime.between(startDateTime, endDateTime));

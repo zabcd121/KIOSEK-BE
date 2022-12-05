@@ -1,10 +1,12 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.QPenalty.*;
 
@@ -24,6 +26,17 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
 
         return count != null ? true : false;
 
+    }
+
+    @Override
+    public Optional<Penalty> findInProgressByMemberId(Long memberId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(penalty)
+                .where(penalty.member.memberId.eq(memberId)
+                        .and(penalty.startDate.loe(LocalDate.now())
+                                .and(penalty.endDate.goe(LocalDate.now()))))
+                .fetchOne()
+        );
     }
 
 }

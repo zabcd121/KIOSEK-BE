@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
+import com.cse.cseprojectroommanagementserver.domain.member.application.MemberComplexInfoSearchService;
 import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
@@ -12,9 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController
 @RequestMapping("/api/members")
@@ -23,6 +27,7 @@ public class MemberApiController {
 
     private final AuthService authService;
     private final SignupService signupService;
+    private final MemberComplexInfoSearchService memberComplexInfoSearchService;
 
     @GetMapping("/duplicated-loginid")
     public ResponseSuccessNoResult isDuplicatedLoginId(@RequestParam String loginId) {
@@ -71,5 +76,20 @@ public class MemberApiController {
         TokensDto tokensDto = authService.reissueAccessToken(refreshToken);
         return new ResponseSuccess(TOKEN_REISSUED, tokensDto);
     }
+
+    @GetMapping("/reissue")
+    public ResponseSuccess<LoginMemberInfoResponse> refreshMemberInfo(HttpServletRequest request) {
+        String resolvedToken = authService.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
+        LoginMemberInfoResponse memberInfo = authService.searchMemberInfo(resolvedToken);
+        return new ResponseSuccess<>(MEMBER_INFO_REISSUED, memberInfo);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseSuccess<MemberComplexInfoResponse> getMemberComplexInfo(@PathVariable("id") Long memberId) {
+        MemberComplexInfoResponse memberComplexInfo = memberComplexInfoSearchService.searchMemberComplexInfo(memberId);
+        return new ResponseSuccess<>(MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS, memberComplexInfo);
+    }
+
+
 
 }
