@@ -65,14 +65,21 @@ public class JwtTokenProvider implements InitializingBean {
      * Spring-Security는 그것을 체크해서 로그인을 처리함
      */
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder()
+        Claims claims = getClaims(token);
+        UserDetails userDetails = memberDetailsService.loadUserByUsername(claims.getSubject());
+        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
 
-        UserDetails userDetails = memberDetailsService.loadUserByUsername(claims.getSubject());
-        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+    public String getSubject(String token) {
+        return getClaims(token).getSubject();
     }
 
     public boolean validateToken(String token) {
