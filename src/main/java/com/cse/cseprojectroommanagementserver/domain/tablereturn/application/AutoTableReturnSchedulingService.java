@@ -50,6 +50,7 @@ public class AutoTableReturnSchedulingService {
             violationList.add(Violation.createNotReturnedViolation(reservation));
         }
         violationRepository.saveAllAndFlush(violationList);
+        addPenalty(violationList);
     }
 
     /**TODO
@@ -70,17 +71,21 @@ public class AutoTableReturnSchedulingService {
         penaltyRepository.saveAllAndFlush(penaltyList);
     }
 
-//    @Scheduled(cron = "10 20,50 * * * *")
-//    private void autoCancelUnUsedReservation() {
-//
-//    }
+    @Scheduled(cron = "10 20,50 * * * *")
+    private void autoCancelUnUsedReservation() {
+        List<Reservation> unUsedReservationList = reservationSearchRepository.findUnUsedReservations();
+        for (Reservation unUsedReservation : unUsedReservationList) {
+            unUsedReservation.cancel();
+        }
+        addViolationLog(unUsedReservationList);
+    }
 
     /**
      * 종료시간이 끝날때까지 반납이 되지 않은 예약들에 대해서 반납 대기중 상태로 변경
      */
     @Scheduled(cron = "1 0,30 * * * *")
-    private void changeUsedReservationToToReturnWaiting() {
-        List<Reservation> reservationList = reservationSearchRepository.findFinishedReservations().orElseGet(null);
+    private void changeUsedReservationToReturnWaiting() {
+        List<Reservation> reservationList = reservationSearchRepository.findFinishedButInUseStatusReservations().orElseGet(null);
         for (Reservation reservation : reservationList) {
             reservation.changeStatusToReturnWaiting();
         }

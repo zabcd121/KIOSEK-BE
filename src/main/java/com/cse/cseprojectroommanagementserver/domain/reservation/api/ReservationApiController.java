@@ -39,14 +39,14 @@ public class ReservationApiController {
     //현장 예약
     @PostMapping("/onsite/qr")
     public ResponseSuccessNoResult reserveOnSiteByQRLogin(@RequestBody OnsiteReservationRequestByQR reservationRequest) {
-        Member matchedMember = authService.getMatchedMember(reservationRequest.getAccountQRContents());
+        Member matchedMember = authService.searchMatchedMember(reservationRequest.getAccountQRContents());
         reserveTableService.reserveOnsiteByAccountQR(matchedMember, reservationRequest);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
     @PostMapping("/onsite/form")
     public ResponseSuccessNoResult reserveOnSiteByFromLogin(@RequestBody OnsiteReservationRequestByLoginForm reservationRequest) {
-        Member matchedMember = authService.getMatchedMember(reservationRequest.getLoginId(), reservationRequest.getPassword());
+        Member matchedMember = authService.searchMatchedMember(reservationRequest.getLoginId(), reservationRequest.getPassword());
         reserveTableService.reserveOnsiteByFormLogin(matchedMember, reservationRequest);
 
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
@@ -85,7 +85,7 @@ public class ReservationApiController {
 
     @PatchMapping("/auth/qr")
     public ResponseSuccessNoResult authReservationQR(@RequestBody QRAuthRequest qrContents) {
-        reservationAuthService.qrReservationAuth(qrContents);
+        reservationAuthService.authReservationQR(qrContents);
         return new ResponseSuccessNoResult(RESERVATION_QR_AUTH_SUCCESS);
     }
 
