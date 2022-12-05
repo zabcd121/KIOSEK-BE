@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.CurrentCheckInImpossibleReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,14 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 public class ReservationAuthService {
 
     private final ReservationSearchRepository reservationSearchableRepository;
+    private final ReservationVerifiableRepository reservationVerifiableRepository;
 
     @Transactional
-    public void qrReservationAuth(QRAuthRequest qrAuthRequest) {
+    public void authReservationQR(QRAuthRequest qrAuthRequest) {
         Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthRequest.getQrContent())
                 .orElseThrow(() -> new CurrentCheckInImpossibleReservationQRException());
 
-        findReservation.checkIn();
+        findReservation.checkIn(reservationVerifiableRepository.existsInUsePreviousReservation(findReservation.getProjectTable().getTableId(), findReservation.getStartDateTime()));
     }
 
 
