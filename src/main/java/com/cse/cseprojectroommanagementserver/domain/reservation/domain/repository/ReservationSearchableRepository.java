@@ -21,7 +21,11 @@ public interface ReservationSearchableRepository {
 
     Optional<List<Reservation>> findReturnWaitingReservations();
 
-    Optional<List<Reservation>> findFinishedReservations();
+    Optional<List<Reservation>> findFinishedButInUseStatusReservations();
 
     boolean existsCurrentInUseReservationByTableName(String tableName);
+
+    Long countPastReservations(Long memberId);
+
+    List<Reservation> findUnUsedReservations();
 }
