@@ -1,5 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.querydsl.core.types.Projections;
@@ -24,18 +26,6 @@ import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.m
 public class ReservationSearchRepository implements ReservationSearchableRepository {
 
     private final JPAQueryFactory queryFactory;
-
-//    @Override
-//    public List<Reservation> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstDateTime, LocalDateTime lastDateTime) {
-//        return queryFactory
-//                .selectFrom(reservation)
-//                .join(reservation.tableReturn, tableReturn)
-//                .join(reservation.projectTable, projectTable)
-//                .where(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
-//                        .and(reservation.startDateTime.between(firstDateTime, lastDateTime)
-//                                .and(reservation.reservationStatus.notIn(CANCELED))))
-//                .fetch();
-//    }
 
     @Override
     public List<SearchReservationResponse> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstDateTime, LocalDateTime lastDateTime) {
@@ -77,9 +67,11 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                         reservation.reservationId, reservation.startDateTime, reservation.endDateTime, tableReturn.returnedDateTime,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName))
                 .from(reservation)
-                .join(tableReturn.targetReservation, reservation)
+                .leftJoin(reservation.tableReturn, tableReturn)
+                .join(reservation.projectTable, projectTable)
+                .join(projectTable.projectRoom, projectRoom)
                 .where(reservation.member.memberId.eq(memberId)
-                        .and(reservation.reservationStatus.in(UN_USED, RETURN_WAITING, NOT_RETURNED, RETURNED)))
+                        .and(reservation.reservationStatus.in(UN_USED, RETURN_WAITING, NOT_RETURNED, RETURNED, CANCELED)))
                 .orderBy(reservation.startDateTime.desc())
                 .fetch();
     }
@@ -99,9 +91,10 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return Optional.ofNullable(
                 queryFactory
                         .selectFrom(reservation)
-                        .join(reservationQR).fetchJoin()
-                        .on(reservationQR.qrImage.content.eq(contents))
-                        .where(reservation.reservationStatus.ne(IN_USE))
+                        .join(reservation.reservationQR, reservationQR).fetchJoin()
+                        .join(reservation.projectTable, projectTable).fetchJoin()
+                        .where(reservation.reservationStatus.eq(RESERVATION_COMPLETED)
+                                .and(reservationQR.qrImage.content.eq(contents)))
                         .fetchOne()
         );
     }
@@ -117,7 +110,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     }
 
     @Override
-    public Optional<List<Reservation>> findFinishedReservations() {
+    public Optional<List<Reservation>> findFinishedButInUseStatusReservations() {
         return Optional.ofNullable(
                 queryFactory
                         .selectFrom(reservation)
@@ -137,5 +130,24 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .fetchFirst() != null;
     }
 
+    @Override
+    public Long countPastReservations(Long memberId) {
+        return queryFactory
+                .select(reservation.count())
+                .from(reservation)
+                .where(reservation.reservationStatus.in(CANCELED, UN_USED, NOT_RETURNED, RETURNED)
+                        .and(reservation.member.memberId.eq(memberId)))
+                .fetchOne();
+    }
+
+    @Override
+    public List<Reservation> findUnUsedReservations() {
+        LocalDateTime current = LocalDateTime.now();
+        return queryFactory
+                .selectFrom(reservation)
+                .where(reservation.reservationStatus.eq(RESERVATION_COMPLETED)
+                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute()-20))))
+                .fetch();
+    }
 
 }

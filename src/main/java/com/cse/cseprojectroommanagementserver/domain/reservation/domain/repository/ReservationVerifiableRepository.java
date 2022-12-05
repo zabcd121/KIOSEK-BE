@@ -7,4 +7,6 @@ public interface ReservationVerifiableRepository {
     boolean existsBy(Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     Long countCreatedReservationForTodayByMemberId(Long memberId);
+
+    boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startDateTime);
 }
