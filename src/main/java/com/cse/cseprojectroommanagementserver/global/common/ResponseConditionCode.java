@@ -43,6 +43,8 @@ public enum ResponseConditionCode {
     ACCESS_DENIED("0212", "접근 거부"),
     REFRESH_TOKEN_NOT_EXIST_IN_STORE("0213", "refresh 토큰이 만료되었습니다."),
     TOKEN_REISSUED("0214", "토큰이 재발급 되었습니다."),
+    MEMBER_INFO_REISSUED("0215", "회원 정보 재발급"),
+    MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS("0215", "마이페이지 정보 조회 성공했습니다."),
 
     /**
      * Reservation: 03
