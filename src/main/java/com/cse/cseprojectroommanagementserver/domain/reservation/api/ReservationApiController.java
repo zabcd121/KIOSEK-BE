@@ -2,11 +2,8 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationAuthService;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationStatusChangeService;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableService;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.*;
 //import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchDto;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationSearchService;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 public class ReservationApiController {
 
     private final ReserveTableService reserveTableService;
+    private final ReserveTableFacadeService reserveTableFacadeService;
     private final ReservationSearchService reservationSearchService;
     private final ReservationStatusChangeService reservationStatusChangeService;
     private final ReservationAuthService reservationAuthService;
@@ -32,7 +30,7 @@ public class ReservationApiController {
     //일반 웹 예약
     @PostMapping
     public ResponseSuccessNoResult reserveByWeb(@RequestBody ReserveRequest reserveRequest) {
-        reserveTableService.reserve(reserveRequest);
+        reserveTableFacadeService.reserve(reserveRequest);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
@@ -54,7 +52,7 @@ public class ReservationApiController {
 
     @GetMapping("/projectrooms/{id}")
     public ResponseSuccess<List<SearchReservationResponse>> getReservationListByProjectRoom(@PathVariable("id") Long projectRoomId,
-                                                                                         @ModelAttribute FirstAndLastDateTimeRequest firstAndLastDateTimeRequest) {
+                                                                                            @ModelAttribute FirstAndLastDateTimeRequest firstAndLastDateTimeRequest) {
         List<SearchReservationResponse> searchReservationList = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeRequest);
         return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, searchReservationList);
     }
