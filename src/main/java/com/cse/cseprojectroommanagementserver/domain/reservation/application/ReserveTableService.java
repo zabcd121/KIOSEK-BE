@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class ReserveTableService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void reserve(ReserveRequest reserveRequest) {
         validateReservation(reserveRequest.getMemberId(), reserveRequest.getProjectTableId(), reserveRequest.getStartDateTime(), reserveRequest.getEndDateTime());
 
