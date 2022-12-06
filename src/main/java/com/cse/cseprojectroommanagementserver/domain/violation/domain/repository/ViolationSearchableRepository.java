@@ -3,8 +3,9 @@ package com.cse.cseprojectroommanagementserver.domain.violation.domain.repositor
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Violation;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ViolationSearchableRepository {
-    List<Violation> findNotPenalizedViolationsByMemberId(Long memberId);
+    Optional<List<Violation>> findNotPenalizedViolationsByMemberId(Long memberId);
     Long countNotPenalizedViolationsByMemberId(Long memberId);
 }

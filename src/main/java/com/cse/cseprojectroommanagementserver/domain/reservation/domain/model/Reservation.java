@@ -62,6 +62,10 @@ public class Reservation extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Means means;
 
+    public void changeReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
+
     public void changeReservationQR(ReservationQR reservationQR) {
         if (this.reservationQR != null) {
             this.reservationQR.changeReservation(null);
@@ -110,14 +114,14 @@ public class Reservation extends BaseTimeEntity {
         this.reservationStatus = NOT_RETURNED;
     }
 
-    public void changeStatusToReturnWaiting() {
-        this.reservationStatus = reservationStatus;
-    }
+//    public void changeStatusToReturnWaiting() {
+//        this.reservationStatus = RETURN_WAITING;
+//    }
 
 
 
     public void checkIn(boolean isPreviousReservationInUse) {
-        if (!isPreviousReservationInUse
+        if (isPreviousReservationInUse
                 || LocalDateTime.now().isBefore(this.startDateTime.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
                 || LocalDateTime.now().isAfter(this.startDateTime.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
             throw new ImpossibleCheckInTImeException();

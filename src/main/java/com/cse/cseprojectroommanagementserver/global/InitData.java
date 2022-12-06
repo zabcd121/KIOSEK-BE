@@ -2,6 +2,8 @@ package com.cse.cseprojectroommanagementserver.global;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
+import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxCountPerDay;
@@ -27,6 +29,7 @@ public class InitData {
     @PostConstruct
     public void init() {
 //        initService.dataInit();
+//        initService.penaltyPolicyDataInit();
     }
 
     @Component
@@ -85,8 +88,15 @@ public class InitData {
             em.persist(reservationPolicy);
         }
 
-        public void projectRoomDataInit() {
-
+        public void penaltyPolicyDataInit() {
+            PenaltyPolicy penaltyPolicy = PenaltyPolicy.builder()
+                    .violationCountToImposePenalty(ViolationCountToImposePenalty.builder()
+                            .countOfViolationsToImposePenalty(3)
+                            .build())
+                    .numberOfSuspensionDay(2)
+                    .appliedStatus(AppliedStatus.CURRENT)
+                    .build();
+            em.persist(penaltyPolicy);
         }
 
         public void projectTableDataInit() {
