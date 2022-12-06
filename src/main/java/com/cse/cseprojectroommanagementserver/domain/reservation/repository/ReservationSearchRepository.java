@@ -4,6 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.Q
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
+import com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.m
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
+import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -146,7 +148,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return queryFactory
                 .selectFrom(reservation)
                 .where(reservation.reservationStatus.eq(RESERVATION_COMPLETED)
-                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute()-20))))
+                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute()- POSSIBLE_CHECKIN_TIME_AFTER.getValue()))))
                 .fetch();
     }
 
