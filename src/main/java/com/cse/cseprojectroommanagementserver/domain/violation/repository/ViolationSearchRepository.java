@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ProcessingStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.QViolation.*;
@@ -23,13 +24,15 @@ public class ViolationSearchRepository implements ViolationSearchableRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Violation> findNotPenalizedViolationsByMemberId(Long memberId) {
-        return queryFactory
-                .select(violation)
-                .from(violation)
-                .where(violation.targetMember.memberId.eq(memberId)
-                        .and(violation.processingStatus.eq(NON_PENALIZED)))
-                .fetch();
+    public Optional<List<Violation>> findNotPenalizedViolationsByMemberId(Long memberId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(violation)
+                        .from(violation)
+                        .where(violation.targetMember.memberId.eq(memberId)
+                                .and(violation.processingStatus.eq(NON_PENALIZED)))
+                        .fetch()
+        );
     }
 
     @Override

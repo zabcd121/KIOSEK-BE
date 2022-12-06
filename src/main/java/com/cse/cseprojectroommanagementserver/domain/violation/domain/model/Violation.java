@@ -8,7 +8,6 @@ import lombok.*;
 import javax.persistence.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ProcessingStatus.*;
-import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent.*;
 
 @Entity
 @Builder
@@ -38,10 +37,10 @@ public class Violation {
     @JoinColumn(name = "penalty_id")
     private Penalty penalty;
 
-    public static Violation createNotReturnedViolation(Reservation reservation) {
+    public static Violation createViolation(Reservation reservation, ViolationContent violationContent) {
         return Violation.builder()
                 .targetMember(reservation.getMember())
-                .violationContent(NOT_RETURNED)
+                .violationContent(violationContent)
                 .processingStatus(NON_PENALIZED)
                 .targetReservation(reservation)
                 .build();
