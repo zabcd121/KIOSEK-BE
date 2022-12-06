@@ -14,7 +14,7 @@ import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.Tabl
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/return/")
+@RequestMapping("/api/returns/")
 @RequiredArgsConstructor
 public class TableReturnApiController {
 
