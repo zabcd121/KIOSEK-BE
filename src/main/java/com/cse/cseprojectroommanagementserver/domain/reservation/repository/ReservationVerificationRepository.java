@@ -29,7 +29,7 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
         return queryFactory
                 .from(reservation)
                 .where(reservation.projectTable.tableId.eq(projectTableId)
-                        .and(reservation.reservationStatus.notIn(CANCELED)
+                        .and(reservation.reservationStatus.notIn(CANCELED, RETURNED, UN_USED)
                                 .and(startBetweenReqStartAndEnd(startDateTime, endDateTime)
                                         .or(endBetweenReqStartAndEnd(startDateTime, endDateTime)
                                                 .or(startGoeReqStartAndEndLoeReqEnd(startDateTime, endDateTime)))
@@ -64,7 +64,8 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
 
 
     private BooleanBuilder startBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(() -> reservation.startDateTime.between(startDateTime, endDateTime));
+        return nullSafeBuilder(() -> reservation.startDateTime.between(startDateTime, endDateTime)
+                .and(reservation.startDateTime.ne(endDateTime)));
     }
 
     private BooleanBuilder endBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {

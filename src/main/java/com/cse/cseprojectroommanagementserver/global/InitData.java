@@ -28,8 +28,8 @@ public class InitData {
 
     @PostConstruct
     public void init() {
-//        initService.dataInit();
-//        initService.penaltyPolicyDataInit();
+        //initService.dataInit();
+             //initService.penaltyPolicyDataInit();
     }
 
     @Component
@@ -41,8 +41,8 @@ public class InitData {
 
         public void dataInit() {
             Member member1 = Member.createMember(Account.builder().loginId("20180335").password(passwordEncoder.encode("abcd123!")).build(), "20180001@kumoh.ac.kr", "홍길동", QRImage.builder().content("123").fileOriName("qwe").fileLocalName("sdad").fileUrl("asdad").build());
-            Member member2 = Member.createMember(Account.builder().loginId("abcd12").password(passwordEncoder.encode("abcd12!")).build(), "20180002@kumoh.ac.kr", "홍길", QRImage.builder().content("231").fileOriName("asdf").fileLocalName("gdsq").fileUrl("evasc").build());
-            Member member3 = Member.createMember(Account.builder().loginId("abcd1").password(passwordEncoder.encode("abcd1!")).build(), "20180003@kumoh.ac.kr", "홍동", QRImage.builder().content("321").fileOriName("fda").fileLocalName("gcqs").fileUrl("ceqfg").build());
+            Member member2 = Member.createMember(Account.builder().loginId("20").password(passwordEncoder.encode("abcd123!")).build(), "20180002@kumoh.ac.kr", "홍길", QRImage.builder().content("231").fileOriName("asdf").fileLocalName("gdsq").fileUrl("evasc").build());
+            Member member3 = Member.createMember(Account.builder().loginId("abcd1").password(passwordEncoder.encode("abcd123!")).build(), "20180003@kumoh.ac.kr", "홍동", QRImage.builder().content("321").fileOriName("fda").fileLocalName("gcqs").fileUrl("ceqfg").build());
 
             em.persist(member1);
             em.persist(member2);
