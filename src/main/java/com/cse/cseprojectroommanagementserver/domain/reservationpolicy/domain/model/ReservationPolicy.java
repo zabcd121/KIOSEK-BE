@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.*;
+
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,12 +31,25 @@ public class ReservationPolicy {
     @Enumerated(EnumType.STRING)
     private AppliedStatus appliedStatus;
 
+    public static ReservationPolicy createReservationPolicy(Integer reservationMaxHourPerOnce, Integer reservationMaxCountPerDay, Integer reservationMaxPeriod) {
+        return ReservationPolicy.builder()
+                .reservationMaxHourPerOnce(new ReservationMaxHourPerOnce(reservationMaxHourPerOnce))
+                .reservationMaxCountPerDay (new ReservationMaxCountPerDay(reservationMaxCountPerDay))
+                .reservationMaxPeriod(new ReservationMaxPeriod(reservationMaxPeriod))
+                .appliedStatus(CURRENTLY)
+                .build();
+    }
+
     public boolean verifyReservation(LocalDateTime reservationStartDateTime, LocalDateTime reservationEndDateTime, Long countTodayMemberCreatedReservation) {
         reservationMaxHourPerOnce.checkPolicy(reservationStartDateTime, reservationEndDateTime);
         reservationMaxCountPerDay.checkPolicy(countTodayMemberCreatedReservation);
         reservationMaxPeriod.checkPolicy(reservationEndDateTime);
 
         return true;
+    }
+
+    public void toDeprecated() {
+        this.appliedStatus = DEPRECATED;
     }
 
 }
