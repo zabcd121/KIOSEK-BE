@@ -9,9 +9,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Embeddable
-@Builder
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxPeriod {
     private Integer maxPeriod;
