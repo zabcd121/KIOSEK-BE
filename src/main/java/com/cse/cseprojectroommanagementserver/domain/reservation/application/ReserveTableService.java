@@ -131,7 +131,7 @@ public class ReserveTableService {
     }
 
     private ReservationPolicy findReservationPolicy() {
-        return reservationPolicyRepository.findByAppliedStatus(AppliedStatus.CURRENT);
+        return reservationPolicyRepository.findByAppliedStatus(AppliedStatus.CURRENTLY);
     }
 
     private Long getCountTodayMemberCreatedReservation(Long memberId) {

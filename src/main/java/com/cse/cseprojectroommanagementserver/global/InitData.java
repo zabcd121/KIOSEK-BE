@@ -2,6 +2,7 @@ package com.cse.cseprojectroommanagementserver.global;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.NumberOfSuspensionDay;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
@@ -29,7 +30,7 @@ public class InitData {
     @PostConstruct
     public void init() {
         //initService.dataInit();
-             //initService.penaltyPolicyDataInit();
+        //initService.penaltyPolicyDataInit();
     }
 
     @Component
@@ -80,10 +81,10 @@ public class InitData {
             em.persist(projectTable12);
 
             ReservationPolicy reservationPolicy = ReservationPolicy.builder()
-                    .reservationMaxHourPerOnce(ReservationMaxHourPerOnce.builder().maxHourPerOnce(4).build())
-                    .reservationMaxCountPerDay(ReservationMaxCountPerDay.builder().maxCountPerDay(1).build())
-                    .reservationMaxPeriod(ReservationMaxPeriod.builder().maxPeriod(2).build())
-                    .appliedStatus(AppliedStatus.CURRENT)
+                    .reservationMaxHourPerOnce(new ReservationMaxHourPerOnce(4))
+                    .reservationMaxCountPerDay(new ReservationMaxCountPerDay(1))
+                    .reservationMaxPeriod(new ReservationMaxPeriod(2))
+                    .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();
             em.persist(reservationPolicy);
         }
@@ -93,8 +94,8 @@ public class InitData {
                     .violationCountToImposePenalty(ViolationCountToImposePenalty.builder()
                             .countOfViolationsToImposePenalty(3)
                             .build())
-                    .numberOfSuspensionDay(2)
-                    .appliedStatus(AppliedStatus.CURRENT)
+                    .numberOfSuspensionDay(new NumberOfSuspensionDay(2))
+                    .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();
             em.persist(penaltyPolicy);
         }

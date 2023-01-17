@@ -53,7 +53,7 @@ public class Penalty extends BaseTimeEntity {
                 .member(member)
                 .description(description)
                 .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay()))
+                .endDate(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()))
                 .build();
 
         for (Violation violation : violationList) {

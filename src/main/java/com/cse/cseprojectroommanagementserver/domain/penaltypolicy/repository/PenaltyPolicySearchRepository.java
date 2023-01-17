@@ -19,7 +19,7 @@ public class PenaltyPolicySearchRepository implements PenaltyPolicySearchableRep
     public PenaltyPolicy findCurrentPenaltyPolicy() {
         return queryFactory
                 .selectFrom(penaltyPolicy)
-                .where(penaltyPolicy.appliedStatus.eq(AppliedStatus.CURRENT))
+                .where(penaltyPolicy.appliedStatus.eq(AppliedStatus.CURRENTLY))
                 .fetchOne();
     }
 }

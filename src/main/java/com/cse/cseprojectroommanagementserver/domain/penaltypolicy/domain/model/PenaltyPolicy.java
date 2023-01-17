@@ -19,7 +19,8 @@ public class PenaltyPolicy extends BaseTimeEntity {
     @Embedded
     private ViolationCountToImposePenalty violationCountToImposePenalty;
 
-    private Integer numberOfSuspensionDay;
+    @Embedded
+    private NumberOfSuspensionDay numberOfSuspensionDay;
 
     @Enumerated(EnumType.STRING)
     private AppliedStatus appliedStatus;
