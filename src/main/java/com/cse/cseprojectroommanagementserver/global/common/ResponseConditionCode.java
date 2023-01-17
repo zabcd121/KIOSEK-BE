@@ -90,7 +90,12 @@ public enum ResponseConditionCode {
     /**
      * Complaint: 07
      */
-    COMPLAIN_SUCCESS("0700", "불편사항 접수 성공");
+    COMPLAIN_SUCCESS("0700", "불편사항 접수 성공"),
+
+    /**
+     * Reservation Policy: 08
+     */
+    RESERVATION_POLICY_CHANGE_FAIL("0800", "정책 수정 성공");
 
     private final String code;
     private final String message;

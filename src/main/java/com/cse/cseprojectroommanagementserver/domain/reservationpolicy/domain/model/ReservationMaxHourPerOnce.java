@@ -8,9 +8,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Embeddable
-@Builder
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxHourPerOnce {
 
