@@ -13,6 +13,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.exception.Penal
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ReservationQRNotCreatedException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicyRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
@@ -41,6 +42,7 @@ public class ReserveTableService {
     private final ReservationRepository reservationRepository;
     private final PenaltySearchableRepository penaltySearchRepository;
     private final ReservationPolicyRepository reservationPolicyRepository;
+    private final ReservationPolicySearchableRepository reservationPolicySearchableRepository;
     private final MemberRepository memberRepository;
     private final ProjectTableRepository projectTableRepository;
     private final MemberSearchableRepository memberSearchableRepository;
@@ -131,7 +133,7 @@ public class ReserveTableService {
     }
 
     private ReservationPolicy findReservationPolicy() {
-        return reservationPolicyRepository.findByAppliedStatus(AppliedStatus.CURRENTLY);
+        return reservationPolicySearchableRepository.findCurrentlyPolicy();
     }
 
     private Long getCountTodayMemberCreatedReservation(Long memberId) {

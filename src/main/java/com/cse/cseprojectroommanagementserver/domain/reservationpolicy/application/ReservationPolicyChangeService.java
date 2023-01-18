@@ -16,12 +16,11 @@ public class ReservationPolicyChangeService {
     private final ReservationPolicyRepository reservationPolicyRepository;
 
     @Transactional
-    public void changeReservationPolicy(ReservationPolicyChangeRequest changeRequest) {
-        System.out.println("id는 " + changeRequest.getReservationPolicyId());
-        ReservationPolicy originPolicy = reservationPolicyRepository.findById(changeRequest.getReservationPolicyId())
+    public void changeReservationPolicy(ReservationPolicyChangeRequest changeReq) {
+        ReservationPolicy originPolicy = reservationPolicyRepository.findById(changeReq.getReservationPolicyId())
                 .orElseThrow(() -> new NotExistsReservationPolicyException());
 
-        reservationPolicyRepository.save(createNewReservationPolicy(changeRequest));
+        reservationPolicyRepository.save(createNewReservationPolicy(changeReq));
         originPolicy.toDeprecated();
     }
 
