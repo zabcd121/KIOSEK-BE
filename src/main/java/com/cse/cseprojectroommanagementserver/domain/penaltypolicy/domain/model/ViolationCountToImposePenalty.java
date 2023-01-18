@@ -6,9 +6,8 @@ import lombok.*;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Builder
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ViolationCountToImposePenalty {
     private Integer countOfViolationsToImposePenalty;
