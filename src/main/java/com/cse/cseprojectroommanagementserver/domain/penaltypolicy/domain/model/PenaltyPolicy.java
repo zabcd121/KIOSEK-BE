@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.*;
+
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,8 +27,20 @@ public class PenaltyPolicy extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private AppliedStatus appliedStatus;
 
+    public static PenaltyPolicy createPenaltyPolicy(Integer violationCountToImposePenalty, Integer numberOfSuspensionDay) {
+        return PenaltyPolicy.builder()
+                .violationCountToImposePenalty(new ViolationCountToImposePenalty(violationCountToImposePenalty))
+                .numberOfSuspensionDay(new NumberOfSuspensionDay(numberOfSuspensionDay))
+                .appliedStatus(CURRENTLY)
+                .build();
+    }
+
     public boolean isPenaltyTarget(int countOfViolations) {
         return this.violationCountToImposePenalty.isPenaltyTarget(countOfViolations);
+    }
+
+    public void toDeprecated() {
+        this.appliedStatus = DEPRECATED;
     }
 
 }

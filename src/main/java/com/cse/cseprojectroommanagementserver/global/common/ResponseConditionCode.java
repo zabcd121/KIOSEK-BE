@@ -95,7 +95,15 @@ public enum ResponseConditionCode {
     /**
      * Reservation Policy: 08
      */
-    RESERVATION_POLICY_CHANGE_FAIL("0800", "정책 수정 성공");
+    RESERVATION_POLICY_CHANGE_SUCCESS("0800", "예약 정책 수정 성공"),
+    RESERVATION_POLICY_SEARCH_FAIL("0801", "예약 정책 조회 실패"),
+
+    /**
+     * Penalty Policy: 09
+     */
+    PENALTY_POLICY_CHANGE_SUCCESS("0900", "제재 정책 수정 성공"),
+    PENALTY_POLICY_SEARCH_FAIL("0901", "제재 정책 조회 실패");
+
 
     private final String code;
     private final String message;
