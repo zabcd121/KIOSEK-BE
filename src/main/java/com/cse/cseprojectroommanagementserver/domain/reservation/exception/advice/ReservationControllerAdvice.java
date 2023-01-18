@@ -21,7 +21,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 
 @RestControllerAdvice(assignableTypes = {ReservationApiController.class})
 @Slf4j
-public class ReservationPolicyControllerAdvice {
+public class ReservationControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
