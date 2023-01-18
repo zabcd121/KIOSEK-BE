@@ -8,5 +8,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationPolicyRepository extends JpaRepository<ReservationPolicy, Long> {
-    ReservationPolicy findByAppliedStatus(AppliedStatus appliedStatus);
 }
