@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_CHANGE_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_CHANGE_SUCCESS;
 
 @RestController
 @RequestMapping("/api/reservation/policy")
@@ -22,6 +22,6 @@ public class ReservationPolicyApiController {
     public ResponseSuccessNoResult changeReservationPolicy(@RequestBody ReservationPolicyChangeRequest reservationPolicyChangeRequest) {
         reservationPolicyChangeService.changeReservationPolicy(reservationPolicyChangeRequest);
 
-        return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_FAIL);
+        return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);
     }
 }
