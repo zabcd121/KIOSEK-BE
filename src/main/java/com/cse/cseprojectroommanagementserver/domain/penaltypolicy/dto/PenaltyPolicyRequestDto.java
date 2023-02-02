@@ -14,4 +14,7 @@ public class PenaltyPolicyRequestDto {
         private Integer violationCountToImposePenalty;
         private Integer numberOfSuspensionDay;
     }
+
+
+
 }
