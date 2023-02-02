@@ -91,9 +91,7 @@ public class InitData {
 
         public void penaltyPolicyDataInit() {
             PenaltyPolicy penaltyPolicy = PenaltyPolicy.builder()
-                    .violationCountToImposePenalty(ViolationCountToImposePenalty.builder()
-                            .countOfViolationsToImposePenalty(3)
-                            .build())
+                    .violationCountToImposePenalty(new ViolationCountToImposePenalty(3))
                     .numberOfSuspensionDay(new NumberOfSuspensionDay(2))
                     .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();
