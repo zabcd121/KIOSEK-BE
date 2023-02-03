@@ -51,7 +51,7 @@ public enum ResponseConditionCode {
      */
     RESERVATION_SUCCESS("0300", "예약 성공"),
     RESERVATION_FAIL_PENALTY_USER("0301", "계정 정지 상태이므로 예약이 불가능합니다."),
-    RESERVATION_FAIL_RESERVATION_DUPLICATED("0302", "중복된 예약이 존재합니다."),
+    RESERVATION_FAIL_DUPLICATED("0302", "중복된 예약이 존재합니다."),
     RESERVATION_FAIL_EXCEED_MAX_TIME("0303", "예약가능 최대시간을 초과하였습니다."),
     RESERVATION_FAIL_EXCEED_MAX_COUNT("0304", "하루에 최대 예약 가능한 횟수를 초과하였습니다."),
     RESERVATION_FAIL_EXCEED_MAX_PERIOD("0305", "현재 예약 불가능한 날짜입니다."),
@@ -104,7 +104,14 @@ public enum ResponseConditionCode {
      */
     PENALTY_POLICY_CHANGE_SUCCESS("0900", "제재 정책 수정 성공"),
     PENALTY_POLICY_SEARCH_FAIL("0901", "제재 정책 조회 실패"),
-    PENALTY_POLICY_SEARCH_SUCCESS("0902", "제재 정책 조회 성공");
+    PENALTY_POLICY_SEARCH_SUCCESS("0902", "제재 정책 조회 성공"),
+
+    /**
+     * Table Deactivation: 10
+     */
+    TABLE_DEACTIVATION_SUCCESS("1000", "테이블 비활성화 성공"),
+    TABLE_DEACTIVATION_FAIL("1001", "테이블 비활성화 실패"),
+    TABLE_DEACTIVATION_DUPLICATED("1002", "중복된 비활성화 내역으로 인한 실패");
 
 
     private final String code;

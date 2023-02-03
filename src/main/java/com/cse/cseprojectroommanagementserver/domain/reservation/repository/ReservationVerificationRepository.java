@@ -33,7 +33,8 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
                                 .and(startBetweenReqStartAndEnd(startDateTime, endDateTime)
                                         .or(endBetweenReqStartAndEnd(startDateTime, endDateTime)
                                                 .or(startGoeReqStartAndEndLoeReqEnd(startDateTime, endDateTime)))
-                                ))
+                                )
+                        )
 
                 )
                 .select(reservation.reservationId)
@@ -64,17 +65,24 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
 
 
     private BooleanBuilder startBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(() -> reservation.startDateTime.between(startDateTime, endDateTime)
-                .and(reservation.startDateTime.ne(endDateTime)));
+        return nullSafeBuilder(
+                () -> reservation.startDateTime.between(startDateTime, endDateTime)
+                        .and(reservation.startDateTime.ne(endDateTime))
+        );
     }
 
     private BooleanBuilder endBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(() -> reservation.endDateTime.between(startDateTime, endDateTime)
-                .and(reservation.endDateTime.ne(startDateTime)));
+        return nullSafeBuilder(
+                () -> reservation.endDateTime.between(startDateTime, endDateTime)
+                        .and(reservation.endDateTime.ne(startDateTime))
+        );
     }
 
     private BooleanBuilder startGoeReqStartAndEndLoeReqEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(() -> reservation.startDateTime.goe(startDateTime).and(reservation.endDateTime.loe(endDateTime)));
+        return nullSafeBuilder(
+                () -> reservation.startDateTime.goe(startDateTime)
+                        .and(reservation.endDateTime.loe(endDateTime))
+        );
     }
 
 }
