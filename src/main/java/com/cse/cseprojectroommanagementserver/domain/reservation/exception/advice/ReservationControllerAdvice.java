@@ -61,7 +61,7 @@ public class ReservationControllerAdvice {
     @ExceptionHandler
     public ResponseError duplicatedReservationExHandler(DuplicatedReservationException ex) {
         log.error("[exceptionHandler] DuplicatedReservationException", ex);
-        return new ResponseError(RESERVATION_FAIL_RESERVATION_DUPLICATED);
+        return new ResponseError(RESERVATION_FAIL_DUPLICATED);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

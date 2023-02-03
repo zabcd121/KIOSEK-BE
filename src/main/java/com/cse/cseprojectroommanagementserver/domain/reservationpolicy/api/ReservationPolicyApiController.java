@@ -12,7 +12,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
 
 @RestController
-@RequestMapping("/api/reservation/policy")
+@RequestMapping("/api/reservations/policy")
 @RequiredArgsConstructor
 public class ReservationPolicyApiController {
 

@@ -13,7 +13,7 @@ import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.Pe
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/penalty/policy")
+@RequestMapping("/api/penalties/policy")
 @RequiredArgsConstructor
 public class PenaltyPolicyApiController {
 
