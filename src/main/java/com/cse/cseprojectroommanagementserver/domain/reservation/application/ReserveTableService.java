@@ -106,13 +106,12 @@ public class ReserveTableService {
     }
 
     private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        isPenaltyMember(memberId);
-        isDuplicatedReservation(projectTableId, startDateTime, endDateTime);
-
-        ReservationPolicy reservationPolicy = findReservationPolicy();
-        //오늘 이 회원이 예약을 실행한 횟수룰 가져옴
-        Long countTodayMemberCreatedReservation = getCountTodayMemberCreatedReservation(memberId);
-        reservationPolicy.verifyReservation(startDateTime, endDateTime, countTodayMemberCreatedReservation);
+        if(!isPenaltyMember(memberId) && !isDuplicatedReservation(projectTableId, startDateTime, endDateTime)) {
+            ReservationPolicy reservationPolicy = findReservationPolicy();
+            //오늘 이 회원이 예약을 실행한 횟수룰 가져옴
+            Long countTodayMemberCreatedReservation = getCountTodayMemberCreatedReservation(memberId);
+            reservationPolicy.verifyReservation(startDateTime, endDateTime, countTodayMemberCreatedReservation);
+        }
     }
 
 
