@@ -1,16 +1,17 @@
 package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivateService;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationRequestDto;
-import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivationLogSearchService;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto;
+import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -19,10 +20,16 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 public class TableDeactivationApiController {
 
     private final TableDeactivateService tableDeactivateService;
+    private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
 
     @PostMapping
     public ResponseSuccessNoResult deactivateTables(@RequestBody TableDeactivationRequest tableDeactivationRequest) {
         tableDeactivateService.deactivateTables(tableDeactivationRequest);
-        return new ResponseSuccessNoResult(TABLE_DEACTIVATION_SUCCESS);
+        return new ResponseSuccessNoResult(TABLE_DEACTIVATE_SUCCESS);
+    }
+
+    @GetMapping
+    public ResponseSuccess<Page<SearchTableDeactivationListResponse>> getDeactivationTableList(Pageable pageable) {
+        return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }
 }
