@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class TableDeactivationInfo {
 
     private String reason;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 
 }

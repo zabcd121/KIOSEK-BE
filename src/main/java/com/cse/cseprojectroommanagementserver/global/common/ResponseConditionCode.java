@@ -109,9 +109,11 @@ public enum ResponseConditionCode {
     /**
      * Table Deactivation: 10
      */
-    TABLE_DEACTIVATION_SUCCESS("1000", "테이블 비활성화 성공"),
-    TABLE_DEACTIVATION_FAIL("1001", "테이블 비활성화 실패"),
-    TABLE_DEACTIVATION_DUPLICATED("1002", "중복된 비활성화 내역으로 인한 실패");
+    TABLE_DEACTIVATE_SUCCESS("1000", "테이블 비활성화 성공"),
+    TABLE_DEACTIVATE_FAIL("1001", "테이블 비활성화 실패"),
+    TABLE_DEACTIVATE_DUPLICATED("1002", "중복된 비활성화 내역으로 인한 실패"),
+    TABLE_DEACTIVATION_SEARCH_SUCCESS("1003", "테이블 비활성화 내역 조회 성공");
+
 
 
     private final String code;
