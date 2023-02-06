@@ -31,8 +31,8 @@ public class TableDeactivationRequestDto {
         public TableDeactivationInfo toEntity() {
             return TableDeactivationInfo.builder()
                     .reason(reason)
-                    .startTime(startTime)
-                    .endTime(endTime)
+                    .startAt(startTime)
+                    .endAt(endTime)
                     .build();
         }
     }
