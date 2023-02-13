@@ -2,7 +2,6 @@ package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivateService;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivationLogSearchService;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +14,9 @@ import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dt
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/table-deactivations")
+@RequestMapping("/api/admins/table-deactivations")
 @RequiredArgsConstructor
-public class TableDeactivationApiController {
+public class AdminTableDeactivationApiController {
 
     private final TableDeactivateService tableDeactivateService;
     private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
