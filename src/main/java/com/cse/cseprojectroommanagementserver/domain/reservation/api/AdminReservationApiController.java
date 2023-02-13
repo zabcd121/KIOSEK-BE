@@ -1,8 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.api;
 
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.AdminReservationSearchService;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationSearchService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,10 +17,10 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 @RequiredArgsConstructor
 public class AdminReservationApiController {
 
-    private final AdminReservationSearchService adminReservationSearchService;
+    private final ReservationSearchService reservationSearchService;
 
     @GetMapping
     public ResponseSuccess<Page> getReservationList(ReservationSearchCondition searchCondition, Pageable pageable) {
-        return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, adminReservationSearchService.searchReservationLogList(searchCondition, pageable));
+        return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, reservationSearchService.searchReservationListByConditionAndPageable(searchCondition, pageable));
     }
 }
