@@ -1,6 +1,9 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,4 +31,6 @@ public interface ReservationSearchableRepository {
     Long countPastReservations(Long memberId);
 
     List<Reservation> findUnUsedReservations();
+
+    Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable);
 }
