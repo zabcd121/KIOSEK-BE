@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.exception.advice;
 
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api.TableDeactivationApiController;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api.AdminTableDeactivationApiController;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.exception.DuplicatedDeactivationException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.TABLE_DEACTIVATE_DUPLICATED;
 
-@RestControllerAdvice(assignableTypes = {TableDeactivationApiController.class})
+@RestControllerAdvice(assignableTypes = {AdminTableDeactivationApiController.class})
 @Slf4j
 public class TableDeactivationControllerAdvice {
 
