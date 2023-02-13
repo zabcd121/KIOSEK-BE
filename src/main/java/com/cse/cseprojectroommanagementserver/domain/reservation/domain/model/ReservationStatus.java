@@ -15,7 +15,7 @@ public enum ReservationStatus {
     CANCELED("02", "취소됨"),
     IN_USE("03", "사용중"),
     UN_USED("04", "미사용"),
-    RETURN_WAITING("05", "반납 대기중"),
+    RETURN_WAITING("05", "반납대기중"),
     NOT_RETURNED("06", "미반납"),
     RETURNED("07", "반납완료");
 
@@ -29,6 +29,19 @@ public enum ReservationStatus {
 
         for (ReservationStatus rs : ReservationStatus.values()) {
             if(rs.statusCode.equals(inputStatusCode)) {
+                return rs;
+            }
+        }
+        throw new InvalidReservationStatusCodeException();
+    }
+
+    public static ReservationStatus ofStatus(String status) {
+        if(status == null) {
+            throw new NullReservationStatusCodeException();
+        }
+
+        for (ReservationStatus rs : ReservationStatus.values()) {
+            if(rs.status.equals(status)) {
                 return rs;
             }
         }

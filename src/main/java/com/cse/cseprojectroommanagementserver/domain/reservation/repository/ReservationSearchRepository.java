@@ -1,19 +1,27 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy;
+import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember.*;
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.*;
@@ -22,6 +30,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.m
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
 import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
+import static org.springframework.util.StringUtils.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,7 +48,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
                 .where(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
-                                .and(reservation.startDateTime.between(firstDateTime, lastDateTime)
+                        .and(reservation.startDateTime.between(firstDateTime, lastDateTime)
                                 .and(reservation.reservationStatus.notIn(CANCELED))))
                 .fetch();
     }
@@ -116,8 +125,8 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return Optional.ofNullable(
                 queryFactory
                         .selectFrom(reservation)
-                        .where(reservation.reservationStatus.eq(IN_USE))
-                        .where(reservation.endDateTime.before(LocalDateTime.now()))
+                        .where(reservation.reservationStatus.eq(IN_USE)
+                                .and(reservation.endDateTime.before(LocalDateTime.now())))
                         .fetch()
         );
     }
@@ -148,8 +157,78 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return queryFactory
                 .selectFrom(reservation)
                 .where(reservation.reservationStatus.eq(RESERVATION_COMPLETED)
-                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute()- POSSIBLE_CHECKIN_TIME_AFTER.getValue()))))
+                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute() - POSSIBLE_CHECKIN_TIME_AFTER.getValue()))))
                 .fetch();
+    }
+
+    @Override
+    public Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
+        List<SearchReservationByPagingResponse> content = queryFactory
+                .select(Projections.fields(SearchReservationByPagingResponse.class,
+                        Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startDateTime, reservation.endDateTime, reservation.reservationStatus).as("reservation"),
+                        Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
+                        Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
+                        reservation.projectTable.projectRoom.roomName,
+                        reservation.projectTable.tableName
+                ))
+                .from(reservation)
+                .join(reservation.tableReturn, tableReturn)
+                .join(reservation.member, member)
+                .join(reservation.projectTable, projectTable)
+                .join(reservation.projectTable.projectRoom, projectRoom)
+                .where(
+                        periodBetween(condition.getStartDt(), condition.getEndDt()),
+                        memberNameEq(condition.getMemberName()),
+                        loginIdEq(condition.getLoginId()),
+                        reservationStatusEq(condition.getReservationStatus()),
+                        roomNameEq(condition.getRoomName())
+                )
+                .orderBy(reservation.startDateTime.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(reservation.count())
+                .from(reservation)
+                .join(reservation.tableReturn, tableReturn)
+                .join(reservation.member, member)
+                .join(reservation.projectTable, projectTable)
+                .join(reservation.projectTable.projectRoom, projectRoom)
+                .where(
+                        periodBetween(condition.getStartDt(), condition.getEndDt()),
+                        memberNameEq(condition.getMemberName()),
+                        loginIdEq(condition.getLoginId()),
+                        reservationStatusEq(condition.getReservationStatus()),
+                        roomNameEq(condition.getRoomName())
+                );
+
+        return PageableExecutionUtils.getPage(content,pageable,countQuery::fetchOne);
+
+
+    }
+
+    private BooleanExpression periodBetween(LocalDate startDt, LocalDate endDt) {
+        return (startDt != null && endDt != null) ?
+                reservation.startDateTime.goe(startDt.atStartOfDay())
+                        .and(reservation.endDateTime.loe(endDt.atTime(LocalTime.MAX)))
+                : null;
+    }
+
+    private BooleanExpression memberNameEq(String memberName) {
+        return hasText(memberName) ? reservation.member.name.eq(memberName) : null;
+    }
+
+    private BooleanExpression loginIdEq(String loginId) {
+        return hasText(loginId) ? reservation.member.account.loginId.eq(loginId) : null;
+    }
+
+    private BooleanExpression reservationStatusEq(String reservationStatus) {
+        return hasText(reservationStatus) ? reservation.reservationStatus.eq(ReservationStatus.ofStatus(reservationStatus)) : null;
+    }
+
+    private BooleanExpression roomNameEq(String roomName) {
+        return hasText(roomName) ? reservation.projectTable.projectRoom.roomName.eq(roomName) : null;
     }
 
 }
