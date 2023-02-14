@@ -86,6 +86,7 @@ public enum ResponseConditionCode {
      * Penalty: 06
      */
     PENALTY_LOGS_SEARCH_SUCCESS("0600", "제재 내역 조회 성공"),
+    PENALTY_IMPOSITION_SUCCESS("0601", "제재 성공"),
 
     /**
      * Complaint: 07
