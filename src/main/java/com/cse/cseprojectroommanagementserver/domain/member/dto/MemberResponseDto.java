@@ -27,7 +27,6 @@ public class MemberResponseDto {
     @NoArgsConstructor
     @Getter
     public static class LoginMemberInfoResponse {
-
         private Long memberId;
         private String name;
         private RoleType roleType;
@@ -97,6 +96,16 @@ public class MemberResponseDto {
 
             return this;
         }
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    public static class MemberSimpleInfo {
+        private Long memberId;
+        private String loginId;
+        private String name;
     }
 
 }

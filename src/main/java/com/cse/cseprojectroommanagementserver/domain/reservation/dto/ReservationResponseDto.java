@@ -2,14 +2,14 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.dto;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 
 public class ReservationResponseDto {
@@ -125,28 +125,9 @@ public class ReservationResponseDto {
 
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter
-    public static class TableReturnSimpleInfo {
-        private Long tableReturnId;
 
-        @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime returnedDateTime;
 
-        private Image cleanUpPhoto;
-    }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter
-    public static class MemberSimpleInfo {
-        private Long memberId;
-        private String name;
-        private String loginId;
-    }
 
 
 }
