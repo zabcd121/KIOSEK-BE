@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.common.Image;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Complaint {
+public class Complaint extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long complaintId;

@@ -90,7 +90,8 @@ public enum ResponseConditionCode {
     /**
      * Complaint: 07
      */
-    COMPLAIN_SUCCESS("0700", "불편사항 접수 성공"),
+    COMPLAIN_SUCCESS("0700", "민원 접수 성공"),
+    COMPLAINT_SEARCH_SUCCESS("0701", "민원 조회 성공"),
 
     /**
      * Reservation Policy: 08

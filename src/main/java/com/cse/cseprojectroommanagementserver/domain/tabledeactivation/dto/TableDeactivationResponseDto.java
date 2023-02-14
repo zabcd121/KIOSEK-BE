@@ -10,7 +10,7 @@ public class TableDeactivationResponseDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class SearchTableDeactivationListResponse {
+    public static class AdminTableDeactivationSearchResponse {
         private String roomName;
         private String tableName;
         private LocalDateTime startAt;

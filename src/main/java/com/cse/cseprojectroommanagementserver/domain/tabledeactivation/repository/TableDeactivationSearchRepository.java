@@ -1,9 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom;
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,9 +37,9 @@ public class TableDeactivationSearchRepository implements TableDeactivationSearc
     }
 
     @Override
-    public Page<SearchTableDeactivationListResponse> findAllByPageable(Pageable pageable) {
-        List<SearchTableDeactivationListResponse> content = queryFactory
-                .select(Projections.fields(SearchTableDeactivationListResponse.class,
+    public Page<AdminTableDeactivationSearchResponse> findAllByPageable(Pageable pageable) {
+        List<AdminTableDeactivationSearchResponse> content = queryFactory
+                .select(Projections.fields(AdminTableDeactivationSearchResponse.class,
                         tableDeactivation.projectTable.projectRoom.roomName,
                         tableDeactivation.projectTable.tableName,
                         tableDeactivation.tableDeactivationInfo.startAt,
