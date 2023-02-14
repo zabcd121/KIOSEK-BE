@@ -12,12 +12,8 @@ import javax.persistence.Embeddable;
 @Builder
 @Embeddable
 public class Image{
-//    @Column(nullable = false)
+
     private String fileLocalName;
-
-//    @Column(nullable = false)
     private String fileOriName;
-
-//    @Column(nullable = false)
     private String fileUrl;
 }
