@@ -1,10 +1,11 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.querydsl.core.types.Predicate;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.*;
@@ -29,6 +31,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.m
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
+import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
 import static org.springframework.util.StringUtils.*;
 
@@ -165,11 +168,11 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         List<SearchReservationByPagingResponse> content = queryFactory
                 .select(Projections.fields(SearchReservationByPagingResponse.class,
-                        Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startDateTime, reservation.endDateTime, reservation.reservationStatus).as("reservation"),
-                        Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
-                        Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
-                        reservation.projectTable.projectRoom.roomName,
-                        reservation.projectTable.tableName
+                            Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startDateTime, reservation.endDateTime, reservation.reservationStatus).as("reservation"),
+                            Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
+                            Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
+                            reservation.projectTable.projectRoom.roomName,
+                            reservation.projectTable.tableName
                 ))
                 .from(reservation)
                 .join(reservation.tableReturn, tableReturn)
@@ -203,7 +206,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                         roomNameEq(condition.getRoomName())
                 );
 
-        return PageableExecutionUtils.getPage(content,pageable,countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
 
 
     }
