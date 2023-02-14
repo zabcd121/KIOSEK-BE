@@ -34,6 +34,10 @@ public class Penalty extends BaseTimeEntity {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public void extendEndDate(LocalDate newEndDate) {
+        this.endDate = newEndDate;
+    }
+
     public void addViolation(Violation violation) {
         violation.changePenalty(this);
         this.violations.add(violation);
