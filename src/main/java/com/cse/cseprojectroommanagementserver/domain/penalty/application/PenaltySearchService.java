@@ -3,7 +3,10 @@ package com.cse.cseprojectroommanagementserver.domain.penalty.application;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse;
+import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,10 @@ public class PenaltySearchService {
         }
 
         return penaltyLogResponseList;
+    }
+
+    public Page<SearchPenaltyByPagingResponse> searchPenaltyListByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
+        return penaltySearchableRepository.findAllByConditionAndPageable(condition, pageable);
     }
 
 }

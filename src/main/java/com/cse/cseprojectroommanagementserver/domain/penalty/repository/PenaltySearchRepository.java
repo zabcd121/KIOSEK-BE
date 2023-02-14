@@ -1,15 +1,30 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember;
+import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
+import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse;
+import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.QPenalty.*;
+import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.reservation;
+import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 @RequiredArgsConstructor
@@ -48,6 +63,44 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
                         .where(penalty.member.memberId.eq(memberId))
                         .fetch()
         );
+    }
+
+    @Override
+    public Page<SearchPenaltyByPagingResponse> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
+        List<SearchPenaltyByPagingResponse> content = queryFactory
+                .select(Projections.fields(SearchPenaltyByPagingResponse.class,
+                        Projections.fields(PenaltyLogResponse.class, penalty.penaltyId, penalty.startDate, penalty.endDate, penalty.description),
+                        Projections.fields(MemberSimpleInfo.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name)
+                ))
+                .from(penalty)
+                .join(penalty.member, member)
+                .where(
+                        memberNameEq(condition.getMemberName()),
+                        loginIdEq(condition.getLoginId())
+                )
+                .orderBy(penalty.startDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(penalty.count())
+                .from(penalty)
+                .where(
+                        memberNameEq(condition.getMemberName()),
+                        loginIdEq(condition.getLoginId())
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+
+    }
+
+    private BooleanExpression memberNameEq(String memberName) {
+        return hasText(memberName) ? penalty.member.name.eq(memberName) : null;
+    }
+
+    private BooleanExpression loginIdEq(String loginId) {
+        return hasText(loginId) ? penalty.member.account.loginId.eq(loginId) : null;
     }
 
 }
