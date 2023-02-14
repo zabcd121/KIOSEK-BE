@@ -28,7 +28,7 @@ public class AdminTableDeactivationApiController {
     }
 
     @GetMapping
-    public ResponseSuccess<Page<SearchTableDeactivationListResponse>> getDeactivationTableList(Pageable pageable) {
+    public ResponseSuccess<Page<AdminTableDeactivationSearchResponse>> getDeactivationTableList(Pageable pageable) {
         return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }
 }
