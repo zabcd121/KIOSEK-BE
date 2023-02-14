@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ public class TableDeactivationLogSearchService {
 
     private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
 
-    public Page<SearchTableDeactivationListResponse> searchTableDeactivationLog(Pageable pageable) {
+    public Page<AdminTableDeactivationSearchResponse> searchTableDeactivationLog(Pageable pageable) {
 
         return tableDeactivationSearchableRepository.findAllByPageable(pageable);
     }
