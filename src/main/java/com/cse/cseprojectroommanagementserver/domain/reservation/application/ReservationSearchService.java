@@ -22,7 +22,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 public class ReservationSearchService {
     private final ReservationSearchableRepository reservationSearchableRepository;
 
-    public Page searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
+    public Page<SearchReservationByPagingResponse> searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         return reservationSearchableRepository.findAllByConditionAndPageable(condition, pageable);
     }
 
