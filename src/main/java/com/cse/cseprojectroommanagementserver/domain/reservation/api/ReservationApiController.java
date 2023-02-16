@@ -23,7 +23,7 @@ public class ReservationApiController {
     private final ReserveTableService reserveTableService;
     private final ReserveTableFacadeService reserveTableFacadeService;
     private final ReservationSearchService reservationSearchService;
-    private final ReservationStatusChangeService reservationStatusChangeService;
+    private final ReservationCancelService reservationCancelService;
     private final ReservationAuthService reservationAuthService;
     private final AuthService authService;
 
@@ -76,8 +76,8 @@ public class ReservationApiController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseSuccessNoResult cancelReservation(@PathVariable("id") Long reservationId) {
-        reservationStatusChangeService.cancelReservation(reservationId);
+    public ResponseSuccessNoResult cancelReservationByMember(@PathVariable("id") Long reservationId) {
+        reservationCancelService.cancelReservationByMember(reservationId);
         return new ResponseSuccessNoResult(RESERVATION_CANCEL_SUCCESS);
     }
 

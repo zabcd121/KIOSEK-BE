@@ -2,26 +2,24 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DisabledTableException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.PenaltyMemberReserveFailException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ReservationQRNotCreatedException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicyRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,14 +39,11 @@ public class ReserveTableService {
     private final ReservationVerifiableRepository reservationVerifiableRepository;
     private final ReservationRepository reservationRepository;
     private final PenaltySearchableRepository penaltySearchRepository;
-    private final ReservationPolicyRepository reservationPolicyRepository;
     private final ReservationPolicySearchableRepository reservationPolicySearchableRepository;
     private final MemberRepository memberRepository;
     private final ProjectTableRepository projectTableRepository;
-    private final MemberSearchableRepository memberSearchableRepository;
+    private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
     private final QRGenerator qrGenerator;
-
-    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -106,7 +101,7 @@ public class ReserveTableService {
     }
 
     private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(!isPenaltyMember(memberId) && !isDuplicatedReservation(projectTableId, startDateTime, endDateTime)) {
+        if(!isPenaltyMember(memberId) && !isDuplicatedReservation(projectTableId, startDateTime, endDateTime) && !isDisabledTableAtTime(projectTableId, startDateTime, endDateTime)) {
             ReservationPolicy reservationPolicy = findReservationPolicy();
             //오늘 이 회원이 예약을 실행한 횟수룰 가져옴
             Long countTodayMemberCreatedReservation = getCountTodayMemberCreatedReservation(memberId);
@@ -127,7 +122,13 @@ public class ReserveTableService {
         if (reservationVerifiableRepository.existsBy(tableId, startDateTime, endDateTime)) {
             throw new DuplicatedReservationException();
         }
-        log.info("중복 예약 아님");
+        return false;
+    }
+
+    private boolean isDisabledTableAtTime(Long tableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if(tableDeactivationSearchableRepository.existsBy(tableId, startDateTime, endDateTime)) {
+            throw new DisabledTableException();
+        }
         return false;
     }
 
