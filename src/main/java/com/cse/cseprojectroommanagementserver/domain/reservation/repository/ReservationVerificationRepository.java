@@ -29,12 +29,9 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
         return queryFactory
                 .from(reservation)
                 .where(reservation.projectTable.tableId.eq(projectTableId)
-                        .and(reservation.reservationStatus.notIn(CANCELED, RETURNED, UN_USED)
-                                .and(startBetweenReqStartAndEnd(startDateTime, endDateTime)
-                                        .or(endBetweenReqStartAndEnd(startDateTime, endDateTime)
-                                                .or(startGoeReqStartAndEndLoeReqEnd(startDateTime, endDateTime)))
-                                )
-                        )
+                        .and(reservation.reservationStatus.notIn(CANCELED, RETURNED, UN_USED))
+                        .and(reservation.startDateTime.lt(endDateTime))
+                        .and(reservation.endDateTime.gt(startDateTime))
 
                 )
                 .select(reservation.reservationId)
@@ -64,25 +61,25 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
     }
 
 
-    private BooleanBuilder startBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(
-                () -> reservation.startDateTime.between(startDateTime, endDateTime)
-                        .and(reservation.startDateTime.ne(endDateTime))
-        );
-    }
-
-    private BooleanBuilder endBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(
-                () -> reservation.endDateTime.between(startDateTime, endDateTime)
-                        .and(reservation.endDateTime.ne(startDateTime))
-        );
-    }
-
-    private BooleanBuilder startGoeReqStartAndEndLoeReqEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return nullSafeBuilder(
-                () -> reservation.startDateTime.goe(startDateTime)
-                        .and(reservation.endDateTime.loe(endDateTime))
-        );
-    }
+//    private BooleanBuilder startBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+//        return nullSafeBuilder(
+//                () -> reservation.startDateTime.between(startDateTime, endDateTime)
+//                        .and(reservation.startDateTime.ne(endDateTime))
+//        );
+//    }
+//
+//    private BooleanBuilder endBetweenReqStartAndEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+//        return nullSafeBuilder(
+//                () -> reservation.endDateTime.between(startDateTime, endDateTime)
+//                        .and(reservation.endDateTime.ne(startDateTime))
+//        );
+//    }
+//
+//    private BooleanBuilder startGoeReqStartAndEndLoeReqEnd(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+//        return nullSafeBuilder(
+//                () -> reservation.startDateTime.goe(startDateTime)
+//                        .and(reservation.endDateTime.loe(endDateTime))
+//        );
+//    }
 
 }
