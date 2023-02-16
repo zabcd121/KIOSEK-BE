@@ -86,11 +86,13 @@ public enum ResponseConditionCode {
      * Penalty: 06
      */
     PENALTY_LOGS_SEARCH_SUCCESS("0600", "제재 내역 조회 성공"),
+    PENALTY_IMPOSITION_SUCCESS("0601", "제재 성공"),
 
     /**
      * Complaint: 07
      */
-    COMPLAIN_SUCCESS("0700", "불편사항 접수 성공"),
+    COMPLAIN_SUCCESS("0700", "민원 접수 성공"),
+    COMPLAINT_SEARCH_SUCCESS("0701", "민원 조회 성공"),
 
     /**
      * Reservation Policy: 08
@@ -109,9 +111,11 @@ public enum ResponseConditionCode {
     /**
      * Table Deactivation: 10
      */
-    TABLE_DEACTIVATION_SUCCESS("1000", "테이블 비활성화 성공"),
-    TABLE_DEACTIVATION_FAIL("1001", "테이블 비활성화 실패"),
-    TABLE_DEACTIVATION_DUPLICATED("1002", "중복된 비활성화 내역으로 인한 실패");
+    TABLE_DEACTIVATE_SUCCESS("1000", "테이블 비활성화 성공"),
+    TABLE_DEACTIVATE_FAIL("1001", "테이블 비활성화 실패"),
+    TABLE_DEACTIVATE_DUPLICATED("1002", "중복된 비활성화 내역으로 인한 실패"),
+    TABLE_DEACTIVATION_SEARCH_SUCCESS("1003", "테이블 비활성화 내역 조회 성공");
+
 
 
     private final String code;

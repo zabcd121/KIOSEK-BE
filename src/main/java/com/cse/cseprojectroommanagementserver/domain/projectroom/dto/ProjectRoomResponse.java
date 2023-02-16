@@ -33,4 +33,14 @@ public class ProjectRoomResponse {
             return this;
         }
     }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    public static class SimpleProjectRoomResponse {
+        private Long projectRoomId;
+        private String buildingName;
+        private String roomName;
+    }
 }

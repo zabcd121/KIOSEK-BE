@@ -36,7 +36,7 @@ public class TableDeactivateService {
         List<TableDeactivation> tableDeactivationList = new ArrayList<>();
 
         for (Long tableId : tableDeactivationRequest.getProjectTableIdList()) {
-            if(!isDuplicatedDeactivation(tableId, info.getStartTime(), info.getEndTime())) {
+            if(!isDuplicatedDeactivation(tableId, info.getStartAt(), info.getEndAt())) {
                 tableDeactivationList.add(
                         TableDeactivation.createTableDeactivation(projectTableRepository.getReferenceById(tableId), info)
                 );
