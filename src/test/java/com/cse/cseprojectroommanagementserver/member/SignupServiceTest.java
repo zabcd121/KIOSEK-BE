@@ -14,6 +14,7 @@ import com.google.zxing.WriterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,6 +86,9 @@ public class SignupServiceTest {
     void isDuplicatedLoginId() {
         //given
         given(signupRepository.existsByAccountLoginId(any())).willReturn(true);
+
+        //when
+        signupService.isDuplicatedLoginId(member.getLoginId());
 
         //then
         assertThrows(LoginIdDuplicatedException.class, () -> signupService.isDuplicatedLoginId(member.getLoginId()));

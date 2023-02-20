@@ -39,7 +39,6 @@ public class AuthService {
     @Transactional
     public LoginResponse login(LoginRequest loginRequest, RoleType allowedRoleType) {
         Authentication authentication = authenticateMember(loginRequest.getLoginId(), loginRequest.getPassword(), allowedRoleType);
-
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
         saveRefreshTokenInRedis(refreshToken, authentication);
@@ -119,7 +118,7 @@ public class AuthService {
 
     public Member searchMatchedMember(String loginId, String password) {
         Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
-        matchingPassword(password, member.getPassword());
+        matchPassword(password, member.getPassword());
 
         return member;
     }
@@ -133,7 +132,7 @@ public class AuthService {
     private Authentication authenticateMember(String loginId, String password, RoleType allowedRoleType){
         UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
 
-        matchingPassword(password, userDetails.getPassword());
+        matchPassword(password, userDetails.getPassword());
 
         String role = "";
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
@@ -169,7 +168,7 @@ public class AuthService {
                 .build();
     }
 
-    private boolean matchingPassword(String requestPassword, String originPassword) {
+    private boolean matchPassword(String requestPassword, String originPassword) {
         if(!passwordEncoder.matches(requestPassword, originPassword)) {
             throw new InvalidPasswordException();
         }
