@@ -40,10 +40,10 @@ public class ReservationPolicy {
                 .build();
     }
 
-    public boolean verifyReservation(LocalDateTime reservationStartDateTime, LocalDateTime reservationEndDateTime, Long countTodayMemberCreatedReservation) {
-        reservationMaxHourPerOnce.checkPolicy(reservationStartDateTime, reservationEndDateTime);
+    public boolean verifyReservation(LocalDateTime reservationStartAt, LocalDateTime reservationEndAt, Long countTodayMemberCreatedReservation) {
+        reservationMaxHourPerOnce.checkPolicy(reservationStartAt, reservationEndAt);
         reservationMaxCountPerDay.checkPolicy(countTodayMemberCreatedReservation);
-        reservationMaxPeriod.checkPolicy(reservationEndDateTime);
+        reservationMaxPeriod.checkPolicy(reservationEndAt);
 
         return true;
     }

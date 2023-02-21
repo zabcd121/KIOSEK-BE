@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxPeriod {
-    private Integer maxPeriod;
+    private Integer value; //week
 
     /**
      * 최대 주기가 2주라면 오늘을 제외한 2주 뒤까지 예약이 활성화 된다.
@@ -24,9 +24,9 @@ public class ReservationMaxPeriod {
      */
     public boolean checkPolicy(LocalDateTime reservationEndDateTime) {
         LocalDateTime current = LocalDateTime.now();
-        LocalDateTime maxAvailableDateTimeForReservation = LocalDateTime.of(current.toLocalDate().plusDays(maxPeriod*2+1), LocalTime.of(8, 0));
+        LocalDateTime maxAvailableDateTimeForReservation = LocalDateTime.of(current.toLocalDate().plusDays(value *7+1), LocalTime.of(8, 0));
 
-        if(reservationEndDateTime.isAfter(maxAvailableDateTimeForReservation) || reservationEndDateTime.isEqual(maxAvailableDateTimeForReservation) ) {
+        if(reservationEndDateTime.isAfter(maxAvailableDateTimeForReservation)) {
             throw new ExceedMaxPeriodEnableReservationException("최대 " + maxAvailableDateTimeForReservation.format(DateTimeFormatter.ofPattern("MM월 dd알 HH시 mm분")) + " 까지만 예약 가능합니다." );
         }
         return true;
