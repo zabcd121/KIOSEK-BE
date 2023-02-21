@@ -2,9 +2,9 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.CheckInPreviousReservationInUseException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ImpossibleCheckInTimeAfterStartTimeException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ImpossibleCheckInTimeBeforeStartTimeException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelReservationException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
@@ -102,6 +102,9 @@ public class Reservation extends BaseTimeEntity {
     }
 
     public void cancel() {
+        if (this.reservationStatus != RESERVATION_COMPLETED) {
+            throw new UnableToCancelReservationException();
+        }
         this.reservationStatus = CANCELED;
     }
 
@@ -116,9 +119,11 @@ public class Reservation extends BaseTimeEntity {
     }
 
     public void checkIn(boolean isPreviousReservationInUse) {
-        if (isPreviousReservationInUse) throw new CheckInPreviousReservationInUseException();
-        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue()))) throw new ImpossibleCheckInTimeBeforeStartTimeException();//시작시간 10분이상 전에는 체크인 불가
-        else if (LocalDateTime.now().isAfter(this.startAt.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) throw new ImpossibleCheckInTimeAfterStartTimeException();//시작시간 20분이 지난 후에는 체크인 불가
+        if (isPreviousReservationInUse) throw new UnableToCheckInStatusException(); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
+        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
+                || LocalDateTime.now().isAfter(this.startAt.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
+            throw new UnableToCheckInTimeException();
+        }
 
         this.checkInTime = LocalDateTime.now();
         this.reservationStatus = IN_USE;
