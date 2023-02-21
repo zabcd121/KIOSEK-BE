@@ -42,16 +42,16 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<SearchReservationResponse> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstDateTime, LocalDateTime lastDateTime) {
+    public List<SearchReservationResponse> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
         return queryFactory
                 .select(Projections.fields(SearchReservationResponse.class,
                         reservation.projectTable.tableId.as("projectTableId"), projectTable.tableName,
-                        reservation.startDateTime, reservation.endDateTime, tableReturn.returnedDateTime))
+                        reservation.startAt, reservation.endAt, tableReturn.returnedDateTime))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
                 .where(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
-                        .and(reservation.startDateTime.between(firstDateTime, lastDateTime)
+                        .and(reservation.startAt.between(firstAt, lastAt)
                                 .and(reservation.reservationStatus.notIn(CANCELED))))
                 .fetch();
     }
@@ -60,7 +60,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<CurrentReservationByMemberResponse> findCurrentAllByMemberId(Long memberId) {
         return queryFactory
                 .select(Projections.fields(CurrentReservationByMemberResponse.class,
-                        reservation.reservationId, reservation.startDateTime, reservation.endDateTime, tableReturn.returnedDateTime,
+                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName,
                         reservationQR.qrImage.fileLocalName.as("imageName"), reservationQR.qrImage.fileUrl.as("imageURL")))
                 .from(reservation)
@@ -70,7 +70,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .leftJoin(reservation.reservationQR, reservationQR)
                 .where(reservation.member.memberId.eq(memberId)
                         .and(reservation.reservationStatus.in(RESERVATION_COMPLETED, IN_USE, RETURN_WAITING)))
-                .orderBy(reservation.startDateTime.asc())
+                .orderBy(reservation.startAt.asc())
                 .fetch();
     }
 
@@ -78,7 +78,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<PastReservationByMemberResponse> findPastAllByMemberId(Long memberId) {
         return queryFactory
                 .select(Projections.fields(PastReservationByMemberResponse.class,
-                        reservation.reservationId, reservation.startDateTime, reservation.endDateTime, tableReturn.returnedDateTime,
+                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
@@ -86,7 +86,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .join(projectTable.projectRoom, projectRoom)
                 .where(reservation.member.memberId.eq(memberId)
                         .and(reservation.reservationStatus.in(UN_USED, RETURN_WAITING, NOT_RETURNED, RETURNED, CANCELED)))
-                .orderBy(reservation.startDateTime.desc())
+                .orderBy(reservation.startAt.desc())
                 .fetch();
     }
 
@@ -129,7 +129,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 queryFactory
                         .selectFrom(reservation)
                         .where(reservation.reservationStatus.eq(IN_USE)
-                                .and(reservation.endDateTime.before(LocalDateTime.now())))
+                                .and(reservation.endAt.before(LocalDateTime.now())))
                         .fetch()
         );
     }
@@ -160,7 +160,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return queryFactory
                 .selectFrom(reservation)
                 .where(reservation.reservationStatus.eq(RESERVATION_COMPLETED)
-                        .and(reservation.startDateTime.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute() - POSSIBLE_CHECKIN_TIME_AFTER.getValue()))))
+                        .and(reservation.startAt.eq(LocalDateTime.of(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute() - POSSIBLE_CHECKIN_TIME_AFTER.getValue()))))
                 .fetch();
     }
 
@@ -168,7 +168,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         List<SearchReservationByPagingResponse> content = queryFactory
                 .select(Projections.fields(SearchReservationByPagingResponse.class,
-                            Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startDateTime, reservation.endDateTime, reservation.reservationStatus).as("reservation"),
+                            Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
                             Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
                             Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
                             reservation.projectTable.projectRoom.roomName,
@@ -186,7 +186,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                         reservationStatusEq(condition.getReservationStatus()),
                         roomNameEq(condition.getRoomName())
                 )
-                .orderBy(reservation.startDateTime.desc())
+                .orderBy(reservation.startAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -213,8 +213,8 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
 
     private BooleanExpression periodBetween(LocalDate startDt, LocalDate endDt) {
         return (startDt != null && endDt != null) ?
-                reservation.startDateTime.goe(startDt.atStartOfDay())
-                        .and(reservation.endDateTime.loe(endDt.atTime(LocalTime.MAX)))
+                reservation.startAt.goe(startDt.atStartOfDay())
+                        .and(reservation.endAt.loe(endDt.atTime(LocalTime.MAX)))
                 : null;
     }
 

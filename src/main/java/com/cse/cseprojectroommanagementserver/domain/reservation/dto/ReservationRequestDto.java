@@ -22,12 +22,12 @@ public class ReservationRequestDto {
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
     }
 
     @Builder
@@ -41,12 +41,12 @@ public class ReservationRequestDto {
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
     }
 
     @Builder
@@ -61,12 +61,12 @@ public class ReservationRequestDto {
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
     }
 
     @Builder
@@ -75,10 +75,10 @@ public class ReservationRequestDto {
     @Getter @Setter
     public static class FirstAndLastDateTimeRequest {
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime firstDateTime;
+        private LocalDateTime firstAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime lastDateTime;
+        private LocalDateTime lastAt;
     }
 
     @Builder

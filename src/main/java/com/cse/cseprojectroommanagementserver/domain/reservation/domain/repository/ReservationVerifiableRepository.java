@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public interface ReservationVerifiableRepository {
 
-    boolean existsBy(Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    boolean existsBy(Long projectTableId, LocalDateTime startAt, LocalDateTime endAt);
 
     Long countCreatedReservationForTodayByMemberId(Long memberId);
 
-    boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startDateTime);
+    boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startAt);
 }

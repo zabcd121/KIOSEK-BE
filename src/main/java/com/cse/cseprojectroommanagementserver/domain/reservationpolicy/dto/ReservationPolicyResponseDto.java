@@ -17,9 +17,9 @@ public class ReservationPolicyResponseDto {
 
         public ReservationPolicySearchResponse of(ReservationPolicy reservationPolicy) {
             this.reservationPolicyId = reservationPolicy.getReservationPolicyId();
-            this.reservationMaxHourPerOnce = reservationPolicy.getReservationMaxHourPerOnce().getMaxHourPerOnce();
-            this.reservationMaxCountPerDay = reservationPolicy.getReservationMaxCountPerDay().getMaxCountPerDay();
-            this.reservationMaxPeriod = reservationPolicy.getReservationMaxPeriod().getMaxPeriod();
+            this.reservationMaxHourPerOnce = reservationPolicy.getReservationMaxHourPerOnce().getValue();
+            this.reservationMaxCountPerDay = reservationPolicy.getReservationMaxCountPerDay().getValue();
+            this.reservationMaxPeriod = reservationPolicy.getReservationMaxPeriod().getValue();
 
             return this;
         }

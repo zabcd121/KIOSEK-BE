@@ -27,6 +27,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtTokenFilterConfig jwtTokenFilterConfig;
 
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -75,14 +76,12 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 실패시 오류 처리
                 .accessDeniedHandler(jwtAccessDeniedHandler) // 권한 부족시 오류 처리
                 .and()
-                .apply(new JwtTokenFilterConfig(jwtTokenProvider))
+                .apply(jwtTokenFilterConfig)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/members/**")
                 .permitAll()
                 .and().build();
-
-
 
     }
 }

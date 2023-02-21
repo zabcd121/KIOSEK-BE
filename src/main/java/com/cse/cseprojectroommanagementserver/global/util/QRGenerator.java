@@ -69,8 +69,9 @@ public class QRGenerator {
             String fileOriName = UUID.randomUUID().toString();
             String destinationFileName = UUID.randomUUID().toString();
             String fileUrl = fixedDir + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
-            log.info("fileUrL: ,{}", fileUrl);
-            log.info("destinationFileName: ,{}", destinationFileName);
+            log.info("fixedDir: {}", fixedDir);
+            log.info("fileUrL: {}", fileUrl);
+            log.info("destinationFileName: {}", destinationFileName);
 
 
             File destinationFile = new File(outbound + fileUrl + destinationFileName + EXTENSION);
