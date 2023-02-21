@@ -115,46 +115,44 @@ public class ReservationControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError InvalidPasswordExHandler(InvalidPasswordException ex) {
+    public ResponseError invalidPasswordExHandler(InvalidPasswordException ex) {
         log.error("[exceptionHandler] InvalidPasswordExHandler", ex);
         return new ResponseError(PASSWORD_INVALID);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError IsNotInUseTableExHandler(IsNotInUseTableException ex) {
+    public ResponseError isNotInUseTableExHandler(IsNotInUseTableException ex) {
         log.error("[exceptionHandler] IsNotInUseTableException", ex);
         return new ResponseError(NOT_IN_USE_TABLE);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError notExistsQRExHandler(InvalidReservationQRException ex) {
+    public ResponseError invalidReservationQRExHandler(InvalidReservationQRException ex) {
         log.error("[exceptionHandler] InvalidReservationQRException", ex);
         return new ResponseError(RESERVATION_QR_CHECKIN_FAIL);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError notExistsQRExHandler(CheckInPreviousReservationInUseException ex) {
-        log.error("[exceptionHandler] CheckInPreviousReservationInUseException", ex);
-        return new ResponseError(RESERVATION_CHECK_IN_FAIL_PREVIOUS_IN_USE);
+    public ResponseError unableToCheckInStatusExHandler(UnableToCheckInStatusException ex) {
+        log.error("[exceptionHandler] UnableToCheckInStatusException", ex);
+        return new ResponseError(RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_STATUS);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError IsNotInUseTableExHandler(ImpossibleCheckInTimeBeforeStartTimeException ex) {
-        log.error("[exceptionHandler] ImpossibleCheckInTimeBeforeStartTimeException", ex);
-        return new ResponseError(RESERVATION_CHECK_IN_FAIL_BEFORE_START_TIME);
+    public ResponseError unableToCheckInTimeExHandler(UnableToCheckInTimeException ex) {
+        log.error("[exceptionHandler] UnableToCheckInTimeException", ex);
+        return new ResponseError(RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_TIME);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError IsNotInUseTableExHandler(ImpossibleCheckInTimeAfterStartTimeException ex) {
-        log.error("[exceptionHandler] ImpossibleCheckInTimeAfterStartTimeException", ex);
-        return new ResponseError(RESERVATION_CHECK_IN_FAIL_AFTER_START_TIME);
+    public ResponseError impossibleOfReservationCancelExHandler(UnableToCancelReservationException ex) {
+        log.error("[exceptionHandler] UnableToCancelReservationException", ex);
+        return new ResponseError(RESERVATION_CANCEL_FAIL);
     }
-
-
 }
 

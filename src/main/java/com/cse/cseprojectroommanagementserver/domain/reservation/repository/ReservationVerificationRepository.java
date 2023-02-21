@@ -32,7 +32,7 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
     }
 
     @Override
-    public Long countCreatedReservationForTodayByMemberId(Long memberId) {
+    public Long countCreatedReservationForTodayBy(Long memberId) {
         return queryFactory
                 .select(reservation.count())
                 .from(reservation)
@@ -44,7 +44,7 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
     }
 
     @Override
-    public boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startAt) {
+    public boolean existsCurrentlyInUseTableBy(Long tableId, LocalDateTime startAt) {
         return queryFactory
                 .from(reservation)
                 .where(reservation.projectTable.tableId.eq(tableId)

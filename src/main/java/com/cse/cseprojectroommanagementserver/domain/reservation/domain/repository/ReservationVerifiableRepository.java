@@ -6,7 +6,7 @@ public interface ReservationVerifiableRepository {
 
     boolean existsBy(Long projectTableId, LocalDateTime startAt, LocalDateTime endAt);
 
-    Long countCreatedReservationForTodayByMemberId(Long memberId);
+    Long countCreatedReservationForTodayBy(Long memberId);
 
-    boolean existsInUsePreviousReservation(Long tableId, LocalDateTime startAt);
+    boolean existsCurrentlyInUseTableBy(Long tableId, LocalDateTime startAt);
 }

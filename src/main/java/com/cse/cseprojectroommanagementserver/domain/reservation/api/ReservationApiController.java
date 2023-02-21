@@ -76,14 +76,14 @@ public class ReservationApiController {
 
     @PatchMapping("/{id}")
     public ResponseSuccessNoResult cancelReservationByMember(@PathVariable("id") Long reservationId) {
-        reservationCancelService.cancelReservationByMember(reservationId);
+        reservationCancelService.cancelReservation(reservationId);
         return new ResponseSuccessNoResult(RESERVATION_CANCEL_SUCCESS);
     }
 
     @PatchMapping("/auth/qr")
     public ResponseSuccessNoResult authReservationQR(@RequestBody QRAuthRequest qrContents) {
         reservationAuthService.authReservationQR(qrContents);
-        return new ResponseSuccessNoResult(RESERVATION_QR_AUTH_SUCCESS);
+        return new ResponseSuccessNoResult(RESERVATION_QR_CHECKIN_SUCCESS);
     }
 
 
