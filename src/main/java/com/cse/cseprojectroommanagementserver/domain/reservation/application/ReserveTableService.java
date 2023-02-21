@@ -48,7 +48,7 @@ public class ReserveTableService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void reserve(ReserveRequest reserveRequest) {
-        validateReservation(reserveRequest.getMemberId(), reserveRequest.getProjectTableId(), reserveRequest.getStartDateTime(), reserveRequest.getEndDateTime());
+        validateReservation(reserveRequest.getMemberId(), reserveRequest.getProjectTableId(), reserveRequest.getStartAt(), reserveRequest.getEndAt());
 
         QRImage reservationQrImage = null;
 
@@ -63,8 +63,8 @@ public class ReserveTableService {
                         memberRepository.getReferenceById(reserveRequest.getMemberId()), //성능 향상을 위해 proxy 객체를 넣음
                         projectTableRepository.getReferenceById(reserveRequest.getProjectTableId()),
                         reservationQrImage,
-                        reserveRequest.getStartDateTime(),
-                        reserveRequest.getEndDateTime()
+                        reserveRequest.getStartAt(),
+                        reserveRequest.getEndAt()
                 ));
 
     }
@@ -75,7 +75,7 @@ public class ReserveTableService {
      */
     @Transactional
     public void reserveOnsiteByAccountQR(Member member, OnsiteReservationRequestByQR reservationRequest) {
-        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartDateTime(), reservationRequest.getEndDateTime());
+        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt());
     }
 
     /**
@@ -84,28 +84,28 @@ public class ReserveTableService {
      */
     @Transactional
     public void reserveOnsiteByFormLogin(Member member, OnsiteReservationRequestByLoginForm reservationRequest) {
-        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartDateTime(), reservationRequest.getEndDateTime() );
+        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
     }
 
 
-    private void reserveOnsite(Member member, Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        validateReservation(member.getMemberId(), projectTableId, startDateTime, endDateTime);
+    private void reserveOnsite(Member member, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
+        validateReservation(member.getMemberId(), projectTableId, startAt, endAt);
 
         reservationRepository.save(
                 Reservation.createOnSiteReservation(
                         memberRepository.getReferenceById(member.getMemberId()),
                         projectTableRepository.getReferenceById(projectTableId),
-                        startDateTime,
-                        endDateTime
+                        startAt,
+                        endAt
                 ));
     }
 
-    private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(!isPenaltyMember(memberId) && !isDuplicatedReservation(projectTableId, startDateTime, endDateTime) && !isDisabledTableAtTime(projectTableId, startDateTime, endDateTime)) {
+    private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
+        if(!isPenaltyMember(memberId) && !isDisabledTableAtTime(projectTableId, startAt, endAt) && !isDuplicatedReservation(projectTableId, startAt, endAt)) {
             ReservationPolicy reservationPolicy = findReservationPolicy();
             //오늘 이 회원이 예약을 실행한 횟수룰 가져옴
             Long countTodayMemberCreatedReservation = getCountTodayMemberCreatedReservation(memberId);
-            reservationPolicy.verifyReservation(startDateTime, endDateTime, countTodayMemberCreatedReservation);
+            reservationPolicy.verifyReservation(startAt, endAt, countTodayMemberCreatedReservation);
         }
     }
 
@@ -117,17 +117,16 @@ public class ReserveTableService {
         return false;
     }
 
-
-    private boolean isDuplicatedReservation(Long tableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if (reservationVerifiableRepository.existsBy(tableId, startDateTime, endDateTime)) {
-            throw new DuplicatedReservationException();
+    private boolean isDisabledTableAtTime(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
+        if(tableDeactivationSearchableRepository.existsBy(tableId, startAt, endAt)) {
+            throw new DisabledTableException();
         }
         return false;
     }
 
-    private boolean isDisabledTableAtTime(Long tableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(tableDeactivationSearchableRepository.existsBy(tableId, startDateTime, endDateTime)) {
-            throw new DisabledTableException();
+    private boolean isDuplicatedReservation(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
+        if (reservationVerifiableRepository.existsBy(tableId, startAt, endAt)) {
+            throw new DuplicatedReservationException();
         }
         return false;
     }

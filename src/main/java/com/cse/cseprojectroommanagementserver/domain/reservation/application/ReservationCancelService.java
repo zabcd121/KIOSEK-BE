@@ -1,13 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationUpdatableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotExistsReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

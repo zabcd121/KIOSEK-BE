@@ -51,10 +51,10 @@ public class Reservation extends BaseTimeEntity {
     private ReservationStatus reservationStatus;
 
     @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-    private LocalDateTime startDateTime;
+    private LocalDateTime startAt;
 
     @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-    private LocalDateTime endDateTime;
+    private LocalDateTime endAt;
 
     @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
     private LocalDateTime checkInTime;
@@ -74,13 +74,13 @@ public class Reservation extends BaseTimeEntity {
         this.reservationQR.changeReservation(this);
     }
 
-    public static Reservation createReservation(Member member, ProjectTable projectTable, QRImage qrImage, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public static Reservation createReservation(Member member, ProjectTable projectTable, QRImage qrImage, LocalDateTime startAt, LocalDateTime endAt) {
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .projectTable(projectTable)
                 .reservationStatus(RESERVATION_COMPLETED)
-                .startDateTime(startDateTime)
-                .endDateTime(endDateTime)
+                .startAt(startAt)
+                .endAt(endAt)
                 .means(WEB)
                 .build();
 
@@ -89,13 +89,13 @@ public class Reservation extends BaseTimeEntity {
         return reservation;
     }
 
-    public static Reservation createOnSiteReservation(Member member, ProjectTable projectTable, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public static Reservation createOnSiteReservation(Member member, ProjectTable projectTable, LocalDateTime startAt, LocalDateTime endAt) {
         return Reservation.builder()
                 .member(member)
                 .projectTable(projectTable)
                 .reservationStatus(IN_USE)
-                .startDateTime(startDateTime)
-                .endDateTime(endDateTime)
+                .startAt(startAt)
+                .endAt(endAt)
                 .checkInTime(LocalDateTime.now())
                 .means(KIOSK)
                 .build();
@@ -115,14 +115,10 @@ public class Reservation extends BaseTimeEntity {
         this.reservationStatus = NOT_RETURNED;
     }
 
-//    public void changeStatusToReturnWaiting() {
-//        this.reservationStatus = RETURN_WAITING;
-//    }
-
     public void checkIn(boolean isPreviousReservationInUse) {
         if (isPreviousReservationInUse) throw new CheckInPreviousReservationInUseException();
-        else if (LocalDateTime.now().isBefore(this.startDateTime.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue()))) throw new ImpossibleCheckInTimeBeforeStartTimeException();//시작시간 10분이상 전에는 체크인 불가
-        else if (LocalDateTime.now().isAfter(this.startDateTime.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) throw new ImpossibleCheckInTimeAfterStartTimeException();//시작시간 20분이 지난 후에는 체크인 불가
+        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue()))) throw new ImpossibleCheckInTimeBeforeStartTimeException();//시작시간 10분이상 전에는 체크인 불가
+        else if (LocalDateTime.now().isAfter(this.startAt.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) throw new ImpossibleCheckInTimeAfterStartTimeException();//시작시간 20분이 지난 후에는 체크인 불가
 
         this.checkInTime = LocalDateTime.now();
         this.reservationStatus = IN_USE;

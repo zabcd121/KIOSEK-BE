@@ -24,8 +24,8 @@ public class ReservationUpdateRepository implements ReservationUpdatableReposito
         queryFactory.update(reservation)
                 .set(reservation.reservationStatus, reservationStatus)
                 .where(reservation.projectTable.tableId.in(projectTableIdList)
-                        .and(reservation.startDateTime.lt(endAt))
-                        .and(reservation.endDateTime.gt(startAt)))
+                        .and(reservation.startAt.lt(endAt))
+                        .and(reservation.endAt.gt(startAt)))
                 .execute();
     }
 }

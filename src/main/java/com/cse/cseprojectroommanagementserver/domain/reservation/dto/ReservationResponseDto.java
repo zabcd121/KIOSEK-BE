@@ -5,7 +5,6 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Re
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
@@ -24,21 +23,21 @@ public class ReservationResponseDto {
         private String tableName;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime returnedDateTime;
+        private LocalDateTime returnedAt;
 
         public SearchReservationResponse of(Reservation reservation) {
             this.projectTableId = reservation.getProjectTable().getTableId();
             this.tableName = reservation.getProjectTable().getTableName();
-            this.startDateTime = reservation.getStartDateTime();
-            this.endDateTime = reservation.getEndDateTime();
+            this.startAt = reservation.getStartAt();
+            this.endAt = reservation.getEndAt();
             if(reservation.getTableReturn() != null) {
-                this.returnedDateTime = reservation.getTableReturn().getReturnedDateTime();
+                this.returnedAt = reservation.getTableReturn().getReturnedDateTime();
             }
 
             return this;
@@ -51,13 +50,13 @@ public class ReservationResponseDto {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime returnedDateTime;
+        private LocalDateTime returnedAt;
 
         private ReservationStatus reservationStatus;
 
@@ -78,13 +77,13 @@ public class ReservationResponseDto {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime returnedDateTime;
+        private LocalDateTime returnedAt;
 
         private ReservationStatus reservationStatus;
 
@@ -116,10 +115,10 @@ public class ReservationResponseDto {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime startDateTime;
+        private LocalDateTime startAt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime endDateTime;
+        private LocalDateTime endAt;
 
         private ReservationStatus reservationStatus;
 
