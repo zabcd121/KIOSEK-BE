@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
-import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.NamedLockReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class ReserveTableFacadeService {
 
     @Transactional
     public void reserve(ReserveRequest reserveRequest) {
-        String key = reserveRequest.getStartDateTime().toLocalDate().toString() + reserveRequest.getProjectTableId();
+        String key = reserveRequest.getStartAt().toLocalDate().toString() + reserveRequest.getProjectTableId();
         try {
             namedLockReservationRepository.getLock(key);
             reserveTableService.reserve(reserveRequest);

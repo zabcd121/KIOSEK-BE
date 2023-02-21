@@ -28,13 +28,13 @@ public class ReservationSearchService {
 
     public List<SearchReservationResponse> searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeRequest firstAndLastDateTimeRequest) {
 
-        log.info("getFirstDateTime: {}", firstAndLastDateTimeRequest.getFirstDateTime());
-        log.info("getLastDateTime: {}", firstAndLastDateTimeRequest.getLastDateTime());
+        log.info("getFirstDateTime: {}", firstAndLastDateTimeRequest.getFirstAt());
+        log.info("getLastDateTime: {}", firstAndLastDateTimeRequest.getLastAt());
 
         return reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(
                 projectRoomId,
-                firstAndLastDateTimeRequest.getFirstDateTime(),
-                firstAndLastDateTimeRequest.getLastDateTime()
+                firstAndLastDateTimeRequest.getFirstAt(),
+                firstAndLastDateTimeRequest.getLastAt()
         );
 
     }
