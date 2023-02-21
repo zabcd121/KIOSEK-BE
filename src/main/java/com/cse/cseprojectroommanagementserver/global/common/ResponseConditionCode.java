@@ -62,14 +62,12 @@ public enum ResponseConditionCode {
     RESERVATION_CANCEL_SUCCESS("0310", "예약 취소 성공"),
     RESERVATION_CANCEL_FAIL("0311", "예약 취소 실패"),
     RESERVATION_QR_CREATE_FAIL("0312", "예약 QR 생성 실패"),
-    RESERVATION_QR_AUTH_SUCCESS("0313", "예약 QR 인증 성공"),
+    RESERVATION_QR_CHECKIN_SUCCESS("0313", "예약 QR 인증 성공"),
+    RESERVATION_QR_CHECKIN_FAIL("0316", "예약 QR 체크인 실패"),
+    RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_TIME("0317", "체크인 불가능한 시간입니다."),
+    RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_STATUS("0318", "이전 예약 사용중에는 체크인이 불가능합니다."),
     IN_USE_TABLE("0314", "사용중인 테이블입니다."),
     NOT_IN_USE_TABLE("0315", "예약 확인 후 사용해주세요"),
-    RESERVATION_QR_CHECKIN_FAIL("0316", "예약 QR 체크인 실패"),
-
-    RESERVATION_CHECK_IN_FAIL_BEFORE_START_TIME("0317", "체크인 불가능한 시간입니다."),
-    RESERVATION_CHECK_IN_FAIL_AFTER_START_TIME("0318", "체크인 불가능한 시간입니다."),
-    RESERVATION_CHECK_IN_FAIL_PREVIOUS_IN_USE("0319", "이전 예약 사용중에는 체크인이 불가능합니다."),
 
     /**
      * Table Return: 04
