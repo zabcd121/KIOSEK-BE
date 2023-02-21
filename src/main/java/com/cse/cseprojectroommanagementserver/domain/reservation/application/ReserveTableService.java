@@ -136,7 +136,7 @@ public class ReserveTableService {
     }
 
     private Long getCountTodayMemberCreatedReservation(Long memberId) {
-        return reservationVerifiableRepository.countCreatedReservationForTodayByMemberId(memberId);
+        return reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId);
     }
 
 

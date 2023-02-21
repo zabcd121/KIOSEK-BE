@@ -24,7 +24,7 @@ public class ReservationAuthService {
         Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthRequest.getQrContent())
                 .orElseThrow(() -> new InvalidReservationQRException());
 
-        findReservation.checkIn(reservationVerifiableRepository.existsInUsePreviousReservation(findReservation.getProjectTable().getTableId(), findReservation.getStartAt()));
+        findReservation.checkIn(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt()));
     }
 
 

@@ -25,9 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -102,7 +100,7 @@ class ReserveTableServiceMockTest {
         given(reservationVerifiableRepository.existsBy(reserveRequest.getProjectTableId(), reserveRequest.getStartAt(), reserveRequest.getEndAt())).willReturn(false);
 
         given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayByMemberId(reserveRequest.getMemberId())).willReturn(reservationPolicy.getReservationMaxCountPerDay().getValue().longValue() - 1L);
+        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(reserveRequest.getMemberId())).willReturn(reservationPolicy.getReservationMaxCountPerDay().getValue().longValue() - 1L);
 
         given(memberRepository.getReferenceById(reserveRequest.getMemberId())).willReturn(Member.builder().memberId(reserveRequest.getMemberId()).build());
         given(projectTableRepository.getReferenceById(reserveRequest.getProjectTableId())).willReturn(ProjectTable.builder().tableId(reserveRequest.getProjectTableId()).build());
@@ -302,7 +300,7 @@ class ReserveTableServiceMockTest {
         given(reservationVerifiableRepository.existsBy(reserveRequest.getProjectTableId(), reserveRequest.getStartAt(), reserveRequest.getEndAt())).willReturn(false);
 
         given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayByMemberId(reserveRequest.getMemberId())).willReturn(todayReservationCountByMember);
+        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(reserveRequest.getMemberId())).willReturn(todayReservationCountByMember);
     }
 
     private ReserveRequest getReserveRequest() {
