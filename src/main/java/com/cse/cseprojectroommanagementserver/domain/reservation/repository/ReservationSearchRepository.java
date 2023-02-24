@@ -1,11 +1,9 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -29,7 +27,7 @@ import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservationQR.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
@@ -42,9 +40,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<SearchReservationResponse> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
+    public List<SearchReservationRes> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
         return queryFactory
-                .select(Projections.fields(SearchReservationResponse.class,
+                .select(Projections.fields(SearchReservationRes.class,
                         reservation.projectTable.tableId.as("projectTableId"), projectTable.tableName,
                         reservation.startAt, reservation.endAt, tableReturn.returnedDateTime))
                 .from(reservation)
@@ -57,9 +55,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     }
 
     @Override
-    public List<CurrentReservationByMemberResponse> findCurrentAllByMemberId(Long memberId) {
+    public List<CurrentReservationByMemberRes> findCurrentAllByMemberId(Long memberId) {
         return queryFactory
-                .select(Projections.fields(CurrentReservationByMemberResponse.class,
+                .select(Projections.fields(CurrentReservationByMemberRes.class,
                         reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName,
                         reservationQR.qrImage.fileLocalName.as("imageName"), reservationQR.qrImage.fileUrl.as("imageURL")))
@@ -75,9 +73,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     }
 
     @Override
-    public List<PastReservationByMemberResponse> findPastAllByMemberId(Long memberId) {
+    public List<PastReservationByMemberRes> findPastAllByMemberId(Long memberId) {
         return queryFactory
-                .select(Projections.fields(PastReservationByMemberResponse.class,
+                .select(Projections.fields(PastReservationByMemberRes.class,
                         reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName))
                 .from(reservation)
@@ -165,9 +163,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     }
 
     @Override
-    public Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
-        List<SearchReservationByPagingResponse> content = queryFactory
-                .select(Projections.fields(SearchReservationByPagingResponse.class,
+    public Page<SearchReservationByPagingRes> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
+        List<SearchReservationByPagingRes> content = queryFactory
+                .select(Projections.fields(SearchReservationByPagingRes.class,
                             Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
                             Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
                             Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),

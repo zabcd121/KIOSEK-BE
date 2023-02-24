@@ -11,13 +11,13 @@ import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRes
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 
-public class ReservationResponseDto {
+public class ReservationResDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class SearchReservationResponse {
+    public static class SearchReservationRes {
 
         private Long projectTableId;
         private String tableName;
@@ -31,7 +31,7 @@ public class ReservationResponseDto {
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime returnedAt;
 
-        public SearchReservationResponse of(Reservation reservation) {
+        public SearchReservationRes of(Reservation reservation) {
             this.projectTableId = reservation.getProjectTable().getTableId();
             this.tableName = reservation.getProjectTable().getTableName();
             this.startAt = reservation.getStartAt();
@@ -46,7 +46,7 @@ public class ReservationResponseDto {
 
     @NoArgsConstructor
     @Getter
-    public static class CurrentReservationByMemberResponse {
+    public static class CurrentReservationByMemberRes {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
@@ -73,7 +73,7 @@ public class ReservationResponseDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class PastReservationByMemberResponse {
+    public static class PastReservationByMemberRes {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
@@ -96,7 +96,7 @@ public class ReservationResponseDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class SearchReservationByPagingResponse {
+    public static class SearchReservationByPagingRes {
         private ReservationSimpleInfo reservation;
 
         private TableReturnSimpleInfo tableReturn;

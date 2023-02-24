@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 
-public class ReservationRequestDto {
+public class ReservationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class ReserveRequest {
+    public static class ReserveReq {
         private Long projectTableId;
         private Long memberId;
 
@@ -34,7 +34,7 @@ public class ReservationRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class OnsiteReservationRequestByQR {
+    public static class OnsiteReservationReqByQR {
         private String accountQRContents;
         private Long projectTableId;
 
@@ -53,7 +53,7 @@ public class ReservationRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class OnsiteReservationRequestByLoginForm {
+    public static class OnsiteReservationReqByLoginForm {
         private String loginId;
         private String password;
         private Long projectTableId;
@@ -73,7 +73,7 @@ public class ReservationRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter @Setter
-    public static class FirstAndLastDateTimeRequest {
+    public static class FirstAndLastDateTimeReq {
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime firstAt;
 
@@ -85,7 +85,7 @@ public class ReservationRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class QRAuthRequest {
+    public static class QRAuthReq {
         private String qrContent;
     }
 }
