@@ -16,7 +16,7 @@ import java.util.List;
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable.*;
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.QTableDeactivation.*;
-import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,9 +37,9 @@ public class TableDeactivationSearchRepository implements TableDeactivationSearc
     }
 
     @Override
-    public Page<AdminTableDeactivationSearchResponse> findAllByPageable(Pageable pageable) {
-        List<AdminTableDeactivationSearchResponse> content = queryFactory
-                .select(Projections.fields(AdminTableDeactivationSearchResponse.class,
+    public Page<AdminTableDeactivationSearchRes> findAllByPageable(Pageable pageable) {
+        List<AdminTableDeactivationSearchRes> content = queryFactory
+                .select(Projections.fields(AdminTableDeactivationSearchRes.class,
                         tableDeactivation.projectTable.projectRoom.roomName,
                         tableDeactivation.projectTable.tableName,
                         tableDeactivation.tableDeactivationInfo.startAt,

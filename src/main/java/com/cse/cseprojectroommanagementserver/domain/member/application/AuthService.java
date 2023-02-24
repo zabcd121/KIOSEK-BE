@@ -19,8 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.TokenDto.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
@@ -37,15 +38,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public LoginResponse login(LoginRequest loginRequest, RoleType allowedRoleType) {
-        Authentication authentication = authenticateMember(loginRequest.getLoginId(), loginRequest.getPassword(), allowedRoleType);
+    public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
+        Authentication authentication = authenticateMember(loginReq.getLoginId(), loginReq.getPassword(), allowedRoleType);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
         saveRefreshTokenInRedis(refreshToken, authentication);
 
-        Member member = memberSearchRepository.findByAccountLoginId(loginRequest.getLoginId()).orElseGet(null);
+        Member member = memberSearchRepository.findByAccountLoginId(loginReq.getLoginId()).orElseGet(null);
 
-        return LoginResponse.builder()
+        return LoginRes.builder()
                 .memberInfo(getLoginMemberInfoResponse(member))
                 .tokenInfo(getTokensDto(accessToken, refreshToken))
                 .build();
@@ -105,11 +106,11 @@ public class AuthService {
 
     }
 
-    public LoginMemberInfoResponse searchMemberInfo(String resolvedAccessToken) {
+    public LoginMemberInfoRes searchMemberInfo(String resolvedAccessToken) {
         String loginId = jwtTokenProvider.getSubject(resolvedAccessToken);
         Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
 
-        return LoginMemberInfoResponse.builder()
+        return LoginMemberInfoRes.builder()
                 .memberId(member.getMemberId())
                 .name(member.getName())
                 .roleType(member.getRoleType())
@@ -153,8 +154,8 @@ public class AuthService {
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
     }
 
-    private LoginMemberInfoResponse getLoginMemberInfoResponse(Member member) {
-        return LoginMemberInfoResponse.builder()
+    private LoginMemberInfoRes getLoginMemberInfoResponse(Member member) {
+        return LoginMemberInfoRes.builder()
                 .memberId(member.getMemberId())
                 .name(member.getName())
                 .roleType(member.getRoleType())

@@ -6,16 +6,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_FORMAT;
 
-public class PenaltyResponse {
+public class PenaltyResDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class PenaltyLogResponse {
+    public static class PenaltyLogRes {
 
         private Long penaltyId;
         @DateTimeFormat(pattern = LOCAL_DATE_FORMAT)
@@ -26,7 +26,7 @@ public class PenaltyResponse {
 
         private String description;
 
-        public PenaltyLogResponse of(Penalty penalty) {
+        public PenaltyLogRes of(Penalty penalty) {
             this.penaltyId = penalty.getPenaltyId();
             this.startDate = penalty.getStartDate();
             this.endDate = penalty.getEndDate();
@@ -40,8 +40,8 @@ public class PenaltyResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class SearchPenaltyByPagingResponse {
-        private PenaltyLogResponse penalty;
-        private MemberSimpleInfo member;
+    public static class SearchPenaltyByPagingRes {
+        private PenaltyLogRes penalty;
+        private MemberSimpleInfoRes member;
     }
 }

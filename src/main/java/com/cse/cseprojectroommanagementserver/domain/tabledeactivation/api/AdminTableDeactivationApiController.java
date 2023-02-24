@@ -9,9 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api/admins")
@@ -22,13 +22,14 @@ public class AdminTableDeactivationApiController {
     private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
 
     @PostMapping("/v1/table-deactivations")
-    public ResponseSuccessNoResult deactivateTables(@RequestBody TableDeactivationRequest tableDeactivationRequest) {
+    public ResponseSuccessNoResult deactivateTables(@RequestBody TableDeactivationReq tableDeactivationRequest) {
         tableDeactivateService.deactivateTables(tableDeactivationRequest);
         return new ResponseSuccessNoResult(TABLE_DEACTIVATE_SUCCESS);
     }
 
     @GetMapping("/v1/table-deactivations")
-    public ResponseSuccess<Page<AdminTableDeactivationSearchResponse>> getDeactivationTableList(Pageable pageable) {
+    public ResponseSuccess<Page<AdminTableDeactivationSearchRes>> getDeactivationTableList(Pageable pageable) {
         return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }
+
 }

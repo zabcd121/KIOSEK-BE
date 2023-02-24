@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResDto.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api")
@@ -21,8 +21,8 @@ public class PenaltyApiController {
     private final PenaltySearchService penaltySearchService;
 
     @GetMapping("/v1/penalties")
-    public ResponseSuccess<List<PenaltyLogResponse>> getPenaltyListByMemberId(@RequestParam Long memberId) {
-        List<PenaltyLogResponse> penaltyLogResponseList = penaltySearchService.searchMemberPenaltyLogList(memberId);
+    public ResponseSuccess<List<PenaltyLogRes>> getPenaltyListByMemberId(@RequestParam Long memberId) {
+        List<PenaltyLogRes> penaltyLogResponseList = penaltySearchService.searchMemberPenaltyLogList(memberId);
         return new ResponseSuccess(PENALTY_LOGS_SEARCH_SUCCESS, penaltyLogResponseList);
     }
 }

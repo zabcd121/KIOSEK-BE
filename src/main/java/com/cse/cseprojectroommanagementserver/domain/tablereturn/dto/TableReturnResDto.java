@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
 
-public class TableReturnResponseDto {
+public class TableReturnResDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class TableReturnSimpleInfo {
+    public static class TableReturnSimpleInfoRes {
         private Long tableReturnId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)

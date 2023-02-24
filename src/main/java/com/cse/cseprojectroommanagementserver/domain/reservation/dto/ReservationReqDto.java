@@ -34,7 +34,7 @@ public class ReservationReqDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class OnsiteReservationReqByQR {
+    public static class OnsiteReservationByQRReq {
         private String accountQRContents;
         private Long projectTableId;
 
@@ -53,7 +53,7 @@ public class ReservationReqDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class OnsiteReservationReqByLoginForm {
+    public static class OnsiteReservationByLoginFormReq {
         private String loginId;
         private String password;
         private Long projectTableId;

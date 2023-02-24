@@ -1,24 +1,19 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
-import com.cse.cseprojectroommanagementserver.domain.member.application.MemberComplexInfoSearchService;
-import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.TokenDto.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController
@@ -29,8 +24,8 @@ public class MemberAuthApiController {
     private final AuthService authService;
 
     @PostMapping("/v1/members/login")
-    public ResponseSuccess<LoginResponse> login(@RequestBody @Validated LoginRequest loginRequest) {
-        LoginResponse loginResponse = authService.login(loginRequest, ROLE_MEMBER);
+    public ResponseSuccess<LoginRes> login(@RequestBody @Validated LoginReq loginReq) {
+        LoginRes loginResponse = authService.login(loginReq, ROLE_MEMBER);
         return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }
 
@@ -52,9 +47,9 @@ public class MemberAuthApiController {
     }
 
     @GetMapping("/v1/members/reissue")
-    public ResponseSuccess<LoginMemberInfoResponse> refreshMemberInfo(HttpServletRequest request) {
+    public ResponseSuccess<LoginMemberInfoRes> refreshMemberInfo(HttpServletRequest request) {
         String resolvedToken = authService.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
-        LoginMemberInfoResponse memberInfo = authService.searchMemberInfo(resolvedToken);
+        LoginMemberInfoRes memberInfo = authService.searchMemberInfo(resolvedToken);
         return new ResponseSuccess<>(MEMBER_INFO_REISSUED, memberInfo);
     }
 }

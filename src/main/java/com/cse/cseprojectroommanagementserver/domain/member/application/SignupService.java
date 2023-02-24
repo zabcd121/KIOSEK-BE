@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 
 @Service
 @Slf4j
@@ -29,7 +29,7 @@ public class SignupService {
     private final QRGenerator qrGenerator;
 
     @Transactional
-    public void signup(SignupRequest signupDto) {
+    public void signup(SignupReq signupDto) {
         if (!isDuplicatedLoginId(signupDto.getLoginId()) && !isDuplicatedEmail(signupDto.getEmail())) {
             try {
                 QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();

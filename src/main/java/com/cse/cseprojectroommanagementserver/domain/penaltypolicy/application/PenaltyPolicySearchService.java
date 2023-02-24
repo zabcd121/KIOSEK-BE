@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -15,8 +15,8 @@ public class PenaltyPolicySearchService {
     private PenaltyPolicySearchableRepository penaltyPolicySearchableRepository;
 
     @Transactional
-    public PenaltyPolicySearchResponse searchPenaltyPolicy() {
-        return new PenaltyPolicySearchResponse()
+    public PenaltyPolicySearchRes searchPenaltyPolicy() {
+        return new PenaltyPolicySearchRes()
                 .of(penaltyPolicySearchableRepository.findCurrentPenaltyPolicy());
     }
 }

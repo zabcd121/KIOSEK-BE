@@ -85,6 +85,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour());
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -159,6 +160,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -179,6 +181,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -199,6 +202,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더, 현재 예약 불가능한 날짜임
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -219,6 +223,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -239,6 +244,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -259,6 +265,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)
@@ -279,6 +286,7 @@ class ReserveTableServiceMockTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
+
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
                 .memberId(3L)

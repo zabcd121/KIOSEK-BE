@@ -1,12 +1,9 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
+import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -18,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 
 @Slf4j
@@ -58,7 +55,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     }
 
-    private void setResponse(HttpServletResponse response, ResponseConditionCode exceptionCode) throws IOException {
+    private void setResponse(HttpServletResponse response, ResConditionCode exceptionCode) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 

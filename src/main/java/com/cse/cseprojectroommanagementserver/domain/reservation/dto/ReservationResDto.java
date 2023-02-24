@@ -7,8 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 
 public class ReservationResDto {
@@ -18,7 +18,6 @@ public class ReservationResDto {
     @NoArgsConstructor
     @Getter
     public static class SearchReservationRes {
-
         private Long projectTableId;
         private String tableName;
 
@@ -39,7 +38,6 @@ public class ReservationResDto {
             if(reservation.getTableReturn() != null) {
                 this.returnedAt = reservation.getTableReturn().getReturnedDateTime();
             }
-
             return this;
         }
     }
@@ -97,11 +95,11 @@ public class ReservationResDto {
     @NoArgsConstructor
     @Getter
     public static class SearchReservationByPagingRes {
-        private ReservationSimpleInfo reservation;
+        private ReservationSimpleInfoRes reservation;
 
-        private TableReturnSimpleInfo tableReturn;
+        private TableReturnSimpleInfoRes tableReturn;
 
-        private MemberSimpleInfo member;
+        private MemberSimpleInfoRes member;
 
         private String roomName;
 
@@ -111,7 +109,7 @@ public class ReservationResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class ReservationSimpleInfo {
+    public static class ReservationSimpleInfoRes {
         private Long reservationId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
@@ -123,10 +121,4 @@ public class ReservationResDto {
         private ReservationStatus reservationStatus;
 
     }
-
-
-
-
-
-
 }

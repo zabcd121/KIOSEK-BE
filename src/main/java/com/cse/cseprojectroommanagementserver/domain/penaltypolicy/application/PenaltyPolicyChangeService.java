@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,7 +17,7 @@ public class PenaltyPolicyChangeService {
     private final PenaltyPolicyRepository penaltyPolicyRepository;
 
     @Transactional
-    public void changePenaltyPolicy(PenaltyPolicyChangeRequest changeReq) {
+    public void changePenaltyPolicy(PenaltyPolicyChangeReq changeReq) {
         PenaltyPolicy originPolicy = penaltyPolicyRepository.findById(changeReq.getPenaltyPolicyId())
                 .orElseThrow(() -> new NotExistsPenaltyPolicyException());
 
@@ -26,7 +26,7 @@ public class PenaltyPolicyChangeService {
 
     }
 
-    private PenaltyPolicy createNewPenaltyPolicy(PenaltyPolicyChangeRequest changeReq) {
+    private PenaltyPolicy createNewPenaltyPolicy(PenaltyPolicyChangeReq changeReq) {
         return PenaltyPolicy.createPenaltyPolicy(changeReq.getViolationCountToImposePenalty(), changeReq.getNumberOfSuspensionDay());
     }
 }

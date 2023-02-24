@@ -24,5 +24,4 @@ public class ReservationPolicyResDto {
             return this;
         }
     }
-
 }

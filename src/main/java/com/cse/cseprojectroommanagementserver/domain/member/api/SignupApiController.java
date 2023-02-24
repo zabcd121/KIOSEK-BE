@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
@@ -10,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api")
@@ -39,8 +38,8 @@ public class SignupApiController {
 
     @PostMapping("/v1/members/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseSuccessNoResult signup(@RequestBody @Validated SignupRequest signupDto) {
-        signupService.signup(signupDto);
+    public ResponseSuccessNoResult signup(@RequestBody @Validated SignupReq signupReq) {
+        signupService.signup(signupReq);
         return new ResponseSuccessNoResult(SIGNUP_SUCCESS);
     }
 }
