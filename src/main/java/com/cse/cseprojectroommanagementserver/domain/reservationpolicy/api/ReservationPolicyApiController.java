@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_CHANGE_SUCCESS;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_CHANGE_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
 
 @RestController
 @RequestMapping("/api")

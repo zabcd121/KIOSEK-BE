@@ -1,8 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.common.dto;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
+import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,7 @@ public class ResponseSuccessNoResult {
     private String code;
     private String message;
 
-    public ResponseSuccessNoResult(ResponseConditionCode conditionCode) {
+    public ResponseSuccessNoResult(ResConditionCode conditionCode) {
         this.code = conditionCode.getCode();
         this.message = conditionCode.getMessage();
     }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.PENALTY_POLICY_SEARCH_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.PENALTY_POLICY_SEARCH_FAIL;
 
 @RestControllerAdvice(assignableTypes = {PenaltyPolicyApiController.class})
 @Slf4j

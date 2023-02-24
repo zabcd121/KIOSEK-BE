@@ -3,7 +3,7 @@ package com.cse.cseprojectroommanagementserver.global.common;
 import lombok.Getter;
 
 @Getter
-public enum ResponseConditionCode {
+public enum ResConditionCode {
     /**
      * Signup: 01
      */
@@ -119,7 +119,7 @@ public enum ResponseConditionCode {
     private final String code;
     private final String message;
 
-    ResponseConditionCode(final String code, final String message) {
+    ResConditionCode(final String code, final String message) {
         this.code = code;
         this.message = message;
     }
