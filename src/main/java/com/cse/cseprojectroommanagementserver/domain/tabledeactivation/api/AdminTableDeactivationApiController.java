@@ -14,20 +14,20 @@ import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dt
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/admins/table-deactivations")
+@RequestMapping("/api/admins")
 @RequiredArgsConstructor
 public class AdminTableDeactivationApiController {
 
     private final TableDeactivateService tableDeactivateService;
     private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
 
-    @PostMapping
+    @PostMapping("/v1/table-deactivations")
     public ResponseSuccessNoResult deactivateTables(@RequestBody TableDeactivationRequest tableDeactivationRequest) {
         tableDeactivateService.deactivateTables(tableDeactivationRequest);
         return new ResponseSuccessNoResult(TABLE_DEACTIVATE_SUCCESS);
     }
 
-    @GetMapping
+    @GetMapping("/v1/table-deactivations")
     public ResponseSuccess<Page<AdminTableDeactivationSearchResponse>> getDeactivationTableList(Pageable pageable) {
         return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }

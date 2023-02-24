@@ -14,13 +14,13 @@ import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.Compla
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/complaints")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ComplaintApiController {
 
     private final ComplainService complainService;
 
-    @PostMapping
+    @PostMapping("/v1/complaints")
     public ResponseSuccessNoResult complain(ComplainRequest complainRequest) {
         complainService.complain(complainRequest);
         return new ResponseSuccessNoResult(COMPLAIN_SUCCESS);

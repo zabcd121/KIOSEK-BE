@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ReservationApiController {
 
@@ -27,67 +27,65 @@ public class ReservationApiController {
     private final AuthService authService;
 
     //일반 웹 예약
-    @PostMapping
-    public ResponseSuccessNoResult reserveByWeb(@RequestBody ReserveRequest reserveRequest) {
-        reserveTableFacadeService.reserve(reserveRequest);
+    @PostMapping("/v1/reservations")
+    public ResponseSuccessNoResult reserveByWeb(@RequestBody ReserveReq reserveReq) {
+        reserveTableFacadeService.reserve(reserveReq);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
     //현장 예약
-    @PostMapping("/onsite/qr")
-    public ResponseSuccessNoResult reserveOnSiteByQRLogin(@RequestBody OnsiteReservationRequestByQR reservationRequest) {
+    @PostMapping("/v1/reservations/onsite/qr")
+    public ResponseSuccessNoResult reserveOnSiteByQRLogin(@RequestBody OnsiteReservationReqByQR reservationRequest) {
         Member matchedMember = authService.searchMatchedMember(reservationRequest.getAccountQRContents());
         reserveTableService.reserveOnsiteByAccountQR(matchedMember, reservationRequest);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
-    @PostMapping("/onsite/form")
-    public ResponseSuccessNoResult reserveOnSiteByFromLogin(@RequestBody OnsiteReservationRequestByLoginForm reservationRequest) {
+    @PostMapping("/v1/reservations/onsite/form")
+    public ResponseSuccessNoResult reserveOnSiteByFromLogin(@RequestBody OnsiteReservationReqByLoginForm reservationRequest) {
         Member matchedMember = authService.searchMatchedMember(reservationRequest.getLoginId(), reservationRequest.getPassword());
         reserveTableService.reserveOnsiteByFormLogin(matchedMember, reservationRequest);
 
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
-    @GetMapping("/projectrooms/{id}")
-    public ResponseSuccess<List<SearchReservationResponse>> getReservationListByProjectRoom(@PathVariable("id") Long projectRoomId,
-                                                                                            @ModelAttribute FirstAndLastDateTimeRequest firstAndLastDateTimeRequest) {
-        List<SearchReservationResponse> searchReservationList = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeRequest);
+    @GetMapping("/v1/reservations")
+    public ResponseSuccess<List<SearchReservationRes>> getReservationListByProjectRoom(@RequestParam Long projectRoomId,
+                                                                                       @ModelAttribute FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
+        List<SearchReservationRes> searchReservationList = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
         return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, searchReservationList);
     }
 
-    @GetMapping("/tables")
+    /**
+     * Q&A 스피커에서 사람이 감지되었을 때 현재 이 테이블이 예약되어 사용중인 테이블인지 검사하는 API
+     */
+    @GetMapping("sensor/v1/reservations/check")
     public ResponseSuccessNoResult isCurrentReservedTable(@RequestParam String tableName) {
-        reservationSearchService.checkIsInUseTableAtCurrent(tableName);
+        reservationSearchService.checkIsInUseTable(tableName);
         return new ResponseSuccessNoResult(IN_USE_TABLE);
     }
 
-    @GetMapping("/current/members/{id}")
-    public ResponseSuccess<List<CurrentReservationByMemberResponse>> getCurrentReservationListOfMember(@PathVariable("id") Long memberId) {
-        List<CurrentReservationByMemberResponse> myCurrentReservationList = reservationSearchService.searchMyCurrentReservationList(memberId);
+    @GetMapping("/v1/reservations/current")
+    public ResponseSuccess<List<CurrentReservationByMemberRes>> getCurrentReservationListOfMember(@RequestParam Long memberId) {
+        List<CurrentReservationByMemberRes> myCurrentReservationList = reservationSearchService.searchMyCurrentReservationList(memberId);
         return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, myCurrentReservationList);
     }
 
-    @GetMapping("/past/members/{id}")
-    public ResponseSuccess<List<PastReservationByMemberResponse>> getPastReservationListOfMember(@PathVariable("id") Long memberId) {
-        List<PastReservationByMemberResponse> myPastReservationList = reservationSearchService.searchMyPastReservationList(memberId);
+    @GetMapping("/v1/reservations/past")
+    public ResponseSuccess<List<PastReservationByMemberRes>> getPastReservationListOfMember(@RequestParam Long memberId) {
+        List<PastReservationByMemberRes> myPastReservationList = reservationSearchService.searchMyPastReservationList(memberId);
         return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, myPastReservationList);
     }
 
-    @PatchMapping("/{id}")
+    @DeleteMapping("/v1/reservations/{id}")
     public ResponseSuccessNoResult cancelReservationByMember(@PathVariable("id") Long reservationId) {
         reservationCancelService.cancelReservation(reservationId);
         return new ResponseSuccessNoResult(RESERVATION_CANCEL_SUCCESS);
     }
 
-    @PatchMapping("/auth/qr")
-    public ResponseSuccessNoResult authReservationQR(@RequestBody QRAuthRequest qrContents) {
-        reservationAuthService.authReservationQR(qrContents);
+    @PostMapping("/v1/reservations/auth")
+    public ResponseSuccessNoResult checkInWithReservationQR(@RequestBody QRAuthReq qrContent) {
+        reservationAuthService.checkInWIthReservationQR(qrContent);
         return new ResponseSuccessNoResult(RESERVATION_QR_CHECKIN_SUCCESS);
     }
-
-
-
-
-
 }

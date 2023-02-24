@@ -13,13 +13,13 @@ import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.Compla
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/admins/complaints")
+@RequestMapping("/api/admins")
 @RequiredArgsConstructor
 public class AdminComplaintApiController {
 
     private final ComplaintSearchService complaintSearchService;
 
-    @GetMapping
+    @GetMapping("/v1/complaints")
     public ResponseSuccess<Page<AdminComplaintSearchResponse>> getComplaintList(Pageable pageable) {
         return new ResponseSuccess<>(COMPLAINT_SEARCH_SUCCESS, complaintSearchService.searchComplaintListByPageable(pageable));
     }

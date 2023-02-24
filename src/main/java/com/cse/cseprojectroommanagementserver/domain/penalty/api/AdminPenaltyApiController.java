@@ -18,19 +18,19 @@ import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyR
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/admins/penalties")
+@RequestMapping("/api/admins")
 @RequiredArgsConstructor
 public class AdminPenaltyApiController {
 
     private final PenaltySearchService penaltySearchService;
-    private PenaltyImpositionService penaltyImpositionService;
+    private final PenaltyImpositionService penaltyImpositionService;
 
-    @GetMapping
+    @GetMapping("/v1/penalties")
     public ResponseSuccess<Page<SearchPenaltyByPagingResponse>> getPenaltyList(PenaltySearchCondition searchCondition, Pageable pageable) {
         return new ResponseSuccess(PENALTY_LOGS_SEARCH_SUCCESS, penaltySearchService.searchPenaltyListByConditionAndPageable(searchCondition, pageable));
     }
 
-    @PostMapping
+    @PostMapping("/v1/penalties")
     public ResponseSuccessNoResult imposePenalty(@RequestBody ImposePenaltyRequest penaltyRequest) {
         penaltyImpositionService.imposePenalty(penaltyRequest);
         return new ResponseSuccessNoResult(PENALTY_IMPOSITION_SUCCESS);

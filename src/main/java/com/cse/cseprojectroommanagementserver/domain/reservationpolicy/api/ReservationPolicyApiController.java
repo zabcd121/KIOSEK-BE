@@ -12,21 +12,21 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResponseCondi
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
 
 @RestController
-@RequestMapping("/api/reservations/policy")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ReservationPolicyApiController {
 
     private final ReservationPolicyChangeService reservationPolicyChangeService;
     private final ReservationPolicySearchService reservationPolicySearchService;
 
-    @PutMapping
+    @PutMapping("/v1/reservations/policies")
     public ResponseSuccessNoResult changeReservationPolicy(@RequestBody ReservationPolicyChangeRequest reservationPolicyChangeRequest) {
         reservationPolicyChangeService.changeReservationPolicy(reservationPolicyChangeRequest);
 
         return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);
     }
 
-    @GetMapping
+    @GetMapping("/v1/reservations/policies")
     public ResponseSuccess getCurrentReservationPolicy() {
         return new ResponseSuccess(RESERVATION_POLICY_SEARCH_SUCCESS, reservationPolicySearchService.searchReservationPolicy());
     }
