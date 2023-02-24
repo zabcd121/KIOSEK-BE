@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,7 +16,7 @@ public class ReservationPolicyChangeService {
     private final ReservationPolicyRepository reservationPolicyRepository;
 
     @Transactional
-    public void changeReservationPolicy(ReservationPolicyChangeRequest changeReq) {
+    public void changeReservationPolicy(ReservationPolicyChangeReq changeReq) {
         ReservationPolicy originPolicy = reservationPolicyRepository.findById(changeReq.getReservationPolicyId())
                 .orElseThrow(() -> new NotExistsReservationPolicyException());
 
@@ -24,7 +24,7 @@ public class ReservationPolicyChangeService {
         originPolicy.toDeprecated();
     }
 
-    private ReservationPolicy createNewReservationPolicy(ReservationPolicyChangeRequest changeRequest) {
+    private ReservationPolicy createNewReservationPolicy(ReservationPolicyChangeReq changeRequest) {
         return ReservationPolicy.createReservationPolicy(changeRequest.getReservationMaxHourPerOnce(), changeRequest.getReservationMaxCountPerDay(), changeRequest.getReservationMaxPeriod());
     }
 }

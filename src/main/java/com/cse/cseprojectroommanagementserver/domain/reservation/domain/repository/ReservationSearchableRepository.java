@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 
 public interface ReservationSearchableRepository {
-    List<SearchReservationResponse> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt);
+    List<SearchReservationRes> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt);
 
-    List<CurrentReservationByMemberResponse> findCurrentAllByMemberId(Long memberId);
+    List<CurrentReservationByMemberRes> findCurrentAllByMemberId(Long memberId);
 
-    List<PastReservationByMemberResponse> findPastAllByMemberId(Long memberId);
+    List<PastReservationByMemberRes> findPastAllByMemberId(Long memberId);
 
     Optional<Reservation> findByReservationId(Long reservationId);
 
@@ -32,5 +32,5 @@ public interface ReservationSearchableRepository {
 
     List<Reservation> findUnUsedReservations();
 
-    Page<SearchReservationByPagingResponse> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable);
+    Page<SearchReservationByPagingRes> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable);
 }
