@@ -37,7 +37,7 @@ public class ReservationVerificationRepository implements ReservationVerifiableR
                 .select(reservation.count())
                 .from(reservation)
                 .where(reservation.member.memberId.eq(memberId)
-                        .and(reservation.createdDateTime.startsWith(
+                        .and(reservation.createdAt.startsWith(
                                 LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")).toString()))
                         .and(reservation.reservationStatus.ne(CANCELED)))
                 .fetchOne();

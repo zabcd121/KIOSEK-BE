@@ -74,12 +74,12 @@ public class MemberResDto {
     @NoArgsConstructor
     @Getter
     public static class MemberPenaltyInfoRes {
-        private LocalDate startDateTime;
-        private LocalDate endDateTime;
+        private LocalDate startDt;
+        private LocalDate endDt;
 
         public MemberPenaltyInfoRes of(Penalty penalty) {
-            this.startDateTime = penalty.getStartDate();
-            this.endDateTime = penalty.getEndDate();
+            this.startDt = penalty.getStartDate();
+            this.endDt = penalty.getEndDate();
 
             return this;
         }
