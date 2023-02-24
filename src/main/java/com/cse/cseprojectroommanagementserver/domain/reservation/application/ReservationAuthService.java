@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 
 
 @Service
@@ -20,12 +20,10 @@ public class ReservationAuthService {
     private final ReservationVerifiableRepository reservationVerifiableRepository;
 
     @Transactional
-    public void authReservationQR(QRAuthRequest qrAuthRequest) {
-        Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthRequest.getQrContent())
+    public void checkInWIthReservationQR(QRAuthReq qrAuthReq) {
+        Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())
                 .orElseThrow(() -> new InvalidReservationQRException());
-
-        findReservation.checkIn(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt()));
+        boolean isPreviousReservationInUse = reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt());
+        findReservation.checkIn(isPreviousReservationInUse);
     }
-
-
 }

@@ -27,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.ReserveRequest;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.ReserveReq;
 
 @Service
 @Slf4j
@@ -47,8 +47,8 @@ public class ReserveTableService {
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void reserve(ReserveRequest reserveRequest) {
-        validateReservation(reserveRequest.getMemberId(), reserveRequest.getProjectTableId(), reserveRequest.getStartAt(), reserveRequest.getEndAt());
+    public void reserve(ReserveReq reserveReq) {
+        validateReservation(reserveReq.getMemberId(), reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
         QRImage reservationQrImage = null;
 
@@ -60,11 +60,11 @@ public class ReserveTableService {
 
         reservationRepository.save(
                 Reservation.createReservation(
-                        memberRepository.getReferenceById(reserveRequest.getMemberId()), //성능 향상을 위해 proxy 객체를 넣음
-                        projectTableRepository.getReferenceById(reserveRequest.getProjectTableId()),
+                        memberRepository.getReferenceById(reserveReq.getMemberId()), //성능 향상을 위해 proxy 객체를 넣음
+                        projectTableRepository.getReferenceById(reserveReq.getProjectTableId()),
                         reservationQrImage,
-                        reserveRequest.getStartAt(),
-                        reserveRequest.getEndAt()
+                        reserveReq.getStartAt(),
+                        reserveReq.getEndAt()
                 ));
 
     }
@@ -74,7 +74,7 @@ public class ReserveTableService {
      * @param
      */
     @Transactional
-    public void reserveOnsiteByAccountQR(Member member, OnsiteReservationRequestByQR reservationRequest) {
+    public void reserveOnsiteByAccountQR(Member member, OnsiteReservationReqByQR reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt());
     }
 
@@ -83,7 +83,7 @@ public class ReserveTableService {
      * @param
      */
     @Transactional
-    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationRequestByLoginForm reservationRequest) {
+    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationReqByLoginForm reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
     }
 

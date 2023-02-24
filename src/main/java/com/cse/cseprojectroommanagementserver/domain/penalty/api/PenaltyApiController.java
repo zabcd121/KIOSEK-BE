@@ -14,13 +14,13 @@ import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyR
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/penalties")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class PenaltyApiController {
 
     private final PenaltySearchService penaltySearchService;
 
-    @GetMapping
+    @GetMapping("/v1/penalties")
     public ResponseSuccess<List<PenaltyLogResponse>> getPenaltyListByMemberId(@RequestParam Long memberId) {
         List<PenaltyLogResponse> penaltyLogResponseList = penaltySearchService.searchMemberPenaltyLogList(memberId);
         return new ResponseSuccess(PENALTY_LOGS_SEARCH_SUCCESS, penaltyLogResponseList);

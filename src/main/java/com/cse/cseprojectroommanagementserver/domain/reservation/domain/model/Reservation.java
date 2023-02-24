@@ -5,6 +5,7 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.P
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelReservationException;
+import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;

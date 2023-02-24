@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +15,11 @@ public class ReserveTableFacadeService {
     private final ReserveTableService reserveTableService;
 
     @Transactional
-    public void reserve(ReserveRequest reserveRequest) {
-        String key = reserveRequest.getStartAt().toLocalDate().toString() + reserveRequest.getProjectTableId();
+    public void reserve(ReserveReq reserveReq) {
+        String key = reserveReq.getStartAt().toLocalDate().toString() + reserveReq.getProjectTableId();
         try {
             namedLockReservationRepository.getLock(key);
-            reserveTableService.reserve(reserveRequest);
+            reserveTableService.reserve(reserveReq);
         } finally {
             namedLockReservationRepository.releaseLock(key);
         }

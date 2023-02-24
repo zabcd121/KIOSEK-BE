@@ -22,6 +22,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
 @RequiredArgsConstructor
+@Configuration
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;

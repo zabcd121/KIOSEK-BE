@@ -12,13 +12,13 @@ import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.Tabl
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/returns")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class TableReturnApiController {
 
     private final TableReturnService tableReturnService;
 
-    @PostMapping
+    @PostMapping("/v1/returns")
     public ResponseSuccessNoResult tableReturn(@RequestParam Long reservationId, MultipartFile cleanupPhoto) {
         tableReturnService.returnTable(reservationId, cleanupPhoto);
         return new ResponseSuccessNoResult(RETURN_SUCCESS);

@@ -13,23 +13,22 @@ import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.Pe
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/penalties/policy")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class PenaltyPolicyApiController {
 
     private final PenaltyPolicyChangeService penaltyPolicyChangeService;
     private final PenaltyPolicySearchService penaltyPolicySearchService;
 
-    @PutMapping
+    @PutMapping("/v1/penalties/policies")
     public ResponseSuccessNoResult changePenaltyPolicy(@RequestBody PenaltyPolicyChangeRequest penaltyPolicyChangeRequest) {
         penaltyPolicyChangeService.changePenaltyPolicy(penaltyPolicyChangeRequest);
 
         return new ResponseSuccessNoResult(PENALTY_POLICY_CHANGE_SUCCESS);
     }
 
-    @GetMapping
+    @GetMapping("/v1/penalties/policies")
     public ResponseSuccess getCurrentPenaltyPolicy() {
-        return new ResponseSuccess(PENALTY_POLICY_SEARCH_SUCCESS,
-                penaltyPolicySearchService.searchPenaltyPolicy());
+        return new ResponseSuccess(PENALTY_POLICY_SEARCH_SUCCESS, penaltyPolicySearchService.searchPenaltyPolicy());
     }
 }

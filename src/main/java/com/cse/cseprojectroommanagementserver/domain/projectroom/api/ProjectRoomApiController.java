@@ -13,13 +13,13 @@ import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.Proj
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
-@RequestMapping("/api/projectrooms")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProjectRoomApiController {
 
     private final ProjectRoomSearchService projectRoomSearchService;
 
-    @GetMapping
+    @GetMapping("/v1/rooms")
     public ResponseSuccess<List<ProjectRoomAndTableSearchResponse>> getProjectRoomAndTableList() {
         return new ResponseSuccess<>(PROJECT_ROOM_SEARCH_SUCCESS, projectRoomSearchService.searchAllProjectRoomAndTable());
     }

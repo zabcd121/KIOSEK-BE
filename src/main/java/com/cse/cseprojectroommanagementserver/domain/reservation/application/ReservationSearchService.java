@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 
 @Service
 @Slf4j
@@ -22,38 +22,37 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 public class ReservationSearchService {
     private final ReservationSearchableRepository reservationSearchableRepository;
 
-    public Page<SearchReservationByPagingResponse> searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
+    public Page<SearchReservationByPagingRes> searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         return reservationSearchableRepository.findAllByConditionAndPageable(condition, pageable);
     }
 
-    public List<SearchReservationResponse> searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeRequest firstAndLastDateTimeRequest) {
+    public List<SearchReservationRes> searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
 
-        log.info("getFirstDateTime: {}", firstAndLastDateTimeRequest.getFirstAt());
-        log.info("getLastDateTime: {}", firstAndLastDateTimeRequest.getLastAt());
+        log.info("getFirstDateTime: {}", firstAndLastDateTimeReq.getFirstAt());
+        log.info("getLastDateTime: {}", firstAndLastDateTimeReq.getLastAt());
 
         return reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(
                 projectRoomId,
-                firstAndLastDateTimeRequest.getFirstAt(),
-                firstAndLastDateTimeRequest.getLastAt()
+                firstAndLastDateTimeReq.getFirstAt(),
+                firstAndLastDateTimeReq.getLastAt()
         );
 
     }
 
 
-    public List<CurrentReservationByMemberResponse> searchMyCurrentReservationList(Long memberId) {
+    public List<CurrentReservationByMemberRes> searchMyCurrentReservationList(Long memberId) {
         return reservationSearchableRepository.findCurrentAllByMemberId(memberId);
     }
 
-    public List<PastReservationByMemberResponse> searchMyPastReservationList(Long memberId) {
+    public List<PastReservationByMemberRes> searchMyPastReservationList(Long memberId) {
         return reservationSearchableRepository.findPastAllByMemberId(memberId);
     }
 
-    public boolean checkIsInUseTableAtCurrent(String tableName) {
+    public boolean checkIsInUseTable(String tableName) {
         if(!reservationSearchableRepository.existsCurrentInUseReservationByTableName(tableName)){
             throw new IsNotInUseTableException();
         }
         return true;
     }
-
 
 }

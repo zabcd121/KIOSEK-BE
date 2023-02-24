@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxHourPerOnce {
 
-    private Integer value;
+    private Integer maxHour;
 
     public boolean checkPolicy(LocalDateTime reservationStartAt, LocalDateTime reservationEndAt) {
         Duration duration = Duration.between(reservationStartAt, reservationEndAt);
         long timeToAttempt = duration.toHours();
 
-        if (this.value < timeToAttempt) {
-            throw new ExceedMaxTimeEnableReservationException("한번에 최대 예약가능한 " + this.value +  "시간을 초과하였습니다.");
+        if (this.maxHour < timeToAttempt) {
+            throw new ExceedMaxTimeEnableReservationException("한번에 최대 예약가능한 " + this.maxHour +  "시간을 초과하였습니다.");
         }
         return true;
     }
