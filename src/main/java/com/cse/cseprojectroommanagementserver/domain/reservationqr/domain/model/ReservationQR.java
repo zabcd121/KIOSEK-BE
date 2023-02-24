@@ -1,5 +1,6 @@
-package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
+package com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model;
 
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
 
