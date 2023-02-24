@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,12 +20,12 @@ public class ProjectRoomSearchService {
     private final ProjectRoomRepository projectRoomRepository;
     private final ProjectTableRepository projectTableRepository;
 
-    public List<ProjectRoomAndTableSearchResponse> searchAllProjectRoomAndTable() {
-        List<ProjectRoomAndTableSearchResponse> projectRoomSearchList = new ArrayList<>();
+    public List<ProjectRoomAndTableSearchRes> searchAllProjectRoomAndTable() {
+        List<ProjectRoomAndTableSearchRes> projectRoomSearchList = new ArrayList<>();
 
         for (ProjectRoom projectRoom : projectRoomRepository.findAll()) {
             List<ProjectTable> projectTableList = projectTableRepository.findAllByProjectRoom(projectRoom);
-            projectRoomSearchList.add(new ProjectRoomAndTableSearchResponse().of(projectRoom, projectTableList));
+            projectRoomSearchList.add(new ProjectRoomAndTableSearchRes().of(projectRoom, projectTableList));
         }
 
         return projectRoomSearchList;

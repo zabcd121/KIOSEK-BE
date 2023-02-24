@@ -3,15 +3,11 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidPasswordException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -61,7 +57,7 @@ class AuthServiceMockTest {
     String accessToken;
     String refreshToken;
 
-    LoginRequest loginRequest;
+    LoginReq loginReq;
     User user;
 
     @BeforeEach
@@ -83,7 +79,7 @@ class AuthServiceMockTest {
         accessToken = "Bearer accessToken";
         refreshToken = "Bearer refreshToken";
 
-        loginRequest = LoginRequest.builder().loginId("20180335").password("kiosek1234!").build();
+        loginReq = LoginReq.builder().loginId("20180335").password("kiosek1234!").build();
         user = new User(savedMember.getName(), savedMember.getPassword(),
                 savedMember.getAuthorities().stream()
                         .map(authority -> new SimpleGrantedAuthority(authority))
@@ -95,8 +91,8 @@ class AuthServiceMockTest {
     @DisplayName("로그인 성공 - 아이디, 패스워드 모두 일치")
     void 로그인_성공() {
         // Given
-        given(memberDetailsService.loadUserByUsername(loginRequest.getLoginId())).willReturn(user);
-        given(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())).willReturn(true);
+        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willReturn(user);
+        given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(true);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
 
@@ -107,34 +103,34 @@ class AuthServiceMockTest {
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(jwtTokenProvider.getExpiration(refreshToken)).willReturn(5L);
         willDoNothing().given(valueOperations).set("RT:" + authentication.getName(), refreshToken, 5L , TimeUnit.MILLISECONDS);
-        given(memberSearchRepository.findByAccountLoginId(loginRequest.getLoginId())).willReturn(Optional.of(savedMember));
+        given(memberSearchRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
 
         // When
-        LoginResponse loginResponse = authService.login(loginRequest, ROLE_MEMBER);
+        LoginRes loginRes = authService.login(loginReq, ROLE_MEMBER);
 
         // Then
-        assertEquals(savedMember.getMemberId(), loginResponse.getMemberInfo().getMemberId());
+        assertEquals(savedMember.getMemberId(), loginRes.getMemberInfo().getMemberId());
     }
 
     @Test
     @DisplayName("로그인 실패 - 아이디 불일치")
     void 로그인_실패_아이디_일치X() {
         // Given
-        given(memberDetailsService.loadUserByUsername(loginRequest.getLoginId())).willThrow(UsernameNotFoundException.class);
+        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willThrow(UsernameNotFoundException.class);
 
         // When, Then
-        assertThrows(UsernameNotFoundException.class, () -> authService.login(loginRequest,ROLE_MEMBER));
+        assertThrows(UsernameNotFoundException.class, () -> authService.login(loginReq,ROLE_MEMBER));
     }
 
     @Test
     @DisplayName("로그인 실패 - 아이디 일치, 비밀번호 불일치")
     void 로그인_실패_비밀번호_일치X() {
         // Given
-        given(memberDetailsService.loadUserByUsername(loginRequest.getLoginId())).willReturn(user);
-        given(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())).willReturn(false);
+        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willReturn(user);
+        given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
 
         // When, Then
-        assertThrows(InvalidPasswordException.class, () -> authService.login(loginRequest, ROLE_MEMBER));
+        assertThrows(InvalidPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
 
 }

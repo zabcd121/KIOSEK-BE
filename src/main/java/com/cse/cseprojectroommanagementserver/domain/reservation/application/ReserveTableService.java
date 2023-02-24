@@ -74,7 +74,7 @@ public class ReserveTableService {
      * @param
      */
     @Transactional
-    public void reserveOnsiteByAccountQR(Member member, OnsiteReservationReqByQR reservationRequest) {
+    public void reserveOnsiteByAccountQR(Member member, OnsiteReservationByQRReq reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt());
     }
 
@@ -83,7 +83,7 @@ public class ReserveTableService {
      * @param
      */
     @Transactional
-    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationReqByLoginForm reservationRequest) {
+    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationByLoginFormReq reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
     }
 

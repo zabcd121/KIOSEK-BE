@@ -2,14 +2,12 @@ package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.application.PenaltyPolicyChangeService;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.application.PenaltyPolicySearchService;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResponseDto;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyRequestDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -21,9 +19,8 @@ public class PenaltyPolicyApiController {
     private final PenaltyPolicySearchService penaltyPolicySearchService;
 
     @PutMapping("/v1/penalties/policies")
-    public ResponseSuccessNoResult changePenaltyPolicy(@RequestBody PenaltyPolicyChangeRequest penaltyPolicyChangeRequest) {
-        penaltyPolicyChangeService.changePenaltyPolicy(penaltyPolicyChangeRequest);
-
+    public ResponseSuccessNoResult changePenaltyPolicy(@RequestBody PenaltyPolicyChangeReq penaltyPolicyChangeReq) {
+        penaltyPolicyChangeService.changePenaltyPolicy(penaltyPolicyChangeReq);
         return new ResponseSuccessNoResult(PENALTY_POLICY_CHANGE_SUCCESS);
     }
 

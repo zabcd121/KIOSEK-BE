@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.domain.model.QComplaint.*;
-import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
-import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResDto.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,14 +24,14 @@ public class ComplaintSearchRepository implements ComplaintSearchableRepository 
     JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AdminComplaintSearchResponse> findAllByPageable(Pageable pageable) {
-        List<AdminComplaintSearchResponse> content = queryFactory
-                .select(Projections.fields(AdminComplaintSearchResponse.class,
+    public Page<AdminComplaintSearchRes> findAllByPageable(Pageable pageable) {
+        List<AdminComplaintSearchRes> content = queryFactory
+                .select(Projections.fields(AdminComplaintSearchRes.class,
                         complaint.complaintId,
                         complaint.subject,
                         complaint.content,
                         complaint.image,
-                        Projections.fields(SimpleProjectRoomResponse.class, complaint.projectRoom.projectRoomId, complaint.projectRoom.buildingName, complaint.projectRoom.roomName)
+                        Projections.fields(SimpleProjectRoomRes.class, complaint.projectRoom.projectRoomId, complaint.projectRoom.buildingName, complaint.projectRoom.roomName)
 
                 ))
                 .from(complaint)

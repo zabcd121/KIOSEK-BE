@@ -6,12 +6,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class MemberRequestDto {
+public class MemberReqDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class LoginRequest {
+    public static class LoginReq {
 
         @NotBlank(message = "아이디를 입력해주세요.")
         private String loginId;
@@ -24,7 +24,7 @@ public class MemberRequestDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class SignupRequest {
+    public static class SignupReq {
 
         @NotBlank(message = "학번을 입력해주세요.")
         @Pattern(message = "8자리 학번 형식에 맞게 입력해야 합니다. ex)20230001",

@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
 
 public interface TableDeactivationSearchableRepository {
 
     boolean existsBy(Long tableId, LocalDateTime startAt, LocalDateTime endAt);
-    Page<AdminTableDeactivationSearchResponse> findAllByPageable(Pageable pageable);
+    Page<AdminTableDeactivationSearchRes> findAllByPageable(Pageable pageable);
 }

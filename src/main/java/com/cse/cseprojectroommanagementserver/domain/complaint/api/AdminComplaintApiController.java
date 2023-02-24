@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -20,7 +20,7 @@ public class AdminComplaintApiController {
     private final ComplaintSearchService complaintSearchService;
 
     @GetMapping("/v1/complaints")
-    public ResponseSuccess<Page<AdminComplaintSearchResponse>> getComplaintList(Pageable pageable) {
+    public ResponseSuccess<Page<AdminComplaintSearchRes>> getComplaintList(Pageable pageable) {
         return new ResponseSuccess<>(COMPLAINT_SEARCH_SUCCESS, complaintSearchService.searchComplaintListByPageable(pageable));
     }
 }

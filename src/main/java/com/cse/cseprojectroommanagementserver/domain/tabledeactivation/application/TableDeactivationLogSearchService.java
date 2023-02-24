@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,7 +16,7 @@ public class TableDeactivationLogSearchService {
 
     private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
 
-    public Page<AdminTableDeactivationSearchResponse> searchTableDeactivationLog(Pageable pageable) {
+    public Page<AdminTableDeactivationSearchRes> searchTableDeactivationLog(Pageable pageable) {
 
         return tableDeactivationSearchableRepository.findAllByPageable(pageable);
     }

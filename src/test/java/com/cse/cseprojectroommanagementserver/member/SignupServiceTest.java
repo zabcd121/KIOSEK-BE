@@ -14,14 +14,13 @@ import com.google.zxing.WriterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRequestDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,7 +42,7 @@ public class SignupServiceTest {
     @Mock
     QRGenerator qrGenerator;
 
-    SignupRequest signupDto;
+    SignupReq signupDto;
 
     Member member;
 
@@ -58,7 +57,7 @@ public class SignupServiceTest {
         QRImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
 
 
-        signupDto = SignupRequest.builder()
+        signupDto = SignupReq.builder()
                 .loginId("20180335")
                 .password("example1234!")
                 .email("example@kumoh.ac.kr")

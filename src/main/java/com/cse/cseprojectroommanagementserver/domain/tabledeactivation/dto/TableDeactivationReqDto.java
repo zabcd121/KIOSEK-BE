@@ -7,23 +7,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableDeactivationRequestDto {
+public class TableDeactivationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class TableDeactivationRequest {
+    public static class TableDeactivationReq {
         private Long projectRoomId;
         private List<Long> projectTableIdList = new ArrayList<>();
-        private TableDeactivationInfoRequest tableDeactivationInfoRequest;
+        private TableDeactivationInfoReq tableDeactivationInfoReq;
     }
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class TableDeactivationInfoRequest {
+    public static class TableDeactivationInfoReq {
         private String reason;
         private LocalDateTime startTime;
         private LocalDateTime endTime;

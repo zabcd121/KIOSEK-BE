@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 
 @RestController
@@ -20,7 +20,7 @@ public class ProjectRoomApiController {
     private final ProjectRoomSearchService projectRoomSearchService;
 
     @GetMapping("/v1/rooms")
-    public ResponseSuccess<List<ProjectRoomAndTableSearchResponse>> getProjectRoomAndTableList() {
+    public ResponseSuccess<List<ProjectRoomAndTableSearchRes>> getProjectRoomAndTableList() {
         return new ResponseSuccess<>(PROJECT_ROOM_SEARCH_SUCCESS, projectRoomSearchService.searchAllProjectRoomAndTable());
     }
 }

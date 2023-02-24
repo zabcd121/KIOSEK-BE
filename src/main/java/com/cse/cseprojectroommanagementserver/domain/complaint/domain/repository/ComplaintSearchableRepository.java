@@ -3,9 +3,9 @@ package com.cse.cseprojectroommanagementserver.domain.complaint.domain.repositor
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResponse.*;
+import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResDto.*;
 
 public interface ComplaintSearchableRepository {
 
-    Page<AdminComplaintSearchResponse> findAllByPageable(Pageable pageable);
+    Page<AdminComplaintSearchRes> findAllByPageable(Pageable pageable);
 }

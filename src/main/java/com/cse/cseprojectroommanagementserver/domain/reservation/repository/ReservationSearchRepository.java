@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.*;
@@ -29,7 +29,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.m
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
-import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
 import static org.springframework.util.StringUtils.*;
 
@@ -166,9 +166,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public Page<SearchReservationByPagingRes> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         List<SearchReservationByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchReservationByPagingRes.class,
-                            Projections.fields(ReservationSimpleInfo.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
-                            Projections.fields(TableReturnSimpleInfo.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
-                            Projections.fields(MemberSimpleInfo.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
+                            Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
+                            Projections.fields(TableReturnSimpleInfoRes.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
+                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
                             reservation.projectTable.projectRoom.roomName,
                             reservation.projectTable.tableName
                 ))

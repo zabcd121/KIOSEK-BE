@@ -1,10 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -20,10 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.QMember.*;
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResponseDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.QPenalty.*;
-import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResponse.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.reservation;
+import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResDto.*;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -66,11 +62,11 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
     }
 
     @Override
-    public Page<SearchPenaltyByPagingResponse> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
-        List<SearchPenaltyByPagingResponse> content = queryFactory
-                .select(Projections.fields(SearchPenaltyByPagingResponse.class,
-                        Projections.fields(PenaltyLogResponse.class, penalty.penaltyId, penalty.startDate, penalty.endDate, penalty.description),
-                        Projections.fields(MemberSimpleInfo.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name)
+    public Page<SearchPenaltyByPagingRes> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
+        List<SearchPenaltyByPagingRes> content = queryFactory
+                .select(Projections.fields(SearchPenaltyByPagingRes.class,
+                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDate, penalty.endDate, penalty.description),
+                        Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name)
                 ))
                 .from(penalty)
                 .join(penalty.member, member)
