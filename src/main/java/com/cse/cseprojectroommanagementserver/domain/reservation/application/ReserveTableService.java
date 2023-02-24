@@ -66,7 +66,6 @@ public class ReserveTableService {
                         reserveReq.getStartAt(),
                         reserveReq.getEndAt()
                 ));
-
     }
 
     /**
@@ -86,7 +85,6 @@ public class ReserveTableService {
     public void reserveOnsiteByFormLogin(Member member, OnsiteReservationByLoginFormReq reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
     }
-
 
     private void reserveOnsite(Member member, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
         validateReservation(member.getMemberId(), projectTableId, startAt, endAt);
@@ -138,6 +136,5 @@ public class ReserveTableService {
     private Long getCountTodayMemberCreatedReservation(Long memberId) {
         return reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId);
     }
-
 
 }
