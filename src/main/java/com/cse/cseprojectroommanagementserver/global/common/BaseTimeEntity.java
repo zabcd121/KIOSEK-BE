@@ -16,19 +16,19 @@ public abstract class BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    protected String createdDateTime;
+    protected String createdAt;
 
     @LastModifiedDate
-    private String lastModifiedDateTime;
+    private String lastModifiedAt;
 
     @PrePersist
     public void onPrePersist(){
-        this.createdDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-        this.lastModifiedDateTime = this.createdDateTime;
+        this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        this.lastModifiedAt = this.createdAt;
     }
 
     @PreUpdate
     public void onPreUpdate(){
-        this.lastModifiedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        this.lastModifiedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     }
 }

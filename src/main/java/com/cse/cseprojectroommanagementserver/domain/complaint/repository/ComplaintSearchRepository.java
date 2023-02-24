@@ -36,7 +36,7 @@ public class ComplaintSearchRepository implements ComplaintSearchableRepository 
                 ))
                 .from(complaint)
                 .join(complaint.projectRoom, projectRoom)
-                .orderBy(complaint.createdDateTime.desc())
+                .orderBy(complaint.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
