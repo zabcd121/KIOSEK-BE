@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.TABLE_DEACTIVATE_DUPLICATED;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.TABLE_DEACTIVATE_DUPLICATED;
 
 @RestControllerAdvice(assignableTypes = {AdminTableDeactivationApiController.class})
 @Slf4j

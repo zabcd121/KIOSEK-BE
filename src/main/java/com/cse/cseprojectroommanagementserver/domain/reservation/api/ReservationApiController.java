@@ -12,7 +12,7 @@ import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api")

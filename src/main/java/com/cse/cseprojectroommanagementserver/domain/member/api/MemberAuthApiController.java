@@ -4,7 +4,6 @@ import com.cse.cseprojectroommanagementserver.domain.member.application.AuthServ
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.TokenDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController

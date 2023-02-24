@@ -1,8 +1,5 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
 @Slf4j

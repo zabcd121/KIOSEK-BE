@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.RESERVATION_SEARCH_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_SEARCH_FAIL;
 
 @RestControllerAdvice(assignableTypes = {TableReturnApiController.class})
 @Slf4j

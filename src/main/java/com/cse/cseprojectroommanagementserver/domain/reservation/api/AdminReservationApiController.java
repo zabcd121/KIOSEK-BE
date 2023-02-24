@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

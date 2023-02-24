@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api")

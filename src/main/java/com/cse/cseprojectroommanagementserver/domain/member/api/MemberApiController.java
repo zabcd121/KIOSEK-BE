@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS;
 
 @RestController
 @RequestMapping("/api")

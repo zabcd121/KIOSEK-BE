@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResponseConditionCode.LOGIN_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.LOGIN_SUCCESS;
 
 @RestController
 @RequestMapping("/api/admins")
