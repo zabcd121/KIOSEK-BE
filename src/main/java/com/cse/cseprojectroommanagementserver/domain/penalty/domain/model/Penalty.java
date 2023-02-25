@@ -1,9 +1,9 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.penalty.exception.ImpossibleExtensionReqException;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Violation;
-import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import lombok.*;
 
@@ -31,11 +31,14 @@ public class Penalty extends BaseTimeEntity {
     private Member member;
 
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate startDt;
+    private LocalDate endDt;
 
-    public void extendEndDate(LocalDate newEndDate) {
-        this.endDate = newEndDate;
+    public void extendEndDate(LocalDate newEndDt) {
+        if(newEndDt.isBefore(this.endDt)) {
+            throw new ImpossibleExtensionReqException();
+        }
+        this.endDt = newEndDt;
     }
 
     public void addViolation(Violation violation) {
@@ -56,8 +59,8 @@ public class Penalty extends BaseTimeEntity {
         Penalty penalty = Penalty.builder()
                 .member(member)
                 .description(description)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()))
+                .startDt(LocalDate.now())
+                .endDt(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()))
                 .build();
 
         for (Violation violation : violationList) {

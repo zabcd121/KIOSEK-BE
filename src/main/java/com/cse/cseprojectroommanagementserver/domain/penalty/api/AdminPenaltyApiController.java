@@ -28,7 +28,7 @@ public class AdminPenaltyApiController {
     }
 
     @PostMapping("/v1/penalties")
-    public ResponseSuccessNoResult imposePenalty(@RequestBody ImposePenaltyReq penaltyReq) {
+    public ResponseSuccessNoResult imposePenalty(@RequestBody PenaltyImpositionReq penaltyReq) {
         penaltyImpositionService.imposePenalty(penaltyReq);
         return new ResponseSuccessNoResult(PENALTY_IMPOSITION_SUCCESS);
     }
