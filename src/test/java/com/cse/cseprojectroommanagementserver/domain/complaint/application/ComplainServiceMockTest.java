@@ -55,7 +55,7 @@ class ComplainServiceMockTest {
 
         // Then
         assertDoesNotThrow(() -> ImageUploadFailException.class);
-        verify(complaintRepository, times(1)).save(any());
+        then(complaintRepository).should(times(1)).save(any());
     }
 
     @Test
