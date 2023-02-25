@@ -27,6 +27,7 @@ public class TableDeactivateService {
     private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
     private final ReservationUpdatableRepository reservationUpdatableRepository;
     private final ProjectTableRepository projectTableRepository;
+
     /**
      * Todo: 중복 비활성화 방지하기 -> 중복된 비활성화 있으면 그냥 전체 에러내자!  -> 예약하기에서 비활성화 체크도 해야함., 해당 테이블과 그 시간에 존재하는 예약 삭제해야함
      * @param tableDeactivationReq
