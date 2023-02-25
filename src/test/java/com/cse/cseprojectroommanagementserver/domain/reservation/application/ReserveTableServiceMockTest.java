@@ -113,7 +113,7 @@ class ReserveTableServiceMockTest {
 
         // Then
         assertDoesNotThrow(() -> ReservationQRNotCreatedException.class);
-        verify(reservationRepository, times(1)).save(any());
+        then(reservationRepository).should(times(1)).save(any());
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
@@ -29,26 +31,32 @@ public class SignupService {
     private final QRGenerator qrGenerator;
 
     @Transactional
-    public void signup(SignupReq signupDto) {
-        if (!isDuplicatedLoginId(signupDto.getLoginId()) && !isDuplicatedEmail(signupDto.getEmail())) {
+    public void signup(SignupReq signupReq) {
+        if (!checkDuplicationLoginId(signupReq.getLoginId()) && !checkDuplicationEmail(signupReq.getEmail())) {
             try {
                 QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
-                Account account = Account.builder().loginId(signupDto.getLoginId()).password(passwordEncoder.encode(signupDto.getPassword())).build();
+                Account account = Account.builder().loginId(signupReq.getLoginId()).password(passwordEncoder.encode(signupReq.getPassword())).build();
 
-                Member signupMember = Member.createMember(account, signupDto.getEmail(), signupDto.getName(), accountQRCodeImage);
+                Member signupMember = Member.createMember(account, signupReq.getEmail(), signupReq.getName(), accountQRCodeImage);
 
                 signupRepository.save(signupMember);
-            } catch (WriterException | IOException | QRNotCreatedException e) {
+            } catch (QRNotCreatedException e) {
                 throw new AccountQRNotCreatedException();
             }
         }
     }
 
-    public boolean isDuplicatedLoginId(String loginId) {
-        return signupRepository.existsByAccountLoginId(loginId) ? true : false;
+    public boolean checkDuplicationLoginId(String loginId) {
+        if(signupRepository.existsByAccountLoginId(loginId)) {
+            throw new LoginIdDuplicatedException();
+        }
+        return false;
     }
 
-    public boolean isDuplicatedEmail(String email) {
-        return signupRepository.existsByEmail(email) ? true: false;
+    public boolean checkDuplicationEmail(String email) {
+        if(signupRepository.existsByEmail(email)) {
+            throw new EmailDuplicatedException();
+        }
+        return false;
     }
 }
