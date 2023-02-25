@@ -78,8 +78,8 @@ public class MemberResDto {
         private LocalDate endDt;
 
         public MemberPenaltyInfoRes of(Penalty penalty) {
-            this.startDt = penalty.getStartDate();
-            this.endDt = penalty.getEndDate();
+            this.startDt = penalty.getStartDt();
+            this.endDt = penalty.getEndDt();
 
             return this;
         }

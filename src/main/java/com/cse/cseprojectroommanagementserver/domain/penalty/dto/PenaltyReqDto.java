@@ -15,7 +15,7 @@ public class PenaltyReqDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class ImposePenaltyReq {
+    public static class PenaltyImpositionReq {
         private Long memberId;
         private String description;
 
@@ -29,8 +29,8 @@ public class PenaltyReqDto {
             return Penalty.builder()
                     .description(description)
                     .member(member)
-                    .startDate(startDt)
-                    .endDate(endDt)
+                    .startDt(startDt)
+                    .endDt(endDt)
                     .build();
         }
     }
