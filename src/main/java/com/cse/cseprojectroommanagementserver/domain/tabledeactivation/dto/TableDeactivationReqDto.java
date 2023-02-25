@@ -25,14 +25,14 @@ public class TableDeactivationReqDto {
     @Getter
     public static class TableDeactivationInfoReq {
         private String reason;
-        private LocalDateTime startTime;
-        private LocalDateTime endTime;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
 
         public TableDeactivationInfo toEntity() {
             return TableDeactivationInfo.builder()
                     .reason(reason)
-                    .startAt(startTime)
-                    .endAt(endTime)
+                    .startAt(startAt)
+                    .endAt(endAt)
                     .build();
         }
     }
