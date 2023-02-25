@@ -41,14 +41,13 @@ public class QRGenerator {
     @Value("${fileDir.reservations}")
     private String reservationQRDir; //    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
 
-    public QRImage createAccountQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+    public QRImage createAccountQRCodeImage() throws QRNotCreatedException {
             return createQRCodeImage(accountQRDir);
     }
 
-    public QRImage createReservationQRCodeImage() throws WriterException, IOException, QRNotCreatedException {
+    public QRImage createReservationQRCodeImage() throws QRNotCreatedException {
         return createQRCodeImage(reservationQRDir);
     }
-
 
     private QRImage createQRCodeImage(String fixedDir){
         try {

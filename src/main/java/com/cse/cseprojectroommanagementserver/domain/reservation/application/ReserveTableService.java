@@ -54,7 +54,7 @@ public class ReserveTableService {
 
         try {
             reservationQrImage = qrGenerator.createReservationQRCodeImage();
-        } catch (WriterException | IOException | QRNotCreatedException e) {
+        } catch (QRNotCreatedException e) {
             throw new ReservationQRNotCreatedException();
         }
 
