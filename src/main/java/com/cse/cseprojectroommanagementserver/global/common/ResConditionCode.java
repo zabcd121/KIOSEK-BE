@@ -10,7 +10,7 @@ public enum ResConditionCode {
     SIGNUP_SUCCESS("0100", "회원가입 성공"),
     SIGNUP_FAIL("0101", "회원가입 실패"),
     LOGIN_ID_DUPLICATED("0102", "이미 사용중인 아이디(학번) 입니다.)"),
-    LOGIN_ID_NOT_DUPLICATED("0103", "사용 가능한 아이디 입니다."),
+    LOGIN_USABLE("0103", "사용 가능한 아이디 입니다."),
     EMAIL_DUPLICATED("0104", "이미 사용중인 이메일 입니다."),
     EMAIL_USABLE("0105", "사용 가능한 이메일 입니다."),
     LOGIN_ID_WRONG_TYPE("0106", "잘못된 형식의 아이디(학번)이 입력되었습니다."),
