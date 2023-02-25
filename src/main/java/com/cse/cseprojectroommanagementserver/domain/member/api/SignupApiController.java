@@ -1,8 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,20 +19,14 @@ public class SignupApiController {
 
     @GetMapping("/v1/members/signup/check-id")
     public ResponseSuccessNoResult isDuplicatedLoginId(@RequestParam String loginId) {
-        if(!signupService.isDuplicatedLoginId(loginId)) {
-            return new ResponseSuccessNoResult(LOGIN_ID_NOT_DUPLICATED);
-        } else {
-            throw new LoginIdDuplicatedException();
-        }
+        signupService.checkDuplicationLoginId(loginId);
+        return new ResponseSuccessNoResult(LOGIN_USABLE);
     }
 
     @GetMapping("/v1/members/signup/check-email")
     public ResponseSuccessNoResult isDuplicatedEmail(@RequestParam String email) {
-        if(!signupService.isDuplicatedEmail(email)) {
-            return new ResponseSuccessNoResult(EMAIL_USABLE);
-        } else {
-            throw new EmailDuplicatedException();
-        }
+        signupService.checkDuplicationEmail(email);
+        return new ResponseSuccessNoResult(EMAIL_USABLE);
     }
 
     @PostMapping("/v1/members/signup")
