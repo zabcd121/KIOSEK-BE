@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
-import com.cse.cseprojectroommanagementserver.domain.member.application.MemberComplexInfoSearchService;
+import com.cse.cseprojectroommanagementserver.domain.member.application.MemberSearchService;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResConditionC
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MemberApiController {
-    private final MemberComplexInfoSearchService memberComplexInfoSearchService;
+    private final MemberSearchService memberSearchService;
 
     @GetMapping("/v1/members/{id}")
     public ResponseSuccess<MemberComplexInfoRes> getMemberComplexInfo(@PathVariable("id") Long memberId) {
-        MemberComplexInfoRes memberComplexInfo = memberComplexInfoSearchService.searchMemberComplexInfo(memberId);
+        MemberComplexInfoRes memberComplexInfo = memberSearchService.searchMemberComplexInfo(memberId);
         return new ResponseSuccess<>(MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS, memberComplexInfo);
     }
 
