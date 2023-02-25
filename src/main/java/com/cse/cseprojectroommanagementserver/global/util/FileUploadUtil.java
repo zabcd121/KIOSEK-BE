@@ -37,7 +37,7 @@ public class FileUploadUtil {
 
             String fileUrl = returns + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
 
-            String destinationFileName = UUID.randomUUID().toString() + "." + fileExtension;
+            String destinationFileName = UUID.randomUUID() + "." + fileExtension;
             File destinationFile = new File(outbound + fileUrl + destinationFileName);
             destinationFile.getParentFile().mkdirs();
             multipartFile.transferTo(destinationFile);
