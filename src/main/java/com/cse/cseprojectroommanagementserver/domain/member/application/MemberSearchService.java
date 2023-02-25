@@ -15,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRes
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberComplexInfoSearchService {
+public class MemberSearchService {
 
     private final MemberSearchableRepository memberSearchableRepository;
     private final ViolationSearchableRepository violationSearchableRepository;

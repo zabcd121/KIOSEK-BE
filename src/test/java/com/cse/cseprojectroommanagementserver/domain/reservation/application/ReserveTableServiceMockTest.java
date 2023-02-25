@@ -105,8 +105,8 @@ class ReserveTableServiceMockTest {
 
         given(memberRepository.getReferenceById(reserveReq.getMemberId())).willReturn(Member.builder().memberId(reserveReq.getMemberId()).build());
         given(projectTableRepository.getReferenceById(reserveReq.getProjectTableId())).willReturn(ProjectTable.builder().tableId(reserveReq.getProjectTableId()).build());
-        Reservation reservation = Reservation.builder().build();
-        given(reservationRepository.save(any())).willReturn(reservation);
+        Reservation savedReservation = Reservation.builder().build();
+        given(reservationRepository.save(any())).willReturn(savedReservation);
 
         // When
         reserveTableService.reserve(reserveReq);
