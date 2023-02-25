@@ -28,8 +28,8 @@ public class PenaltyResDto {
 
         public PenaltyLogRes of(Penalty penalty) {
             this.penaltyId = penalty.getPenaltyId();
-            this.startDate = penalty.getStartDate();
-            this.endDate = penalty.getEndDate();
+            this.startDate = penalty.getStartDt();
+            this.endDate = penalty.getEndDt();
             this.description = penalty.getDescription();
 
             return this;

@@ -85,6 +85,7 @@ public enum ResConditionCode {
      */
     PENALTY_LOGS_SEARCH_SUCCESS("0600", "제재 내역 조회 성공"),
     PENALTY_IMPOSITION_SUCCESS("0601", "제재 성공"),
+    PENALTY_IMPOSITION_FAIL("0602", "제재 실패 이미 해당일까지 제재 진행중인 회원입니다."),
 
     /**
      * Complaint: 07

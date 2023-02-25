@@ -33,7 +33,7 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
                 .selectOne()
                 .from(penalty)
                 .where(penalty.member.memberId.eq(memberId)
-                        .and(penalty.startDate.before(LocalDate.now())).and(penalty.endDate.after(LocalDate.now())))
+                        .and(penalty.startDt.before(LocalDate.now())).and(penalty.endDt.after(LocalDate.now())))
                 .fetchFirst();
 
         return count != null ? true : false;
@@ -45,8 +45,8 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
         return Optional.ofNullable(queryFactory
                 .selectFrom(penalty)
                 .where(penalty.member.memberId.eq(memberId)
-                        .and(penalty.startDate.loe(LocalDate.now())
-                                .and(penalty.endDate.goe(LocalDate.now()))))
+                        .and(penalty.startDt.loe(LocalDate.now())
+                                .and(penalty.endDt.goe(LocalDate.now()))))
                 .fetchOne()
         );
     }
@@ -65,7 +65,7 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
     public Page<SearchPenaltyByPagingRes> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
         List<SearchPenaltyByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchPenaltyByPagingRes.class,
-                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDate, penalty.endDate, penalty.description),
+                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDt, penalty.endDt, penalty.description),
                         Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name)
                 ))
                 .from(penalty)
@@ -74,7 +74,7 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
                         memberNameEq(condition.getMemberName()),
                         loginIdEq(condition.getLoginId())
                 )
-                .orderBy(penalty.startDate.desc())
+                .orderBy(penalty.startDt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

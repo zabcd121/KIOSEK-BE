@@ -22,13 +22,13 @@ public class PenaltyImpositionService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void imposePenalty(ImposePenaltyReq penaltyRequest) {
-        Optional<Penalty> inProgressPenalty = penaltySearchableRepository.findInProgressByMemberId(penaltyRequest.getMemberId());
+    public void imposePenalty(PenaltyImpositionReq penaltyReq) {
+        Optional<Penalty> inProgressPenalty = penaltySearchableRepository.findInProgressByMemberId(penaltyReq.getMemberId());
 
         if(inProgressPenalty.isPresent()) {
-            inProgressPenalty.get().extendEndDate(penaltyRequest.getEndDt());
+            inProgressPenalty.get().extendEndDate(penaltyReq.getEndDt());
         } else {
-            penaltyRepository.save(penaltyRequest.toEntity(memberRepository.getReferenceById(penaltyRequest.getMemberId())));
+            penaltyRepository.save(penaltyReq.toEntity(memberRepository.getReferenceById(penaltyReq.getMemberId())));
         }
     }
 }
