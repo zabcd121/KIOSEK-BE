@@ -40,14 +40,15 @@ class PenaltyPolicyChangeServiceMockTest {
     /**
      * C1. 제재 정책 변경 성공
      * C2. 제재 정책 변경 실패
-     * C2-01. 제재 정책 변경 실패 - 해당 정책이 존재하지 않음
+     * C2-01. 제재 정책 변경 실패 -  request penaltyPolicyId에 해당하는 정책이 존재하지 않음
      */
 
     @Test
     @DisplayName("C1. 제재 정책 변경 성공")
     void 제재정책변경_성공() {
         // Given
-        PenaltyPolicy existingPenaltyPolicy = PenaltyPolicy.builder().penaltyPolicyId(1L)
+        PenaltyPolicy existingPenaltyPolicy = PenaltyPolicy.builder()
+                .penaltyPolicyId(1L)
                 .violationCountToImposePenalty(new ViolationCountToImposePenalty(5))
                 .numberOfSuspensionDay(new NumberOfSuspensionDay(4))
                 .appliedStatus(AppliedStatus.CURRENTLY).build();
