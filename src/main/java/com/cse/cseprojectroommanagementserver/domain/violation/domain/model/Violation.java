@@ -47,7 +47,11 @@ public class Violation {
     }
 
     public void changePenalty(Penalty penalty) {
+        if(this.penalty != null) {
+            this.penalty.getViolations().remove(this);
+        }
         this.penalty = penalty;
+        this.penalty.getViolations().add(this);
         this.processingStatus = PENALIZED;
     }
 
