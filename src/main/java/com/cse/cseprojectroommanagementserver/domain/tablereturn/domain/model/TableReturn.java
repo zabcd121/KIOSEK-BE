@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.NOT_RETURNED;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.RETURNED;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 
 @Entity
@@ -50,21 +52,22 @@ public class TableReturn {
         return tableReturn;
     }
 
-    public void changeReservation(Reservation reservation){
+    private void changeReservation(Reservation reservation){
         if(this.targetReservation != null) {
-            this.targetReservation.changeTableReturnToReturned(null);
+            this.targetReservation.setTableReturn(null);
         }
         this.targetReservation = reservation;
-        this.targetReservation.changeTableReturnToReturned(this);
+        this.targetReservation.setTableReturn(this);
+        this.targetReservation.setReservationStatus(RETURNED);
     }
 
-    public void changeReservationByAutoReturn(Reservation reservation) {
+    private void changeReservationByAutoReturn(Reservation reservation) {
         if(this.targetReservation != null) {
-            this.targetReservation.changeTableReturnToNotReturned(null);
+            this.targetReservation.setTableReturn(null);
         }
         this.targetReservation = reservation;
-        this.targetReservation.changeTableReturnToNotReturned(this);
+        this.targetReservation.setTableReturn(this);
+        this.targetReservation.setReservationStatus(NOT_RETURNED);
     }
-
 
 }
