@@ -2,7 +2,6 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.InvalidReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
@@ -10,8 +9,6 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.exception.Unabl
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
-import com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReservationAuthServiceMockTest {
+class ReservationAuthServiceUnitTest {
 
     @InjectMocks
     ReservationAuthService reservationAuthService;

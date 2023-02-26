@@ -32,7 +32,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class SignupServiceMockTest {
+public class SignupServiceUnitTest {
     @InjectMocks SignupService signupService;
 
     @Mock SignupRepository signupRepository;

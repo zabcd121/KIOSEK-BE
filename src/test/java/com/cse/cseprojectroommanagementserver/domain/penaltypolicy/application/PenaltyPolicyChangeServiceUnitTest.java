@@ -4,14 +4,12 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.repository.PenaltyPolicyRepository;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotExistsPenaltyPolicyException;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PenaltyPolicyChangeServiceMockTest {
+class PenaltyPolicyChangeServiceUnitTest {
 
     @InjectMocks
     PenaltyPolicyChangeService penaltyPolicyChangeService;

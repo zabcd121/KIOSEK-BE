@@ -17,7 +17,6 @@ import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Viol
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.repository.ViolationRepository;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.repository.ViolationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AutoTableReturnSchedulingServiceMockTest {
+class AutoTableReturnSchedulingServiceUnitTest {
 
     @InjectMocks AutoTableReturnSchedulingService autoTableReturnSchedulingService;
 

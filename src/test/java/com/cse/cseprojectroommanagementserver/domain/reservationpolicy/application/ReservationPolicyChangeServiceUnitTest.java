@@ -5,14 +5,12 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxPeriod;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicyRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotExistsReservationPolicyException;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReservationPolicyChangeServiceMockTest {
+class ReservationPolicyChangeServiceUnitTest {
 
     @InjectMocks
     ReservationPolicyChangeService reservationPolicyChangeService;
