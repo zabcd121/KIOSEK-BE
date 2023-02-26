@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltyRepository;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.NumberOfSuspensionDay;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ProcessingStatus.NON_PENALIZED;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,10 +59,10 @@ class AutoTableReturnSchedulingServiceMockTest {
     void 자동반납_성공_유예시간후에미반납된예약() {
         // Given
         // 사용종료 후 반납대기중 상태인 예약리스트
-        List<Reservation> returnWaitingReservationList = getReturnWaitingReservationList();
+        List<Reservation> returnWaitingReservationList = getReservationListBy(ReservationStatus.RETURN_WAITING);
         given(reservationSearchableRepository.findReturnWaitingReservations()).willReturn(Optional.of(returnWaitingReservationList));
 
-        List<TableReturn> autoTableReturnList = getAutoTableReturnList(returnWaitingReservationList);
+        List<TableReturn> autoTableReturnList = getAutoTableReturnListBy(returnWaitingReservationList);
         given(tableReturnRepository.saveAll(any())).willReturn(autoTableReturnList);
 
         // 반납 대기중 상태인 예약들을 위반
@@ -76,20 +78,55 @@ class AutoTableReturnSchedulingServiceMockTest {
                     .willReturn(Optional.of(violationListByMember));
         }
 
-        given(penaltyRepository.saveAllAndFlush(any())).willReturn(new ArrayList<>());
+        List<Penalty> penaltyList = new ArrayList<>();
+        given(penaltyRepository.saveAllAndFlush(any())).willReturn(penaltyList); // 반환타입으로 뭐 사용하는게 없어서 테스트는 빈 리스트 반환으로 함.
 
         // When
         autoTableReturnSchedulingService.autoTableReturn();
 
         // Then
-        Assertions.assertEquals(ReservationStatus.NOT_RETURNED, returnWaitingReservationList.get(0).getReservationStatus());
-        Assertions.assertEquals(ReservationStatus.NOT_RETURNED, returnWaitingReservationList.get(1).getReservationStatus());
+        assertEquals(ReservationStatus.NOT_RETURNED, returnWaitingReservationList.get(0).getReservationStatus());
+        assertEquals(ReservationStatus.NOT_RETURNED, returnWaitingReservationList.get(1).getReservationStatus());
         then(tableReturnRepository).should(times(1)).saveAll(any());
         then(violationRepository).should(times(1)).saveAllAndFlush(any());
         then(penaltyRepository).should(times(1)).saveAllAndFlush(any());
     }
 
-    private List<TableReturn> getAutoTableReturnList(List<Reservation> returnWaitingReservationList) {
+    @Test
+    @DisplayName("M2-C1. 예약 자동 취소 기능 성공")
+    void 예약자동취소_성공() {
+        // Given
+        List<Reservation> unUsedReservationList = getReservationListBy(ReservationStatus.UN_USED);
+        given(reservationSearchableRepository.findUnUsedReservations()).willReturn(unUsedReservationList);
+
+        // 반납 대기중 상태인 예약들을 위반
+        List<Violation> violationList = getViolationListBy(unUsedReservationList);
+        given(violationRepository.saveAllAndFlush(any())).willReturn(violationList);
+
+        //최신 제재 정책 가져옴
+        given(penaltyPolicySearchableRepository.findCurrentPenaltyPolicy()).willReturn(getCurrentPenaltyPolicy());
+
+        for (Violation violation : violationList) {
+            List<Violation> violationListByMember = getViolationListByMember(violation.getTargetMember(), violation.getTargetReservation()); // 현재 히원의 위반 내역과 그전에 처벌받지 않은 위반 내역을 함께 리스트로 가져옴
+            given(violationSearchableRepository.findNotPenalizedViolationsByMemberId(violation.getTargetMember().getMemberId()))
+                    .willReturn(Optional.of(violationListByMember));
+        }
+
+        given(penaltyRepository.saveAllAndFlush(any())).willReturn(new ArrayList<>());
+
+        // When
+        autoTableReturnSchedulingService.autoCancelUnUsedReservation();
+
+        // Then
+        assertEquals(ReservationStatus.UN_USED, unUsedReservationList.get(0).getReservationStatus());
+        assertEquals(ReservationStatus.UN_USED, unUsedReservationList.get(0).getReservationStatus());
+        then(violationRepository).should(times(1)).saveAllAndFlush(any());
+        then(penaltyRepository).should(times(1)).saveAllAndFlush(any());
+    }
+
+    
+
+    private List<TableReturn> getAutoTableReturnListBy(List<Reservation> returnWaitingReservationList) {
         List<TableReturn> tableReturnList = new ArrayList<>();
         for (Reservation reservation : returnWaitingReservationList) {
             tableReturnList.add(TableReturn.createAutoReturn(reservation));
@@ -98,19 +135,19 @@ class AutoTableReturnSchedulingServiceMockTest {
         return tableReturnList;
     }
 
-    private List<Reservation> getReturnWaitingReservationList() {
+    private List<Reservation> getReservationListBy(ReservationStatus reservationStatus) {
         List<Reservation> reservationList = new ArrayList<>();
-        reservationList.add(getReturnWaitingReservationBy(1L, getMemberBy(1L)));
-        reservationList.add(getReturnWaitingReservationBy(2L, getMemberBy(2L)));
+        reservationList.add(getReservationBy(1L, getMemberBy(1L), reservationStatus));
+        reservationList.add(getReservationBy(2L, getMemberBy(2L), reservationStatus));
 
         return reservationList;
     }
 
-    private Reservation getReturnWaitingReservationBy(Long reservationId, Member member) {
+    private Reservation getReservationBy(Long reservationId, Member member, ReservationStatus reservationStatus) {
         return Reservation.builder()
                 .reservationId(reservationId)
                 .member(member)
-                .reservationStatus(ReservationStatus.RETURN_WAITING)
+                .reservationStatus(reservationStatus)
                 .build();
     }
 
