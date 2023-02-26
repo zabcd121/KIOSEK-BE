@@ -63,8 +63,12 @@ public class Reservation extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Means means;
 
-    public void changeReservationStatus(ReservationStatus reservationStatus) {
+    public void setReservationStatus(ReservationStatus reservationStatus) {
         this.reservationStatus = reservationStatus;
+    }
+
+    public void setTableReturn(TableReturn tableReturn) {
+        this.tableReturn = tableReturn;
     }
 
     public void changeReservationQR(ReservationQR reservationQR) {
@@ -107,16 +111,6 @@ public class Reservation extends BaseTimeEntity {
             throw new UnableToCancelReservationException();
         }
         this.reservationStatus = CANCELED;
-    }
-
-    public void changeTableReturnToReturned(TableReturn tableReturn) {
-        this.tableReturn = tableReturn;
-        this.reservationStatus = RETURNED;
-    }
-
-    public void changeTableReturnToNotReturned(TableReturn tableReturn) {
-        this.tableReturn = tableReturn;
-        this.reservationStatus = NOT_RETURNED;
     }
 
     public void checkIn(boolean isPreviousReservationInUse) {

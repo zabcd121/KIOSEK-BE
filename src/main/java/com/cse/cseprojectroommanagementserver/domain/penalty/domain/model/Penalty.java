@@ -9,6 +9,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent.*;
@@ -23,8 +24,9 @@ public class Penalty extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long penaltyId;
 
+    @Builder.Default
     @OneToMany(mappedBy = "penalty", fetch = FetchType.LAZY)
-    private List<Violation> violations;
+    private List<Violation> violations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -41,20 +43,15 @@ public class Penalty extends BaseTimeEntity {
         this.endDt = newEndDt;
     }
 
-    public void addViolation(Violation violation) {
-        violation.changePenalty(this);
-        this.violations.add(violation);
-    }
-
     public static Penalty createPenalty(Member member, PenaltyPolicy penaltyPolicy, List<Violation> violationList) {
         int unusedCnt = 0;
         int notReturnedCnt = 0;
         for (Violation violation : violationList) {
-            if(violation.getViolationContent().equals(UN_USED) ) unusedCnt++;
-            else if(violation.getViolationContent().equals(NOT_RETURNED) ) notReturnedCnt++;
+            if(violation.getViolationContent().equals(UN_USED_CONTENT) ) unusedCnt++;
+            else if(violation.getViolationContent().equals(NOT_RETURNED_CONTENT) ) notReturnedCnt++;
         }
 
-        String description = UN_USED.getContent() + " " + unusedCnt + "회 " + NOT_RETURNED + " " + notReturnedCnt + "회";
+        String description = UN_USED_CONTENT.getContent() + " " + unusedCnt + "회 " + NOT_RETURNED_CONTENT + " " + notReturnedCnt + "회";
 
         Penalty penalty = Penalty.builder()
                 .member(member)
@@ -64,7 +61,7 @@ public class Penalty extends BaseTimeEntity {
                 .build();
 
         for (Violation violation : violationList) {
-            penalty.addViolation(violation);
+            violation.changePenalty(penalty);
         }
 
         return penalty;
