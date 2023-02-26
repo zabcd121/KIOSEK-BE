@@ -124,7 +124,21 @@ class AutoTableReturnSchedulingServiceMockTest {
         then(penaltyRepository).should(times(1)).saveAllAndFlush(any());
     }
 
-    
+    @Test
+    @DisplayName("M3-C1. 사용시간 종료후 반납 대기중 상태로 자동 변경 성공")
+    void 반납대기중상태로자동변경_성공_종료시간까지미반납시() {
+        // Given
+        List<Reservation> finishedButInUseReservationList = getReservationListBy(ReservationStatus.IN_USE);
+        given(reservationSearchableRepository.findFinishedButInUseStatusReservations()).willReturn(Optional.of(finishedButInUseReservationList));
+
+        // When
+        autoTableReturnSchedulingService.changeUsedReservationToReturnWaiting();
+
+        // Then
+        assertEquals(ReservationStatus.RETURN_WAITING, finishedButInUseReservationList.get(0).getReservationStatus());
+        assertEquals(ReservationStatus.RETURN_WAITING, finishedButInUseReservationList.get(1).getReservationStatus());
+    }
+
 
     private List<TableReturn> getAutoTableReturnListBy(List<Reservation> returnWaitingReservationList) {
         List<TableReturn> tableReturnList = new ArrayList<>();
