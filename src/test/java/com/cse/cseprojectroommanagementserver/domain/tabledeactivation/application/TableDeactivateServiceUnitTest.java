@@ -2,19 +2,16 @@ package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.applicat
 
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationUpdatableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivation;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.exception.DuplicatedDeactivationException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TableDeactivateServiceMockTest {
+class TableDeactivateServiceUnitTest {
 
     @InjectMocks
     TableDeactivateService tableDeactivateService;

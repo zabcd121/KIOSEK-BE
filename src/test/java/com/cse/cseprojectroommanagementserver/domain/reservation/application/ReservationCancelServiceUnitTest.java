@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReservationCancelServiceMockTest {
+class ReservationCancelServiceUnitTest {
 
     @InjectMocks
     ReservationCancelService reservationCancelService;

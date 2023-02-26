@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReserveTableServiceMockTest {
+class ReserveTableServiceUnitTest {
 
     @InjectMocks ReserveTableService reserveTableService;
 

@@ -5,14 +5,12 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.Me
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltyRepository;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyReqDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.exception.ImpossibleExtensionReqException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,11 +19,10 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyReqDto.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PenaltyImpositionServiceMockTest {
+class PenaltyImpositionServiceUnitTest {
 
     @InjectMocks PenaltyImpositionService penaltyImpositionService;
 
