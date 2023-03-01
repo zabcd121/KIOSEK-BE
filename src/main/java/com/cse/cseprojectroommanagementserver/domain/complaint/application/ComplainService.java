@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
 
@@ -22,8 +23,10 @@ public class ComplainService {
 
     @Transactional
     public void complain(ComplainReq complainReq) {
-        Image image = fileUploadUtil.uploadFile(complainReq.getImage());
-        Complaint complaint = Complaint.createComplaint(projectRoomRepository.getReferenceById(complainReq.getProjectRoomId()), complainReq.getSubject(), complainReq.getContent(), image);
+        Image image = fileUploadUtil.uploadComplainsImage(complainReq.getPhoto());
+        Complaint complaint = Complaint.createComplaint(
+                projectRoomRepository.getReferenceById(complainReq.getProjectRoomId()), complainReq.getSubject(), complainReq.getContent(), image
+        );
 
         complaintRepository.save(complaint);
     }

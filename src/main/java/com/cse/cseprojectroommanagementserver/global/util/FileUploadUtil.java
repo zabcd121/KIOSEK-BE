@@ -28,14 +28,26 @@ public class FileUploadUtil {
     @Value("${fileDir.returns}")
     private String returns;
 
+    @Value("${fileDir.complains}")
+    private String complains;
 
+    public Image uploadReturnsImage(MultipartFile multipartFile) {
+        return uploadFile(multipartFile, returns);
+    }
 
-    public Image uploadFile(MultipartFile multipartFile) {
+    public Image uploadComplainsImage(MultipartFile multipartFile) {
+        return uploadFile(multipartFile, complains);
+    }
+
+    private Image uploadFile(MultipartFile multipartFile, String path) {
+        if(multipartFile == null) {
+            return null;
+        }
         try {
             String fileOriName = multipartFile.getOriginalFilename();
             String fileExtension = FilenameUtils.getExtension(fileOriName);
 
-            String fileUrl = returns + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
+            String fileUrl = path + "/" + LocalDate.now().getYear() + "/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getDayOfMonth() + "/";
 
             String destinationFileName = UUID.randomUUID() + "." + fileExtension;
             File destinationFile = new File(outbound + fileUrl + destinationFileName);
@@ -48,7 +60,7 @@ public class FileUploadUtil {
                     .fileUrl(inbound + fileUrl)
                     .build();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new ImageUploadFailException();
         }
     }

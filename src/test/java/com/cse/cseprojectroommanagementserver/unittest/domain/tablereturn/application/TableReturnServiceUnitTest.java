@@ -50,7 +50,7 @@ class TableReturnServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         MockMultipartFile cleanupPhoto = new MockMultipartFile("cleanupPhoto", "imageBytes".getBytes(StandardCharsets.UTF_8));
-        given(fileUploadUtil.uploadFile(cleanupPhoto)).willReturn(Image.builder().build());
+        given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willReturn(Image.builder().build());
 
         given(tableReturnRepository.save(any())).willReturn(TableReturn.builder().build());
 
@@ -72,7 +72,7 @@ class TableReturnServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         MockMultipartFile cleanupPhoto = new MockMultipartFile("cleanupPhoto", "imageBytes".getBytes(StandardCharsets.UTF_8));
-        given(fileUploadUtil.uploadFile(cleanupPhoto)).willThrow(ImageUploadFailException.class);
+        given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willThrow(ImageUploadFailException.class);
 
         // When, Then
         assertThrows(ImageUploadFailException.class, () -> tableReturnService.returnTable(reqReservationId, cleanupPhoto));
