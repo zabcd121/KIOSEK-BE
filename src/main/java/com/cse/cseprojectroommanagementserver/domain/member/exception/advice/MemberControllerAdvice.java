@@ -107,7 +107,7 @@ public class MemberControllerAdvice {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public ResponseError notExistEqualRefreshTokenExHandler(NotExistsEqualRefreshToken ex) {
+    public ResponseError notExistEqualRefreshTokenExHandler(NotExistsEqualRefreshTokenException ex) {
         log.error("[exceptionHandler] member", ex);
         return new ResponseError(REFRESH_TOKEN_NOT_EXIST_IN_STORE);
     }

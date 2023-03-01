@@ -11,7 +11,12 @@ plugins {
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 
     id 'com.google.cloud.tools.jib' version '3.3.1'
+    id 'jacoco'
 
+}
+
+jacoco {
+    toolVersion = '0.8.5'
 }
 
 group = 'com.cse'
@@ -39,8 +44,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: "com.vaadin.external.google", module:"android-json"
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -65,8 +70,8 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
     // swagger
-    implementation (group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2')
-    implementation (group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2') {
+    implementation(group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2')
+    implementation(group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2') {
         exclude module: 'swagger-annotations' exclude module: 'swagger-models'
     }
     implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.5.21'
@@ -77,8 +82,6 @@ dependencies {
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 
-
-
     //json type 변환 문제
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
 
@@ -87,9 +90,91 @@ dependencies {
 
 }
 
-tasks.named('test') {
+//tasks.withType(Test) {
+//    jacoco.includeNoLocationClasses = true
+//}
+
+//tasks.named('test') {
+//    useJUnitPlatform()
+//    finalizedBy 'jacocoTestReport'
+//}
+
+tasks.test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
+
+tasks.jacocoTestReport {
+    reports {
+        html.enabled true
+        csv.enabled true
+        xml.enabled false
+    }
+    def Qdomains = []
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
+    afterEvaluate {
+
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: ["**/*Application*",
+                                                "**/*Config*",
+                                                "**/*Dto*",
+                                                "**/*Jwt*",
+                                                "**/*DataFormatProvider*",
+                                                "**/*ControllerAdvice*",
+                                                "**/*Exception*",
+                                                "**/*Condition*",
+                                                "**/*Init*",
+                                                "**/*Res*"] + Qdomains)
+                }))
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+tasks.jacocoTestCoverageVerification {
+    jacocoTestCoverageVerification {
+        def Qdomains = []
+        // 패키지 + 클래스명
+        for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+            Qdomains.add(qPattern + '*')
+        }
+
+        violationRules {
+            rule {
+                enabled = true
+                element = 'CLASS'
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+
+                excludes = ["**/*Application*",
+                            "**/*Config*",
+                            "**/*Dto*",
+                            "**/*Jwt*",
+                            "**/*DataFormatProvider*",
+                            "**/*ControllerAdvice*",
+                            "**/*Exception*",
+                            "**/*Condition*",
+                            "**/*Init*",
+                            "**/*Res*"] + Qdomains // 제외할 Qdomains 패턴 추가
+            }
+        }
+    }
+}
+
 
 def querydslDir = "$buildDir/generated/querydsl"
 
