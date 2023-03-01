@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,8 +47,14 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web -> web.ignoring().mvcMatchers(
-                "/api/**", "/images/**"
-        ));
+                        "/api/v1/reservations/onsite/**",
+                        "/api/sensor/**",
+                        "/api/v1/members/login",
+                        "/api/admins/v1/login",
+                        "/api/v1/members/signup/**",
+                        "/images/**"
+                ).and()
+                .ignoring().mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
     }
 
     @Bean
@@ -80,8 +87,10 @@ public class SecurityConfig {
                 .apply(jwtTokenFilterConfig)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/members/**")
-                .permitAll()
+                .antMatchers("/api/v1/**")
+                .access("hasRole('ROLE_MEMBER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/admins/**")
+                .access("hasRole('ROLE_ADMIN')")
                 .and().build();
 
     }
