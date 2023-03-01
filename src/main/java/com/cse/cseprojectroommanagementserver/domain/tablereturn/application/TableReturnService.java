@@ -25,7 +25,7 @@ public class TableReturnService {
     public void returnTable(Long reservationId, MultipartFile cleanupPhoto) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new NotExistsReservationException());
-        Image image = fileUploadUtil.uploadFile(cleanupPhoto);
+        Image image = fileUploadUtil.uploadReturnsImage(cleanupPhoto);
 
         tableReturnRepository.save(TableReturn.createReturn(findReservation, image));
     }

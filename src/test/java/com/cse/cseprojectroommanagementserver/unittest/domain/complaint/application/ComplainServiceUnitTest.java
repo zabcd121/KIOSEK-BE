@@ -42,9 +42,10 @@ class ComplainServiceUnitTest {
     @DisplayName("C1. 민원 접수 성공")
     void 민원접수_성공() {
         // Given
-        ComplainReq complainReq = ComplainReq.builder().projectRoomId(1L).subject("subject").content("content").image(new MockMultipartFile("example", "example".getBytes(StandardCharsets.UTF_8))).build();
+        ComplainReq complainReq = ComplainReq.builder().projectRoomId(1L).subject("subject").content("content").build();
+        MockMultipartFile photo = new MockMultipartFile("example", "example".getBytes(StandardCharsets.UTF_8));
         Image uploadedImage = Image.builder().fileLocalName("localName").fileOriName("oriName").fileUrl("/image").build();
-        given(fileUploadUtil.uploadFile(complainReq.getImage())).willReturn(uploadedImage);
+        given(fileUploadUtil.uploadComplainsImage(photo)).willReturn(uploadedImage);
 
         ProjectRoom projectRoom = ProjectRoom.builder().projectRoomId(1L).build();
         given(projectRoomRepository.getReferenceById(complainReq.getProjectRoomId())).willReturn(projectRoom);
@@ -64,8 +65,9 @@ class ComplainServiceUnitTest {
     @DisplayName("C2-01. 민원 접수 실패 - 이미지 업로드 실패")
     void 민원접수_실패_이미지업로드실패() {
         // Given
-        ComplainReq complainReq = ComplainReq.builder().projectRoomId(1L).subject("subject").content("content").image(new MockMultipartFile("example", "example".getBytes(StandardCharsets.UTF_8))).build();
-        given(fileUploadUtil.uploadFile(complainReq.getImage())).willThrow(ImageUploadFailException.class);
+        ComplainReq complainReq = ComplainReq.builder().projectRoomId(1L).subject("subject").content("content").build();
+        MockMultipartFile photo = new MockMultipartFile("example", "example".getBytes(StandardCharsets.UTF_8));
+        given(fileUploadUtil.uploadComplainsImage(photo)).willThrow(ImageUploadFailException.class);
 
         // When, Then
         assertThrows(ImageUploadFailException.class, () -> complainService.complain(complainReq));

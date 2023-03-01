@@ -38,6 +38,8 @@ out/
 
 application.yml
 keystore.p12
-
+src/test/resources
 Dockerfile
 docker-compose.yml
+src/.DS_Store
+.DS_Store
