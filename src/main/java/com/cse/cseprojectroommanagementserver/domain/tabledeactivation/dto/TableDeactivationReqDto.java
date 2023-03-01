@@ -15,7 +15,10 @@ public class TableDeactivationReqDto {
     @Getter
     public static class TableDeactivationReq {
         private Long projectRoomId;
+
+        @Builder.Default
         private List<Long> projectTableIdList = new ArrayList<>();
+
         private TableDeactivationInfoReq tableDeactivationInfoReq;
     }
 
