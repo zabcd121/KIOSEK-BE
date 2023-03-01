@@ -15,16 +15,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.ResConditionC
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ReservationPolicyApiController {
-
-    private final ReservationPolicyChangeService reservationPolicyChangeService;
     private final ReservationPolicySearchService reservationPolicySearchService;
-
-    @PutMapping("/v1/reservations/policies")
-    public ResponseSuccessNoResult changeReservationPolicy(@RequestBody ReservationPolicyChangeReq reservationPolicyChangeReq) {
-        reservationPolicyChangeService.changeReservationPolicy(reservationPolicyChangeReq);
-
-        return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);
-    }
 
     @GetMapping("/v1/reservations/policies")
     public ResponseSuccess getCurrentReservationPolicy() {
