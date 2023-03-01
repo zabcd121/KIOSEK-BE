@@ -65,7 +65,7 @@ public class AuthService {
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new NotExistsEqualRefreshToken();
+            throw new NotExistsEqualRefreshTokenException();
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
