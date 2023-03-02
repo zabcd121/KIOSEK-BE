@@ -12,7 +12,7 @@ import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.Pe
 @RequiredArgsConstructor
 public class PenaltyPolicySearchService {
 
-    private PenaltyPolicySearchableRepository penaltyPolicySearchableRepository;
+    private final PenaltyPolicySearchableRepository penaltyPolicySearchableRepository;
 
     @Transactional
     public PenaltyPolicySearchRes searchPenaltyPolicy() {
