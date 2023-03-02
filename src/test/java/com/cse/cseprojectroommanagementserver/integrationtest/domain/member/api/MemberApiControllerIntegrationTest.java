@@ -21,13 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberApiControllerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    MemberSetUp memberSetUp;
+    private MemberSetUp memberSetUp;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * C1. 회원 개인정보 조회 성공

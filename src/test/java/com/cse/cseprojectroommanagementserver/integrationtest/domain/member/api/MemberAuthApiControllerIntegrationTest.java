@@ -24,10 +24,10 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTest {
     private MemberSetUp memberSetUp;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * M1.로그인
