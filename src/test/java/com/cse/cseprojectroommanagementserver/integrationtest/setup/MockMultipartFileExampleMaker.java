@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class MockMultipartFIleExampleMaker {
+public class MockMultipartFileExampleMaker {
 
     public MockMultipartFile getMockMultipartFile() {
         return new MockMultipartFile(

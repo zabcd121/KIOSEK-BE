@@ -1,31 +1,13 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.complaint.api;
 
-import com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto;
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTest;
-import com.cse.cseprojectroommanagementserver.integrationtest.setup.ComplaintSetUp;
-import com.cse.cseprojectroommanagementserver.integrationtest.setup.MockMultipartFIleExampleMaker;
-import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectRoomSetUp;
-import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cse.cseprojectroommanagementserver.integrationtest.setup.MockMultipartFileExampleMaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ComplaintApiControllerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    private MockMultipartFIleExampleMaker mockMultipartFIleExampleMaker;
+    private MockMultipartFileExampleMaker mockMultipartFIleExampleMaker;
 
     /**
      * 테스트 케이스
