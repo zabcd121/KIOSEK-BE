@@ -1,5 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
+import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -20,10 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
@@ -40,35 +43,43 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("####doFilterInternal진입");
-        String jwt = resolveToken(request, AUTHORIZATION_HEADER);
-
         try{
+            String jwt = resolveToken(request, AUTHORIZATION_HEADER);
+            log.info("resolveToken 이후");
             if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+                log.info("validateToken 이후");
                 String isLogout = (String) redisTemplate.opsForValue().get(jwt);
-
+                log.info("isLogout 이후");
                 if (ObjectUtils.isEmpty(isLogout)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                    log.info("getAuthentication 이후");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
                 }
             }
 
-        } /*catch(TokenNotPassedException e) {
+        } catch(TokenNotPassedException e) {
             request.setAttribute("exception", e);
             log.info("catch token not passed exception");
         } catch (TokenNotBearerException e) {
             request.setAttribute("exception", e);
-        }*/
+            log.info("TokenNotBearerException");
+        }
         catch (SignatureException e) {
             request.setAttribute("exception", e);
+            log.info("SignatureException");
         } catch (MalformedJwtException e) {
             request.setAttribute("exception", e);
+            log.info("MalformedJwtException");
         } catch (ExpiredJwtException e) {
             request.setAttribute("exception", e);
+            log.info("ExpiredJwtException");
         } catch (UnsupportedJwtException e) {
             request.setAttribute("exception", e);
+            log.info("UnsupportedJwtException");
         } catch (JwtException | IllegalArgumentException e) {
             request.setAttribute("exception", e);
+            log.info("JwtException IllegalArgumentException");
         }
 
         filterChain.doFilter(request, response);
@@ -76,24 +87,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request, String header) {
 
-            /*String bearerToken = request.getHeader(header);
-
-            if(bearerToken == null || bearerToken.equals("")) {
-                log.info("bearer token not passed");
-                throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
-            }
-
-            if(!bearerToken.startsWith(BEARER)) {
-                throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
-            }
-
-            return bearerToken.substring(7);*/
-
         String bearerToken = request.getHeader(header);
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+
+        if(bearerToken == null || bearerToken.equals("")) {
+            log.info("bearer token not passed");
+            throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
         }
-        return null;
+
+        if(!bearerToken.startsWith(BEARER)) {
+            throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
+        }
+        log.info("bearerToken = , {}", bearerToken);
+        return bearerToken.substring(7);
 
     }
 }
