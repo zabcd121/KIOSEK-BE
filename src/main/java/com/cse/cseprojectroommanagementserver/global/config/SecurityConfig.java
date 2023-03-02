@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -29,7 +30,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtTokenFilterConfig jwtTokenFilterConfig;
+    private final RedisTemplate redisTemplate;
 
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -54,8 +55,7 @@ public class SecurityConfig {
                         "/api/v1/members/token/reissue",
                         "/api/v1/members/signup/**",
                         "/images/**"
-                ).and()
-                .ignoring().mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
+                ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
     }
 
     @Bean
@@ -85,14 +85,16 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 실패시 오류 처리
                 .accessDeniedHandler(jwtAccessDeniedHandler) // 권한 부족시 오류 처리
                 .and()
-                .apply(jwtTokenFilterConfig)
-                .and()
+//                .apply(jwtTokenFilterConfig)
+//                .and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/**")
                 .access("hasRole('ROLE_MEMBER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/admins/**")
                 .access("hasRole('ROLE_ADMIN')")
-                .and().build();
+                .and()
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .build();
 
     }
 }
