@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.complaint.api;
 
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithNoFilter;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MockMultipartFileExampleMaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class ComplaintApiControllerIntegrationTest extends BaseIntegrationTestWithNoFilter {
+class ComplaintApiControllerIntegrationTest extends BaseIntegrationWithSecurityFilter {
 
     @Autowired
     private MockMultipartFileExampleMaker mockMultipartFIleExampleMaker;
@@ -35,6 +36,7 @@ class ComplaintApiControllerIntegrationTest extends BaseIntegrationTestWithNoFil
                         .param("projectRoomId", "4")
                         .param("subject", "subject2")
                         .param("content", "content")
+                        .header("Authorization", accessToken)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print());
 
@@ -52,6 +54,7 @@ class ComplaintApiControllerIntegrationTest extends BaseIntegrationTestWithNoFil
                                 .param("projectRoomId", "4")
                                 .param("subject", "subject2")
                                 .param("content", "content")
+                                .header("Authorization", accessToken)
                                 .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print());
 
@@ -59,6 +62,4 @@ class ComplaintApiControllerIntegrationTest extends BaseIntegrationTestWithNoFil
         resultActions
                 .andExpect(status().isOk());
     }
-
-
 }
