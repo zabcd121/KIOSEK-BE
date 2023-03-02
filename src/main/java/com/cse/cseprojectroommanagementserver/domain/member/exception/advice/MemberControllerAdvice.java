@@ -105,7 +105,7 @@ public class MemberControllerAdvice {
         return new ResponseError(EMAIL_DUPLICATED);
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseError notExistEqualRefreshTokenExHandler(NotExistsEqualRefreshTokenException ex) {
         log.error("[exceptionHandler] member", ex);
