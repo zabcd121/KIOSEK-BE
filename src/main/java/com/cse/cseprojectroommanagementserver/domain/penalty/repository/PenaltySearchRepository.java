@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class PenaltySearchRepository implements PenaltySearchableRepository {
 
     private final JPAQueryFactory queryFactory;
+
     @Override
     public boolean existsByMemberId(Long memberId) {
         Integer count = queryFactory
@@ -65,8 +67,8 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
     public Page<SearchPenaltyByPagingRes> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
         List<SearchPenaltyByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchPenaltyByPagingRes.class,
-                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDt, penalty.endDt, penalty.description),
-                        Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name)
+                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDt, penalty.endDt, penalty.description).as("penalty"),
+                        Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name).as("member")
                 ))
                 .from(penalty)
                 .join(penalty.member, member)
