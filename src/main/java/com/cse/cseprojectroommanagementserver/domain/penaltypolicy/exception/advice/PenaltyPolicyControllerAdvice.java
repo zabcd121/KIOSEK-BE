@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.advice;
 
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.api.PenaltyPolicyApiController;
+import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.api.AdminPenaltyPolicyApiController;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotExistsPenaltyPolicyException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.PENALTY_POLICY_SEARCH_FAIL;
 
-@RestControllerAdvice(assignableTypes = {PenaltyPolicyApiController.class})
+@RestControllerAdvice(assignableTypes = {AdminPenaltyPolicyApiController.class})
 @Slf4j
 public class PenaltyPolicyControllerAdvice {
 

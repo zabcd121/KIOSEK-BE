@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.complaint.api;
 
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithNoFilter;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationWithSecurityFilter;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MockMultipartFileExampleMaker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class ComplaintApiControllerIntegrationTest extends BaseIntegrationWithSecurityFilter {
+class ComplaintApiControllerIntegrationTestTest extends BaseIntegrationTestWithSecurityFilter {
 
     @Autowired
     private MockMultipartFileExampleMaker mockMultipartFIleExampleMaker;

@@ -11,9 +11,9 @@ import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.Pe
 import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admins")
 @RequiredArgsConstructor
-public class PenaltyPolicyApiController {
+public class AdminPenaltyPolicyApiController {
 
     private final PenaltyPolicyChangeService penaltyPolicyChangeService;
     private final PenaltyPolicySearchService penaltyPolicySearchService;

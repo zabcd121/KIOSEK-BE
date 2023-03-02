@@ -1,27 +1,23 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.penalty.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTest;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationWithSecurityFilter;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltySetUp;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PenaltyApiControllerIntegrationTest extends BaseIntegrationWithSecurityFilter {
+class PenaltyApiControllerIntegrationTestTest extends BaseIntegrationTestWithSecurityFilter {
 
     @Autowired
     private PenaltySetUp penaltySetUp;

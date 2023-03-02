@@ -4,7 +4,6 @@ import com.cse.cseprojectroommanagementserver.domain.member.application.AuthServ
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +22,7 @@ import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRes
 @Disabled
 @AutoConfigureMockMvc
 @Transactional
-public class BaseIntegrationWithSecurityFilter {
+public class BaseIntegrationTestWithSecurityFilter {
     @Autowired
     protected MockMvc mvc;
 
