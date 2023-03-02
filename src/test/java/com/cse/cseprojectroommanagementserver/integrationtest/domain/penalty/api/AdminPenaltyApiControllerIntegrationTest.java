@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTest;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
+import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltySetUp;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,9 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MemberSetUp memberSetUp;
+
+    @Autowired
+    private PenaltySetUp penaltySetUp;
 
     @Autowired
     private AuthService authService;
@@ -83,5 +87,36 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTest {
 
         // Then
         resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("M2-C1-01. 제재 회원 리스트 조회 성공")
+    void 제재회원리스트조회_성공() throws Exception {
+        // Given
+        Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member1!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "김현석");
+        penaltySetUp.savePenalty(member, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7));
+        penaltySetUp.savePenalty(member, LocalDate.now(), LocalDate.now().plusDays(3));
+
+        PenaltySearchCondition penaltySearchCondition = PenaltySearchCondition.builder().memberName(member.getName()).loginId(member.getLoginId()).build();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/penalties")
+                                .header("Authorization", accessToken)
+                                .param("loginId", penaltySearchCondition.getLoginId())
+                                .param("memberName", member.getName())
+                                .param("pageNumber", "0")
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content", hasSize(2)))
+                .andExpect(jsonPath("$.result.content[0].member.loginId").value(member.getLoginId()))
+                .andExpect(jsonPath("$.result.content[1].member.loginId").value(member.getLoginId()));
+
     }
 }
