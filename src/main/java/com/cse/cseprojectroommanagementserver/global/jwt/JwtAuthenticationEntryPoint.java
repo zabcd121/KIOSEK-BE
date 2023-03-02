@@ -31,8 +31,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         Exception exception = (Exception) request.getAttribute("exception");
 
-        log.error("exception: {}", exception.getMessage());
-
         if(exception == null) {
             log.error("null token");
             setResponse(response, ACCESS_DENIED);
@@ -52,6 +50,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             log.error(TOKEN_WRONG_TYPE.getMessage());
             setResponse(response, TOKEN_WRONG_TYPE);
         }
+
+        log.error("exception: {}", exception.getMessage());
 
     }
 
