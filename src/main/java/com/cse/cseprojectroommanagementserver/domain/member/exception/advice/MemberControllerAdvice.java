@@ -1,6 +1,9 @@
 package com.cse.cseprojectroommanagementserver.domain.member.exception.advice;
 
+import com.cse.cseprojectroommanagementserver.domain.member.api.AdminAuthApiController;
+import com.cse.cseprojectroommanagementserver.domain.member.api.MemberApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.api.MemberAuthApiController;
+import com.cse.cseprojectroommanagementserver.domain.member.api.SignupApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 
-@RestControllerAdvice(assignableTypes = {MemberAuthApiController.class})
+@RestControllerAdvice(assignableTypes = {MemberAuthApiController.class, AdminAuthApiController.class, SignupApiController.class, MemberApiController.class})
 @Slf4j
 public class MemberControllerAdvice {
 
