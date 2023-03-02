@@ -19,17 +19,17 @@ public class PenaltyResDto {
 
         private Long penaltyId;
         @DateTimeFormat(pattern = LOCAL_DATE_FORMAT)
-        private LocalDate startDate;
+        private LocalDate startDt;
 
         @DateTimeFormat(pattern = LOCAL_DATE_FORMAT)
-        private LocalDate endDate;
+        private LocalDate endDt;
 
         private String description;
 
         public PenaltyLogRes of(Penalty penalty) {
             this.penaltyId = penalty.getPenaltyId();
-            this.startDate = penalty.getStartDt();
-            this.endDate = penalty.getEndDt();
+            this.startDt = penalty.getStartDt();
+            this.endDt = penalty.getEndDt();
             this.description = penalty.getDescription();
 
             return this;
