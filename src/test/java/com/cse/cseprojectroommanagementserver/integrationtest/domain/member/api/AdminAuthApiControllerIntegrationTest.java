@@ -24,9 +24,6 @@ class AdminAuthApiControllerIntegrationTest extends BaseIntegrationTest {
     private MemberSetUp memberSetUp;
 
     @Autowired
-    private AuthService authService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     /**
