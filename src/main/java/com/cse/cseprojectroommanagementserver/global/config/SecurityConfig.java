@@ -51,6 +51,7 @@ public class SecurityConfig {
                         "/api/sensor/**",
                         "/api/v1/members/login",
                         "/api/admins/v1/login",
+                        "/api/v1/members/token/reissue",
                         "/api/v1/members/signup/**",
                         "/images/**"
                 ).and()
