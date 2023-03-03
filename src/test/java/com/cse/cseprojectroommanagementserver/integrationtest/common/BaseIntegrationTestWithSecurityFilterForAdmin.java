@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Disabled
 @AutoConfigureMockMvc
 @Transactional
-public class BaseIntegrationTestWithAdminSecurityFilter {
+public class BaseIntegrationTestWithSecurityFilterForAdmin {
     @Autowired
     protected MockMvc mvc;
 
