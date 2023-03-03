@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.common;
 
-import com.cse.cseprojectroommanagementserver.global.config.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Disabled
 @AutoConfigureMockMvc
 @Transactional
-public class BaseIntegrationTest {
+public class BaseIntegrationTestWithIgnoringURI { // security config에서 ignoring 설정된 api 테스트할 때 사용
 
     @Autowired
     protected MockMvc mvc;
