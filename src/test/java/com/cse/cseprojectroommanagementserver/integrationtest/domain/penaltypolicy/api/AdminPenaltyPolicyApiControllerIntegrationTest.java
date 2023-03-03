@@ -1,19 +1,13 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.penaltypolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithAdminSecurityFilter;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilterForAdmin;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltyPolicySetUp;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class AdminPenaltyPolicyApiControllerIntegrationTest extends BaseIntegrationTestWithAdminSecurityFilter {
+class AdminPenaltyPolicyApiControllerIntegrationTest extends BaseIntegrationTestWithSecurityFilterForAdmin {
 
     @Autowired
     private PenaltyPolicySetUp penaltyPolicySetUp;
