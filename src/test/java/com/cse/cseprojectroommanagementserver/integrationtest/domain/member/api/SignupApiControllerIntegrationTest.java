@@ -1,15 +1,12 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.member.api;
 
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTest;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.client.HttpClientErrorException;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static org.springframework.http.MediaType.*;
@@ -17,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class SignupApiControllerIntegrationTest extends BaseIntegrationTest {
+class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoringURI {
 
     @Autowired
     private MemberSetUp memberSetUp;
