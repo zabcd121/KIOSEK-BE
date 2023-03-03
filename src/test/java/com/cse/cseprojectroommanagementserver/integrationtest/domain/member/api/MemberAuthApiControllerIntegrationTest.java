@@ -3,7 +3,7 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.member.api
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTest;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTest {
+class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoringURI {
 
     @Autowired
     private MemberSetUp memberSetUp;
