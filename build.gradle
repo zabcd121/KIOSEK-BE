@@ -127,8 +127,10 @@ tasks.jacocoTestReport {
                                                 "**/*ControllerAdvice*",
                                                 "**/*Exception*",
                                                 "**/*Condition*",
-                                                "**/*Init*"
-                                                ] + Qdomains)
+                                                "**/*Init*",
+                                                "**/*BaseTime**",
+                                                "**/*Foramtter**"
+                    ] + Qdomains)
                 }))
     }
 
@@ -168,7 +170,9 @@ tasks.jacocoTestCoverageVerification {
                             "**/*ControllerAdvice*",
                             "**/*Exception*",
                             "**/*Condition*",
-                            "**/*Init*"] + Qdomains // 제외할 Qdomains 패턴 추가
+                            "**/*Init*",
+                            "**/*BaseTime**",
+                            "**/*Foramtter**"] + Qdomains // 제외할 Qdomains 패턴 추가
             }
         }
     }

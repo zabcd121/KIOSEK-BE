@@ -8,9 +8,9 @@ import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.Proj
 
 public class ComplaintResDto {
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor
     @NoArgsConstructor
-    @Getter
+    @Getter @Setter
     public static class AdminComplaintSearchRes {
         private Long complaintId;
         private String subject;
