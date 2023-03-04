@@ -35,4 +35,8 @@ public class MemberSetUp {
 
         );
     }
+
+    public Member findMember(String loginId) {
+        return memberRepository.findByAccountLoginId(loginId);
+    }
 }

@@ -36,7 +36,7 @@ public class ReservationResDto {
             this.startAt = reservation.getStartAt();
             this.endAt = reservation.getEndAt();
             if(reservation.getTableReturn() != null) {
-                this.returnedAt = reservation.getTableReturn().getReturnedDateTime();
+                this.returnedAt = reservation.getTableReturn().getReturnedAt();
             }
             return this;
         }
@@ -100,10 +100,6 @@ public class ReservationResDto {
         private TableReturnSimpleInfoRes tableReturn;
 
         private MemberSimpleInfoRes member;
-
-        private String roomName;
-
-        private String tableName;
     }
 
     @AllArgsConstructor
@@ -120,5 +116,8 @@ public class ReservationResDto {
 
         private ReservationStatus reservationStatus;
 
+        private String roomName;
+
+        private String tableName;
     }
 }

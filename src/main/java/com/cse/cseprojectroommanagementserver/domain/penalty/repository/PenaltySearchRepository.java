@@ -35,7 +35,7 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
                 .selectOne()
                 .from(penalty)
                 .where(penalty.member.memberId.eq(memberId)
-                        .and(penalty.startDt.before(LocalDate.now())).and(penalty.endDt.after(LocalDate.now())))
+                        .and(penalty.startDt.loe(LocalDate.now())).and(penalty.endDt.goe(LocalDate.now())))
                 .fetchFirst();
 
         return count != null ? true : false;

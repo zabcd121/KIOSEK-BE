@@ -8,6 +8,8 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -27,5 +29,10 @@ public class ReservationSetUp {
         Reservation createdReservation = Reservation.createReservation(member, projectTable, qrImage, startAt, endAt);
         createdReservation.setReservationStatus(reservationStatus);
         return reservationRepository.save(createdReservation);
+    }
+
+    @Transactional
+    public void deleteAll() {
+        reservationRepository.deleteAll();
     }
 }
