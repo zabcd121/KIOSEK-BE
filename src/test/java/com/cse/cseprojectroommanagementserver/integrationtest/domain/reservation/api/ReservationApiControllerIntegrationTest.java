@@ -165,6 +165,28 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                 .andExpect(jsonPath("$.result", hasSize(1)));
     }
 
+    @Test
+    @DisplayName("M4-C1-01. 현재 예약된 테이블인지 확인 기능 성공 - Q&A 스피커에서 사람이 감지되었을 때 현재 이 테이블이 예약되어 사용중인 테이블인지 검사하는 API")
+    void 현재예약된테이블인지확인_QA스피커_성공() throws Exception {
+        // Given
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
+
+        LocalDateTime reservationStartAt = LocalDateTime.now().minusHours(1);
+        reservationSetUp.saveReservationWithStatus(ReservationStatus.IN_USE, member, projectTable, reservationStartAt, reservationStartAt.plusHours(2));
+
+        // When
+
+        ResultActions resultActions = mvc.perform(
+                        get("/api/sensor/v1/reservations/check")
+                                .param("tableName", projectTable.getTableName())
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk());
+    }
+
 
 
     @AfterTransaction

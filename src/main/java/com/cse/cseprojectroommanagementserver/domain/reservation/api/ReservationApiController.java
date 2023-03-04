@@ -59,8 +59,8 @@ public class ReservationApiController {
     /**
      * Q&A 스피커에서 사람이 감지되었을 때 현재 이 테이블이 예약되어 사용중인 테이블인지 검사하는 API
      */
-    @GetMapping("sensor/v1/reservations/check")
-    public ResponseSuccessNoResult isCurrentReservedTable(@RequestParam String tableName) {
+    @GetMapping("/sensor/v1/reservations/check")
+    public ResponseSuccessNoResult validateIsCurrentReservedTable(@RequestParam String tableName) {
         reservationSearchService.checkIsInUseTable(tableName);
         return new ResponseSuccessNoResult(IN_USE_TABLE);
     }
