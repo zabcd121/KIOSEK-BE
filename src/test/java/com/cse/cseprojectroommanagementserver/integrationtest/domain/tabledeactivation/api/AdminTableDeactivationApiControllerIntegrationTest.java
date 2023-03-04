@@ -2,10 +2,13 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.tabledeact
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilterForAdmin;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectRoomSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
+import com.cse.cseprojectroommanagementserver.integrationtest.setup.TableDeactivationSetUp;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +22,18 @@ import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.DEPRECATED;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminTableDeactivationApiControllerIntegrationTest extends BaseIntegrationTestWithSecurityFilterForAdmin {
+
+    @Autowired
+    private TableDeactivationSetUp tableDeactivationSetUp;
 
     @Autowired
     private ProjectRoomSetUp projectRoomSetUp;
@@ -35,8 +42,10 @@ class AdminTableDeactivationApiControllerIntegrationTest extends BaseIntegration
     private ProjectTableSetUp projectTableSetUp;
 
     /**
-     * C1. 예약 비활성화 기능 성공
-     * C1-01. 예약 비활성화 기능 성공
+     * M1. 예약 비활성화 기능
+         * M1-C1-01. 예약 비활성화 기능 성공
+     * M2. 예약 비활성화 내역 조회 기능
+         * M2-C1-01. 예약 비활성화 내역 조회 기능 성공
      */
 
     @Test
@@ -75,5 +84,36 @@ class AdminTableDeactivationApiControllerIntegrationTest extends BaseIntegration
 
         // Then
         resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("M2-C1-01. 예약 비활성화 내역 조회 기능 성공 ")
+    void 예약비활성화내역조회_성공() throws Exception {
+        // Given
+        ProjectTable table1 = projectTableSetUp.findProjectTableByTableName("A1");
+        ProjectTable table2 = projectTableSetUp.findProjectTableByTableName("A2");
+
+        TableDeactivationInfo tableDeactivationInfo = TableDeactivationInfo.builder()
+                .reason("웹프로그래밍 수업")
+                .startAt(LocalDateTime.now().plusDays(3))
+                .endAt(LocalDateTime.now().plusDays(3).plusHours(2))
+                .build();
+
+        tableDeactivationSetUp.saveTableDeactivation(table1, tableDeactivationInfo);
+        tableDeactivationSetUp.saveTableDeactivation(table2, tableDeactivationInfo);
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/table-deactivations")
+                                .header("Authorization", accessToken)
+                                .param("page", "0")
+                                .param("size", "2")
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content", hasSize(2)));
     }
 }
