@@ -168,17 +168,16 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .select(Projections.fields(SearchReservationByPagingRes.class,
                             Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
                             Projections.fields(TableReturnSimpleInfoRes.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
-                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId, reservation.member.name, reservation.member.account.loginId).as("member"),
+                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId,reservation.member.account.loginId, reservation.member.name).as("member"),
                             reservation.projectTable.projectRoom.roomName,
                             reservation.projectTable.tableName
                 ))
                 .from(reservation)
-                .join(reservation.tableReturn, tableReturn)
+                .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.member, member)
-                .join(reservation.projectTable, projectTable)
                 .join(reservation.projectTable.projectRoom, projectRoom)
                 .where(
-                        periodBetween(condition.getStartDt(), condition.getEndDt()),
+                        startDtBetween(condition.getStartDt(), condition.getEndDt()),
                         memberNameEq(condition.getMemberName()),
                         loginIdEq(condition.getLoginId()),
                         reservationStatusEq(condition.getReservationStatus()),
@@ -192,12 +191,11 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         JPAQuery<Long> countQuery = queryFactory
                 .select(reservation.count())
                 .from(reservation)
-                .join(reservation.tableReturn, tableReturn)
+                .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.member, member)
-                .join(reservation.projectTable, projectTable)
                 .join(reservation.projectTable.projectRoom, projectRoom)
                 .where(
-                        periodBetween(condition.getStartDt(), condition.getEndDt()),
+                        startDtBetween(condition.getStartDt(), condition.getEndDt()),
                         memberNameEq(condition.getMemberName()),
                         loginIdEq(condition.getLoginId()),
                         reservationStatusEq(condition.getReservationStatus()),
@@ -205,14 +203,11 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-
-
     }
 
-    private BooleanExpression periodBetween(LocalDate startDt, LocalDate endDt) {
-        return (startDt != null && endDt != null) ?
-                reservation.startAt.goe(startDt.atStartOfDay())
-                        .and(reservation.endAt.loe(endDt.atTime(LocalTime.MAX)))
+    private BooleanExpression startDtBetween(LocalDate startDt, LocalDate endDt) {
+        return startDt != null && endDt != null
+                ? reservation.startAt.between(LocalDateTime.of(startDt, LocalTime.MIN), LocalDateTime.of(endDt, LocalTime.MAX.withNano(0)))
                 : null;
     }
 

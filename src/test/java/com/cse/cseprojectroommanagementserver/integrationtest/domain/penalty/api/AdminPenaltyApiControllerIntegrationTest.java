@@ -100,7 +100,7 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithIg
                         get("/api/admins/v1/penalties")
                                 .header("Authorization", accessToken)
                                 .param("loginId", penaltySearchCondition.getLoginId())
-                                .param("memberName", member.getName())
+                                .param("memberName", penaltySearchCondition.getMemberName())
                                 .param("pageNumber", "0")
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
