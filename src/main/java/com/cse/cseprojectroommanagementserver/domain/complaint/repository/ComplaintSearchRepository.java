@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.repository;
 
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository.ComplaintSearchableRepository;
+import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,8 +22,8 @@ import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.Proj
 @RequiredArgsConstructor
 public class ComplaintSearchRepository implements ComplaintSearchableRepository {
 
-    JPAQueryFactory queryFactory;
-
+    private final JPAQueryFactory queryFactory;
+//Projections.fields(Image.class, complaint.image.fileLocalName, complaint.image.fileOriName, complaint.image.fileUrl).as("image")
     @Override
     public Page<AdminComplaintSearchRes> findAllByPageable(Pageable pageable) {
         List<AdminComplaintSearchRes> content = queryFactory
@@ -31,8 +32,7 @@ public class ComplaintSearchRepository implements ComplaintSearchableRepository 
                         complaint.subject,
                         complaint.content,
                         complaint.image,
-                        Projections.fields(SimpleProjectRoomRes.class, complaint.projectRoom.projectRoomId, complaint.projectRoom.buildingName, complaint.projectRoom.roomName)
-
+                        Projections.fields(SimpleProjectRoomRes.class, complaint.projectRoom.projectRoomId, complaint.projectRoom.buildingName, complaint.projectRoom.roomName).as("projectRoom")
                 ))
                 .from(complaint)
                 .join(complaint.projectRoom, projectRoom)
@@ -45,6 +45,6 @@ public class ComplaintSearchRepository implements ComplaintSearchableRepository 
                 .select(complaint.count())
                 .from(complaint);
 
-        return PageableExecutionUtils.getPage(content,pageable,countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 }
