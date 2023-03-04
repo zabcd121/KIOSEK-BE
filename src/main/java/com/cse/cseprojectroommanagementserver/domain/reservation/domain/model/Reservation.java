@@ -50,14 +50,10 @@ public class Reservation extends BaseTimeEntity {
 
     @Enumerated(value = EnumType.STRING)
     private ReservationStatus reservationStatus;
-
-    @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
     private LocalDateTime startAt;
 
-    @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
     private LocalDateTime endAt;
 
-    @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
     private LocalDateTime checkInTime;
 
     @Enumerated(EnumType.STRING)
