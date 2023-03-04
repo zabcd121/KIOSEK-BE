@@ -90,10 +90,42 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
 
         // Then
         resultActions.andExpect(status().isOk());
-        reservationSetUp.deleteAll();
     }
+
+    @Test
+    @DisplayName("M2-C1-01. 현장 예약 기능 성공 - By 회원 QR 인증")
+    void 현장예약_By회원qr인증_성공() throws Exception {
+        // Given
+        ReservationPolicy reservationPolicy = reservationPolicySetUp.findReservationPolicy();
+        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * 7 + 1), LocalTime.of(4, 0));
+        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour());
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
+
+        OnsiteReservationByQRReq onsiteReservationByQRReq = OnsiteReservationByQRReq.builder()
+                .accountQRContents(member.getAccountQR().getQrImage().getContent())
+                .projectTableId(projectTable.getTableId())
+                .startAt(reservationStartAt)
+                .endAt(reservationEndAt)
+                .build();
+
+        // When
+
+        ResultActions resultActions = mvc.perform(
+                        post("/api/v1/reservations/onsite/qr")
+                                .header("Authorization", accessToken)
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(onsiteReservationByQRReq))
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk());
+    }
+
     @AfterTransaction
     void setAfter() {
         reservationSetUp.deleteAll();
     }
+
 }

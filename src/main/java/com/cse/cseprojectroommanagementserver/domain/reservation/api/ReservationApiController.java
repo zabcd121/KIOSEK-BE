@@ -35,7 +35,7 @@ public class ReservationApiController {
 
     //현장 예약
     @PostMapping("/v1/reservations/onsite/qr")
-    public ResponseSuccessNoResult reserveOnSiteByQRLogin(@RequestBody OnsiteReservationByQRReq reservationReq) {
+    public ResponseSuccessNoResult reserveOnSiteByQRAuth(@RequestBody OnsiteReservationByQRReq reservationReq) {
         Member matchedMember = authService.searchMatchedMember(reservationReq.getAccountQRContents());
         reserveTableService.reserveOnsiteByAccountQR(matchedMember, reservationReq);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
