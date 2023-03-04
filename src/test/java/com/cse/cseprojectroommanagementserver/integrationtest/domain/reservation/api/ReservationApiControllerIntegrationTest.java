@@ -187,6 +187,56 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         resultActions.andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("M5-C1-01. 현재 나의 예약 내역 조회 기능 성공")
+    void 현재나의예약내역조회_성공() throws Exception {
+        // Given
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
+
+        reservationSetUp.saveReservationWithStatus(ReservationStatus.RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(ReservationStatus.RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
+
+        // When
+
+        ResultActions resultActions = mvc.perform(
+                        get("/api/v1/reservations/current")
+                                .header("Authorization", accessToken)
+                                .param("memberId", member.getMemberId().toString())
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("M6-C1-01. 과거 나의 예약 내역 조회 기능 성공")
+    void 과거나의예약내역조회_성공() throws Exception {
+        // Given
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
+
+        reservationSetUp.saveReservationWithStatus(ReservationStatus.RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(ReservationStatus.RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
+
+        // When
+
+        ResultActions resultActions = mvc.perform(
+                        get("/api/v1/reservations/past")
+                                .header("Authorization", accessToken)
+                                .param("memberId", member.getMemberId().toString())
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", hasSize(1)));
+    }
+
+    
+
 
 
     @AfterTransaction
