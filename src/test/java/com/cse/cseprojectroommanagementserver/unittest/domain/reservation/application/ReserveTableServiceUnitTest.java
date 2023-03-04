@@ -108,14 +108,14 @@ class ReserveTableServiceUnitTest {
         given(memberRepository.getReferenceById(reserveReq.getMemberId())).willReturn(Member.builder().memberId(reserveReq.getMemberId()).build());
         given(projectTableRepository.getReferenceById(reserveReq.getProjectTableId())).willReturn(ProjectTable.builder().tableId(reserveReq.getProjectTableId()).build());
         Reservation savedReservation = Reservation.builder().build();
-        given(reservationRepository.saveAndFlush(any())).willReturn(savedReservation);
+        given(reservationRepository.save(any())).willReturn(savedReservation);
 
         // When
         reserveTableService.reserve(reserveReq);
 
         // Then
         assertDoesNotThrow(() -> ReservationQRNotCreatedException.class);
-        then(reservationRepository).should(times(1)).saveAndFlush(any());
+        then(reservationRepository).should(times(1)).save(any());
     }
 
     @Test
