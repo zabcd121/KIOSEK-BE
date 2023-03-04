@@ -1,11 +1,14 @@
 package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
 
 public class TableDeactivationReqDto {
 
@@ -28,7 +31,11 @@ public class TableDeactivationReqDto {
     @Getter
     public static class TableDeactivationInfoReq {
         private String reason;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime startAt;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime endAt;
 
         public TableDeactivationInfo toEntity() {
