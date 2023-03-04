@@ -19,4 +19,8 @@ public class ProjectTableSetUp {
                         .build()
         );
     }
+
+    public ProjectTable findProjectTableByTableName(String tableName) {
+        return projectTableRepository.findByTableName(tableName);
+    }
 }

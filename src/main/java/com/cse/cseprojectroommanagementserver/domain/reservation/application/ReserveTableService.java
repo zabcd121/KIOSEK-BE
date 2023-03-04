@@ -47,7 +47,7 @@ public class ReserveTableService {
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void reserve(ReserveReq reserveReq) {
+    public Reservation reserve(ReserveReq reserveReq) {
         validateReservation(reserveReq.getMemberId(), reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
         QRImage reservationQrImage = null;
@@ -58,7 +58,7 @@ public class ReserveTableService {
             throw new ReservationQRNotCreatedException();
         }
 
-        reservationRepository.save(
+        return reservationRepository.save(
                 Reservation.createReservation(
                         memberRepository.getReferenceById(reserveReq.getMemberId()), //성능 향상을 위해 proxy 객체를 넣음
                         projectTableRepository.getReferenceById(reserveReq.getProjectTableId()),
@@ -81,10 +81,10 @@ public class ReserveTableService {
      * 현장예약: FORM 로그인과 동시에 예약까지 한번에 진행함
      * @param
      */
-    @Transactional
-    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationByLoginFormReq reservationRequest) {
-        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
-    }
+//    @Transactional
+//    public void reserveOnsiteByFormLogin(Member member, OnsiteReservationByLoginFormReq reservationRequest) {
+//        reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt() );
+//    }
 
     private void reserveOnsite(Member member, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
         validateReservation(member.getMemberId(), projectTableId, startAt, endAt);

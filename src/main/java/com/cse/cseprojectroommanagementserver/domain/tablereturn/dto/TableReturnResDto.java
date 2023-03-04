@@ -17,7 +17,7 @@ public class TableReturnResDto {
         private Long tableReturnId;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-        private LocalDateTime returnedDateTime;
+        private LocalDateTime returnedAt;
 
         private Image cleanUpPhoto;
     }

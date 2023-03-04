@@ -44,7 +44,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
         return queryFactory
                 .select(Projections.fields(SearchReservationRes.class,
                         reservation.projectTable.tableId.as("projectTableId"), projectTable.tableName,
-                        reservation.startAt, reservation.endAt, tableReturn.returnedDateTime))
+                        reservation.startAt, reservation.endAt, tableReturn.returnedAt))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
@@ -58,7 +58,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<CurrentReservationByMemberRes> findCurrentAllByMemberId(Long memberId) {
         return queryFactory
                 .select(Projections.fields(CurrentReservationByMemberRes.class,
-                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
+                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedAt,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName,
                         reservationQR.qrImage.fileLocalName.as("imageName"), reservationQR.qrImage.fileUrl.as("imageURL")))
                 .from(reservation)
@@ -76,7 +76,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<PastReservationByMemberRes> findPastAllByMemberId(Long memberId) {
         return queryFactory
                 .select(Projections.fields(PastReservationByMemberRes.class,
-                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedDateTime,
+                        reservation.reservationId, reservation.startAt, reservation.endAt, tableReturn.returnedAt,
                         reservation.reservationStatus, projectRoom.roomName, projectTable.tableName))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
@@ -166,11 +166,9 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public Page<SearchReservationByPagingRes> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         List<SearchReservationByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchReservationByPagingRes.class,
-                            Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus).as("reservation"),
-                            Projections.fields(TableReturnSimpleInfoRes.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedDateTime, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
-                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId,reservation.member.account.loginId, reservation.member.name).as("member"),
-                            reservation.projectTable.projectRoom.roomName,
-                            reservation.projectTable.tableName
+                            Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus, reservation.projectTable.projectRoom.roomName, reservation.projectTable.tableName).as("reservation"),
+                            Projections.fields(TableReturnSimpleInfoRes.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedAt, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
+                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId,reservation.member.account.loginId, reservation.member.name).as("member")
                 ))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
