@@ -1,40 +1,25 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.reservation.api;
 
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
-import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
-import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectRoomSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationPolicySetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationSetUp;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.event.annotation.AfterTestClass;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
 
+import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 import static org.hamcrest.Matchers.*;
@@ -91,7 +76,6 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                 .build();
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         post("/api/v1/reservations")
                                 .header("Authorization", accessToken)
@@ -122,7 +106,6 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                 .build();
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         post("/api/v1/reservations/onsite/qr")
                                 .header("Authorization", accessToken)
@@ -149,7 +132,6 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         reservationSetUp.saveReservation(member, projectTable, reservationStartAt, reservationStartAt.plusHours(2));
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         get("/api/v1/reservations")
                                 .header("Authorization", accessToken)
@@ -172,10 +154,9 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
 
         LocalDateTime reservationStartAt = LocalDateTime.now().minusHours(1);
-        reservationSetUp.saveReservationWithStatus(ReservationStatus.IN_USE, member, projectTable, reservationStartAt, reservationStartAt.plusHours(2));
+        reservationSetUp.saveReservationWithStatus(IN_USE, member, projectTable, reservationStartAt, reservationStartAt.plusHours(2));
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         get("/api/sensor/v1/reservations/check")
                                 .param("tableName", projectTable.getTableName())
@@ -193,11 +174,10 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         // Given
         ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
 
-        reservationSetUp.saveReservationWithStatus(ReservationStatus.RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
-        reservationSetUp.saveReservationWithStatus(ReservationStatus.RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         get("/api/v1/reservations/current")
                                 .header("Authorization", accessToken)
@@ -217,11 +197,10 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         // Given
         ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
 
-        reservationSetUp.saveReservationWithStatus(ReservationStatus.RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
-        reservationSetUp.saveReservationWithStatus(ReservationStatus.RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
+        reservationSetUp.saveReservationWithStatus(RETURNED, member, projectTable, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(3).plusHours(2));
 
         // When
-
         ResultActions resultActions = mvc.perform(
                         get("/api/v1/reservations/past")
                                 .header("Authorization", accessToken)
@@ -235,7 +214,27 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                 .andExpect(jsonPath("$.result", hasSize(1)));
     }
 
-    
+    @Test
+    @DisplayName("M7-C1-01. 예약 취소 기능 성공")
+    void 예약취소_성공() throws Exception {
+        // Given
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
+
+        Reservation reservation = reservationSetUp.saveReservationWithStatus(RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1).plusHours(2));
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        delete("/api/v1/reservations/{id}", reservation.getReservationId())
+                                .header("Authorization", accessToken)
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk());
+        assertEquals(reservation.getReservationStatus(), CANCELED);
+    }
+
 
 
 
