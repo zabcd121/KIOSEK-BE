@@ -19,4 +19,8 @@ public class ProjectRoomSetUp {
                         .build()
         );
     }
+
+    public ProjectRoom findProjectRoomByRoomName(String roomName) {
+        return projectRoomRepository.findByRoomName(roomName);
+    }
 }

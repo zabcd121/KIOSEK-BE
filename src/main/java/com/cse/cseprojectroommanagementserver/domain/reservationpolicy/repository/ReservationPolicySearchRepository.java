@@ -19,7 +19,8 @@ public class ReservationPolicySearchRepository implements ReservationPolicySearc
 
     @Override
     public ReservationPolicy findCurrentlyPolicy() {
-        return queryFactory.selectFrom(reservationPolicy)
+        return queryFactory
+                .selectFrom(reservationPolicy)
                 .where(reservationPolicy.appliedStatus.eq(CURRENTLY))
                 .fetchOne();
     }

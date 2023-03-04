@@ -33,7 +33,7 @@ class AdminPenaltyPolicyApiControllerIntegrationTest extends BaseIntegrationTest
     @DisplayName("M1-C1-01. 제재 정책 변경 기능 성공 ")
     void 제재정책변경_성공() throws Exception {
         // Given
-        PenaltyPolicy originPenaltyPolicy = penaltyPolicySetUp.savePenaltyPolicy(3, 2);
+        PenaltyPolicy originPenaltyPolicy = penaltyPolicySetUp.findPenaltyPolicy();
         PenaltyPolicyChangeReq newPenaltyPolicyReq = PenaltyPolicyChangeReq.builder()
                 .penaltyPolicyId(originPenaltyPolicy.getPenaltyPolicyId())
                 .violationCountToImposePenalty(5)
@@ -58,7 +58,7 @@ class AdminPenaltyPolicyApiControllerIntegrationTest extends BaseIntegrationTest
     @DisplayName("M2-C1-01. 현재 제재 정책 조회 기능 성공")
     void 현재제재정책조회_성공() throws Exception {
         // Given
-        PenaltyPolicy currentPenaltyPolicy = penaltyPolicySetUp.savePenaltyPolicy(3, 2);
+        PenaltyPolicy originPenaltyPolicy = penaltyPolicySetUp.findPenaltyPolicy();
 
         // When
         ResultActions resultActions = mvc.perform(
@@ -70,7 +70,7 @@ class AdminPenaltyPolicyApiControllerIntegrationTest extends BaseIntegrationTest
 
         // Then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.penaltyPolicyId").value(currentPenaltyPolicy.getPenaltyPolicyId()));
+                .andExpect(jsonPath("$.result.penaltyPolicyId").value(originPenaltyPolicy.getPenaltyPolicyId()));
     }
 
 

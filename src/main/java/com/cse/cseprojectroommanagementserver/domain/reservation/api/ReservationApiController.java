@@ -41,13 +41,13 @@ public class ReservationApiController {
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
     }
 
-    @PostMapping("/v1/reservations/onsite/form")
-    public ResponseSuccessNoResult reserveOnSiteByFromLogin(@RequestBody OnsiteReservationByLoginFormReq reservationReq) {
-        Member matchedMember = authService.searchMatchedMember(reservationReq.getLoginId(), reservationReq.getPassword());
-        reserveTableService.reserveOnsiteByFormLogin(matchedMember, reservationReq);
-
-        return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
-    }
+//    @PostMapping("/v1/reservations/onsite/form")
+//    public ResponseSuccessNoResult reserveOnSiteByFromLogin(@RequestBody OnsiteReservationByLoginFormReq reservationReq) {
+//        Member matchedMember = authService.searchMatchedMember(reservationReq.getLoginId(), reservationReq.getPassword());
+//        reserveTableService.reserveOnsiteByFormLogin(matchedMember, reservationReq);
+//
+//        return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
+//    }
 
     @GetMapping("/v1/reservations")
     public ResponseSuccess<List<SearchReservationRes>> getReservationListByProjectRoom(@RequestParam Long projectRoomId,

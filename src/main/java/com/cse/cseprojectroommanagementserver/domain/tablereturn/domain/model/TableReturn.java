@@ -30,13 +30,13 @@ public class TableReturn {
     private Image cleanUpPhoto;
 
     @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
-    private LocalDateTime returnedDateTime;
+    private LocalDateTime returnedAt;
 
 
     public static TableReturn createReturn(Reservation reservation, Image cleanUpPhoto) {
         TableReturn tableReturn = TableReturn.builder()
                 .cleanUpPhoto(cleanUpPhoto)
-                .returnedDateTime(LocalDateTime.now())
+                .returnedAt(LocalDateTime.now())
                 .build();
         tableReturn.changeReservation(reservation);
 
@@ -45,7 +45,7 @@ public class TableReturn {
 
     public static TableReturn createAutoReturn(Reservation reservation) {
         TableReturn tableReturn = TableReturn.builder()
-                .returnedDateTime(LocalDateTime.now())
+                .returnedAt(LocalDateTime.now())
                 .build();
         tableReturn.changeReservationByAutoReturn(reservation);
 
