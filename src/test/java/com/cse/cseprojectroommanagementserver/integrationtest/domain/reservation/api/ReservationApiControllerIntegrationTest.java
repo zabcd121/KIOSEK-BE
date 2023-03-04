@@ -235,8 +235,30 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         assertEquals(reservation.getReservationStatus(), CANCELED);
     }
 
+    @Test
+    @DisplayName("M8-C1-01. 예약 체크인 기능 성공")
+    void 예약체크인_성공() throws Exception {
+        // Given
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
 
+        Reservation reservation = reservationSetUp.saveReservationWithStatus(RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusMinutes(9), LocalDateTime.now().plusHours(2));
 
+        QRAuthReq qrAuthReq = QRAuthReq.builder().qrContent(reservation.getReservationQR().getQrImage().getContent()).build();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        post("/api/v1/reservations/auth")
+                                .header("Authorization", accessToken)
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(qrAuthReq))
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk());
+        assertEquals(reservation.getReservationStatus(), IN_USE);
+    }
 
     @AfterTransaction
     void setAfter() {
