@@ -45,14 +45,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         log.info("####doFilterInternal진입");
         try{
             String jwt = resolveToken(request, AUTHORIZATION_HEADER);
-            log.info("resolveToken 이후");
             if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-                log.info("validateToken 이후");
                 String isLogout = (String) redisTemplate.opsForValue().get(jwt);
-                log.info("isLogout 이후");
                 if (ObjectUtils.isEmpty(isLogout)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-                    log.info("getAuthentication 이후");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
                 }
