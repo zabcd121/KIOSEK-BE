@@ -6,6 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleTyp
 import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
+import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilterForAdmin;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltySetUp;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoringURI {
+class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithSecurityFilterForAdmin {
 
     @Autowired
     private MemberSetUp memberSetUp;
@@ -40,21 +41,13 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithIg
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private String accessToken;
-
-    @BeforeEach
-    void setUp() {
-        String loginId = RandomStringUtils.random(8, true, true);
-        memberSetUp.saveAdmin(loginId, passwordEncoder.encode("admin1!"));
-        LoginRes loginRes = authService.login(MemberReqDto.LoginReq.builder().loginId(loginId).password("admin1!").build(), RoleType.ROLE_ADMIN);
-        accessToken = loginRes.getTokenInfo().getAccessToken();
-    }
-
     /** 테스트 케이스
      * M1. 사용자 제재
          * M1-C1-01. 사용자 제재 성공
      * M2. 제재 회원 리스트 조회
-         * M2-C1-01. 제재 회원 리스트 조회 성공
+         * M2-C1-01. 제재 회원 리스트 조회 성공 - 회원 로그인 ID, 회원 이름 조건
+         * M2-C1-02. 제재 회원 리스트 조회 성공 - 회원 이름 조건
+         * M2-C1-03. 제재 회원 리스트 조회 성공 - 회원 로그인 ID 조건
      */
 
     @Test
@@ -85,15 +78,17 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithIg
     }
 
     @Test
-    @DisplayName("M2-C1-01. 제재 회원 리스트 조회 성공")
-    void 제재회원리스트조회_성공() throws Exception {
+    @DisplayName("M2-C1-01. 제재 회원 리스트 조회 성공 - 회원 로그인 ID, 회원 이름 조건")
+    void 제재회원리스트조회_로그인ID과이름조건_성공() throws Exception {
         // Given
-        Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member1!",
+        Member member1 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member1!",
                 RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "김현석");
-        penaltySetUp.savePenalty(member, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7));
-        penaltySetUp.savePenalty(member, LocalDate.now(), LocalDate.now().plusDays(3));
+        Member member2 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member2!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "홍길동");
+        penaltySetUp.savePenalty(member1, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7));
+        penaltySetUp.savePenalty(member2, LocalDate.now(), LocalDate.now().plusDays(3));
 
-        PenaltySearchCondition penaltySearchCondition = PenaltySearchCondition.builder().memberName(member.getName()).loginId(member.getLoginId()).build();
+        PenaltySearchCondition penaltySearchCondition = PenaltySearchCondition.builder().memberName(member1.getName()).loginId(member1.getLoginId()).build();
 
         // When
         ResultActions resultActions = mvc.perform(
@@ -109,9 +104,67 @@ class AdminPenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithIg
         // Then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.content", hasSize(2)))
-                .andExpect(jsonPath("$.result.content[0].member.loginId").value(member.getLoginId()))
-                .andExpect(jsonPath("$.result.content[1].member.loginId").value(member.getLoginId()));
+                .andExpect(jsonPath("$.result.content", hasSize(1)))
+                .andExpect(jsonPath("$.result.content[0].member.loginId").value(member1.getLoginId()));
+    }
 
+    @Test
+    @DisplayName("M2-C1-02. 제재 회원 리스트 조회 성공 - 회원 이름 조건")
+    void 제재회원리스트조회_회원이름조건_성공() throws Exception {
+        // Given
+        Member member1 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member1!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "김현석");
+        Member member2 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member2!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "홍길동");
+        penaltySetUp.savePenalty(member1, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7));
+        penaltySetUp.savePenalty(member2, LocalDate.now(), LocalDate.now().plusDays(3));
+
+        PenaltySearchCondition penaltySearchCondition = PenaltySearchCondition.builder().memberName(member1.getName()).build();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/penalties")
+                                .header("Authorization", accessToken)
+                                .param("memberName", penaltySearchCondition.getMemberName())
+                                .param("page", "0")
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content", hasSize(1)))
+                .andExpect(jsonPath("$.result.content[0].member.loginId").value(member1.getLoginId()));
+    }
+
+    @Test
+    @DisplayName("M2-C1-03. 제재 회원 리스트 조회 성공 - 회원 로그인 ID 조건")
+    void 제재회원리스트조회_회원로그인ID조건_성공() throws Exception {
+        // Given
+        Member member1 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member1!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "김현석");
+        Member member2 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "member2!",
+                RandomStringUtils.random(8, false, true) + "kumoh.ac.kr", "홍길동");
+        penaltySetUp.savePenalty(member1, LocalDate.now().minusDays(10), LocalDate.now().minusDays(7));
+        penaltySetUp.savePenalty(member2, LocalDate.now(), LocalDate.now().plusDays(3));
+
+        PenaltySearchCondition penaltySearchCondition = PenaltySearchCondition.builder().loginId(member1.getLoginId()).build();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/penalties")
+                                .header("Authorization", accessToken)
+                                .param("loginId", penaltySearchCondition.getLoginId())
+                                .param("page", "0")
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content", hasSize(1)))
+                .andExpect(jsonPath("$.result.content[0].member.loginId").value(member1.getLoginId()));
     }
 }

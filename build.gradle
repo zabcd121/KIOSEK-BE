@@ -129,7 +129,8 @@ tasks.jacocoTestReport {
                                                 "**/*Condition*",
                                                 "**/*Init*",
                                                 "**/*BaseTime**",
-                                                "**/*Foramtter**"
+                                                "**/*Foramtter**",
+                                                "**/*ReservationStatusReqConverter**"
                     ] + Qdomains)
                 }))
     }
@@ -172,7 +173,8 @@ tasks.jacocoTestCoverageVerification {
                             "**/*Condition*",
                             "**/*Init*",
                             "**/*BaseTime**",
-                            "**/*Foramtter**"] + Qdomains // 제외할 Qdomains 패턴 추가
+                            "**/*Foramtter**",
+                            "**/*ReservationStatusReqConverter**"] + Qdomains // 제외할 Qdomains 패턴 추가
             }
         }
     }
