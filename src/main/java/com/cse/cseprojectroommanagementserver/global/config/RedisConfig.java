@@ -14,6 +14,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     public static final String RT = "RT:";
+    public static final String EM = "EM:";
+    public static final String EV = "EV:";
 
     @Value("${spring.redis.port}")
     private int port;
