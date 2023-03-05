@@ -1,14 +1,19 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.member.api;
 
+import com.cse.cseprojectroommanagementserver.domain.member.application.EmailService;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.EV;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -18,6 +23,9 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
 
     @Autowired
     private MemberSetUp memberSetUp;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * M1. 아이디 중복 체크 기능
@@ -30,6 +38,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
          * M3-C1-01. 회원가입 성공
          * M3-C2-01. 회원가입 실패 - ID 중복
          * M3-C2-01. 회원가입 실패 - Email 중복
+         * M3-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태
      */
 
     @Test
@@ -107,6 +116,8 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);
         SignupReq signupReq = SignupReq.builder().loginId(loginIdReq).password("password1!").email("email@kumoh.ac.kr").name("김현석").build();
+        redisTemplate.opsForValue()
+                .set(EV + signupReq.getEmail(), "completed", 180000L, TimeUnit.MILLISECONDS); // 이메일 인증코드 인증 완료상태
 
         // When
         ResultActions resultActions = mvc.perform(
@@ -162,6 +173,26 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
 
         // Then
         resultActions.andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("M3-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태")
+    void 회원가입_실패_인증코드미인증상태() throws Exception {
+        // Given
+        String loginIdReq = RandomStringUtils.random(8, false, true);
+        SignupReq signupReq = SignupReq.builder().loginId(loginIdReq).password("password1!").email("email@kumoh.ac.kr").name("김현석").build();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        post("/api/v1/members/signup")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signupReq))
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isBadRequest());
     }
 
 }
