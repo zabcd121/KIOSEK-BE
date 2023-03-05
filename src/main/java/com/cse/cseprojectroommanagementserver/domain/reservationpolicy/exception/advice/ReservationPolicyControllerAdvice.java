@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.advice;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api.ReservationPolicyApiController;
+import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api.AdminReservationPolicyApiController;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotExistsReservationPolicyException;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_SEARCH_FAIL;
 
-@RestControllerAdvice(assignableTypes = {ReservationPolicyApiController.class})
+@RestControllerAdvice(assignableTypes = {AdminReservationPolicyApiController.class})
 @Slf4j
 public class ReservationPolicyControllerAdvice {
 
