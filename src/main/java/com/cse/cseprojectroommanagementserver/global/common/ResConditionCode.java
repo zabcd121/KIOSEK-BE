@@ -21,6 +21,11 @@ public enum ResConditionCode {
     NAME_WRONG_TYPE("0111", "이름 형식이 잘못 입력되었습니다."),
     NAME_NULL("0112", "이름이 입력되지 않았습니다."),
     ACCOUNT_QR_CREATE_FAIL("0113", "QR 코드 생성에 실패했습니다."),
+    AUTH_CODE_SEND_EMAIL_SUCCESS("0114", "인증 코드 전송이 완료되었습니다."),
+    AUTH_CODE_NOT_FOUND("0115", "이 메일로 인증 코드를 전송한 내역이 없습니다."),
+    AUTH_CODE_VERIFY_FAIL("0116", "잘못된 인증코드입니다."),
+    AUTH_CODE_VERIFY_SUCCESS("0117", "인증코드 검증 완료"),
+    AUTH_CODE_NOT_VERIFIED("0118", "인증코드 검증 먼저 해주세요."),
 
 
 

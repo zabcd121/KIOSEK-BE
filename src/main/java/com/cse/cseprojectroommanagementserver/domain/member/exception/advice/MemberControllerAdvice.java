@@ -76,58 +76,80 @@ public class MemberControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ResponseError notExistIdExHandler(UsernameNotFoundException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] UsernameNotFoundException", ex);
         return new ResponseError(LOGIN_ID_NOT_EXIST);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ResponseError invalidPWExHandler(InvalidPasswordException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] InvalidPasswordException", ex);
         return new ResponseError(PASSWORD_INVALID);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler
     public ResponseError noAuthorityExHandler(NoAuthorityToLoginException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] NoAuthorityToLoginException", ex);
         return new ResponseError(LOGIN_ID_NOT_EXIST);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     public ResponseError duplicatedLoginIdExHandler(LoginIdDuplicatedException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] LoginIdDuplicatedException", ex);
         return new ResponseError(LOGIN_ID_DUPLICATED);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     public ResponseError duplicatedEmailExHandler(EmailDuplicatedException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] EmailDuplicatedException", ex);
         return new ResponseError(EMAIL_DUPLICATED);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseError notExistEqualRefreshTokenExHandler(NotExistsEqualRefreshTokenException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] NotExistsEqualRefreshTokenException", ex);
         return new ResponseError(REFRESH_TOKEN_NOT_EXIST_IN_STORE);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseError notBearerTokenExHandler(TokenNotBearerTypeException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] TokenNotBearerTypeException", ex);
         return new ResponseError(TOKEN_NOT_BEARER);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseError notCreatedAccountQRExHandler(AccountQRNotCreatedException ex) {
-        log.error("[exceptionHandler] member", ex);
+        log.error("[exceptionHandler] AccountQRNotCreatedException", ex);
         return new ResponseError(ACCOUNT_QR_CREATE_FAIL);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError authCodeNotFoundExHandler(AuthCodeNotFoundException ex) {
+        log.error("[exceptionHandler] AuthCodeNotFoundException", ex);
+        return new ResponseError(AUTH_CODE_NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError authCodeNotEqExHandler(AuthCodeNotEqException ex) {
+        log.error("[exceptionHandler] AuthCodeNotEqException", ex);
+        return new ResponseError(AUTH_CODE_VERIFY_FAIL);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError authCodeNotVerifiedExHandler(AuthCodeNotVerifiedException ex) {
+        log.error("[exceptionHandler] AuthCodeNotVerifiedException", ex);
+        return new ResponseError(AUTH_CODE_NOT_VERIFIED);
+    }
+
 
 
 }

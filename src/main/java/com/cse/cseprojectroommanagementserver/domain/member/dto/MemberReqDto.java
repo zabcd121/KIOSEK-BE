@@ -45,6 +45,18 @@ public class MemberReqDto {
         @Email(message = "유효하지 않은 이메일 형식입니다.",
                 regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
         private String email;
+    }
 
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    public static class EmailAuthCodeVerifyReq {
+        @NotBlank(message = "이메일을 입력해주세요.")
+        @Email(message = "유효하지 않은 이메일 형식입니다.",
+                regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
+        public String email;
+
+        public String code;
     }
 }
