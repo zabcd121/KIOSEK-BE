@@ -10,6 +10,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRN
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.config.RedisConfig;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
@@ -21,15 +22,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,8 +43,9 @@ public class SignupServiceUnitTest {
     SignupService signupService;
 
     @Mock SignupRepository signupRepository;
-    @Spy PasswordEncoder passwordEncoder;
     @Mock QRGenerator qrGenerator;
+    @Spy PasswordEncoder passwordEncoder;
+    @Mock RedisTemplate redisTemplate;
 
     SignupReq signupReq;
 
@@ -48,7 +54,7 @@ public class SignupServiceUnitTest {
         signupReq = SignupReq.builder()
                 .loginId("20180335")
                 .password("example1234!")
-                .email("example@kumoh.ac.kr")
+                .email("20180335@kumoh.ac.kr")
                 .name("소공이")
                 .build();
     }
@@ -63,10 +69,14 @@ public class SignupServiceUnitTest {
 
     @Test
     @DisplayName("C1. 회원가입 성공")
-    void 회원가입_성공() throws IOException, WriterException {
+    void 회원가입_성공() {
         //Given
         given(signupRepository.existsByAccountLoginId(signupReq.getLoginId())).willReturn(false);
         given(signupRepository.existsByEmail(signupReq.getEmail())).willReturn(false);
+        ValueOperations valueOperations = mock(ValueOperations.class);
+        given(redisTemplate.opsForValue()).willReturn(valueOperations);
+        given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");
+        given(redisTemplate.delete(EV + signupReq.getEmail())).willReturn(true);
 
         QRImage qrImage = QRImage.builder().fileLocalName("localName").fileOriName("account_qr").fileUrl("/Users/khs/Documents/images").content("randomContent").build();
         given(qrGenerator.createAccountQRCodeImage()).willReturn(qrImage);
@@ -119,6 +129,10 @@ public class SignupServiceUnitTest {
         // Given
         given(signupRepository.existsByAccountLoginId(signupReq.getLoginId())).willReturn(false);
         given(signupRepository.existsByEmail(signupReq.getEmail())).willReturn(false);
+        ValueOperations valueOperations = mock(ValueOperations.class);
+        given(redisTemplate.opsForValue()).willReturn(valueOperations);
+        given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");
+        given(redisTemplate.delete(EV + signupReq.getEmail())).willReturn(true);
 
         given(qrGenerator.createAccountQRCodeImage()).willThrow(QRNotCreatedException.class);
 
