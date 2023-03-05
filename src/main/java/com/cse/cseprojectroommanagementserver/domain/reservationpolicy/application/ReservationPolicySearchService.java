@@ -11,7 +11,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dt
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReservationPolicySearchService {
-    private ReservationPolicySearchableRepository reservationPolicySearchableRepository;
+    private final ReservationPolicySearchableRepository reservationPolicySearchableRepository;
 
     @Transactional
     public ReservationPolicySearchRes searchReservationPolicy() {

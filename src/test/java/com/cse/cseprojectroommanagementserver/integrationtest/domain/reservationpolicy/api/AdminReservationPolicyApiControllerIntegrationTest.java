@@ -29,12 +29,16 @@ public class AdminReservationPolicyApiControllerIntegrationTest extends BaseInte
     private ReservationPolicySetUp reservationPolicySetUp;
 
     /**
-     * C1. 예약 정책 변경 기능 성공
-         * C1-01. 예약 정책 변경 기능 성공
+     * M1. 예약 정책 변경 기능
+         * C1. 예약 정책 변경 기능 성공
+             * M1-C1-01. 예약 정책 변경 기능 성공
+     * M2. 예약 정책 조회 기능
+         * C1. 예약 정책 조회 기능 성공
+             * M2-C1-01. 예약 정책 조회 기능 성공
      */
 
     @Test
-    @DisplayName("C1-01. 예약 정책 변경 기능 성공  ")
+    @DisplayName("M1-C1-01. 예약 정책 변경 기능 성공")
     void 예약정책변경_성공() throws Exception {
         // Given
         ReservationPolicy originReservationPolicy = reservationPolicySetUp.findReservationPolicy();
@@ -59,6 +63,26 @@ public class AdminReservationPolicyApiControllerIntegrationTest extends BaseInte
         // Then
         resultActions.andExpect(status().isOk());
         assertEquals(DEPRECATED, originReservationPolicy.getAppliedStatus());
+    }
+
+    @Test
+    @DisplayName("M2-C1-01. 예약 정책 조회 기능 성공")
+    void 예약정책조회_성공() throws Exception {
+        // Given
+        ReservationPolicy reservationPolicy = reservationPolicySetUp.findReservationPolicy();
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/reservations/policies")
+                                .header("Authorization", accessToken)
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.reservationPolicyId").value(reservationPolicy.getReservationPolicyId()));
     }
 
 }
