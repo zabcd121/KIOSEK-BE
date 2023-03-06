@@ -33,12 +33,16 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
          * M1-C2-01. 아이디 중복 체크 기능 실패 - 중복 에러
      * M2. 이메일 중복 체크 기능
          * M2-C1-01. 이메일 중복 체크 기능 성공 - 중복 아님
-         * M1-C2-01. 이메일 중복 체크 기능 실패 - 중복 에러
-     * M3. 회원가입 기능
-         * M3-C1-01. 회원가입 성공
-         * M3-C2-01. 회원가입 실패 - ID 중복
-         * M3-C2-01. 회원가입 실패 - Email 중복
-         * M3-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태
+         * M2-C2-01. 이메일 중복 체크 기능 실패 - 중복 에러
+     * M3. 인증코드 전송 기능
+         * M3-C1-01. 인증코드 전송 기능 성공
+     * M4. 인증코드 검증 기능
+         * M4-C1-01. 인증코드 검증 기능 성공
+     * M5. 회원가입 기능
+         * M5-C1-01. 회원가입 성공
+         * M5-C2-01. 회원가입 실패 - ID 중복
+         * M5-C2-01. 회원가입 실패 - Email 중복
+         * M5-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태
      */
 
     @Test
@@ -92,7 +96,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     }
 
     @Test
-    @DisplayName("M1-C2-01. 이메일 중복 체크 기능 실패 - 중복 에러")
+    @DisplayName("M2-C2-01. 이메일 중복 체크 기능 실패 - 중복 에러")
     void 이메일중복체크_성공_중복O() throws Exception {
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);
@@ -111,7 +115,45 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     }
 
     @Test
-    @DisplayName("M3-C1-01. 회원가입 성공")
+    @DisplayName("M3-C1-01. 인증코드 전송 기능 성공 ")
+    void 인증코드전송_성공() throws Exception {
+        // Given
+        String toEmail = "20180335@kumoh.ac.kr";
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/v1/members/signup/authcode")
+                                .param("email", toEmail)
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk());
+    }
+
+//    @Test
+//    @DisplayName("M3-C1-01. 인증코드 전송 기능 성공 ")
+//    void 인증코드검증_성공() throws Exception {
+//        // Given
+//        String toEmail = "20180335@kumoh.ac.kr";
+//
+//        // When
+//        ResultActions resultActions = mvc.perform(
+//                        get("/api/v1/members/signup/authcode")
+//                                .param("email", toEmail)
+//                                .characterEncoding("UTF-8")
+//                                .accept(APPLICATION_JSON))
+//                .andDo(print());
+//
+//        // Then
+//        resultActions.andExpect(status().isOk());
+//    }
+
+
+
+    @Test
+    @DisplayName("M5-C1-01. 회원가입 성공")
     void 회원가입_성공() throws Exception {
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);
@@ -133,7 +175,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     }
 
     @Test
-    @DisplayName("M3-C2-01. 회원가입 실패 - ID 중복")
+    @DisplayName("M5-C2-01. 회원가입 실패 - ID 중복")
     void 회원가입_실패_ID중복() throws Exception {
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);
@@ -154,7 +196,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     }
 
     @Test
-    @DisplayName("M3-C2-01. 회원가입 실패 - Email 중복")
+    @DisplayName("M5-C2-01. 회원가입 실패 - Email 중복")
     void 회원가입_실패_email중복() throws Exception {
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);
@@ -176,7 +218,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     }
 
     @Test
-    @DisplayName("M3-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태")
+    @DisplayName("M5-C2-02. 회원가입 실패 - Email 인증코드 미인증 상태")
     void 회원가입_실패_인증코드미인증상태() throws Exception {
         // Given
         String loginIdReq = RandomStringUtils.random(8, false, true);

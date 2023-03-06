@@ -34,7 +34,7 @@ public class SignupApiController {
     }
 
     @GetMapping("/v1/members/signup/authcode")
-    public ResponseSuccessNoResult sendAuthCodeToEmail(@RequestParam String email) throws MessagingException, UnsupportedEncodingException {
+    public ResponseSuccessNoResult sendAuthCodeToEmail(@RequestParam String email) throws MessagingException {
         emailService.sendEmail(email);
 
         return new ResponseSuccessNoResult(AUTH_CODE_SEND_EMAIL_SUCCESS);
