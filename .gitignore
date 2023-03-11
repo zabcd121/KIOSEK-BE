@@ -43,3 +43,12 @@ Dockerfile
 docker-compose.yml
 src/.DS_Store
 .DS_Store
+src/main/resources/application-devdb.yml
+src/main/resources/application-devdb.yml
+src/main/resources/application-filedir.yml
+src/main/resources/application-jwt.yml
+src/main/resources/application-mail.yml
+src/main/resources/application-testdb.yml
+yarn.lock
+node_modules/.yarn-integrity
+src/main/java/com/cse/cseprojectroommanagementserver/global/InitData.java
