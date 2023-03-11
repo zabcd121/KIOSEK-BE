@@ -19,9 +19,6 @@ jacoco {
     toolVersion = '0.8.5'
 }
 
-group = 'com.cse'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 configurations {
     compileOnly {
@@ -30,8 +27,17 @@ configurations {
 }
 
 repositories {
+    bootJar{
+        archivesBaseName = 'kiosek'
+        archiveFileName = 'kiosek.jar'
+        archiveVersion = "0.0.1"
+    }
     mavenCentral()
 }
+
+group = 'com.cse'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
