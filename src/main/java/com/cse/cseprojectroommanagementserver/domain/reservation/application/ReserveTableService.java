@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
@@ -47,8 +46,8 @@ public class ReserveTableService {
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Reservation reserve(ReserveReq reserveReq) {
-        validateReservation(reserveReq.getMemberId(), reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
+    public Reservation reserve(Long memberId, ReserveReq reserveReq) {
+        validateReservation(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
         QRImage reservationQrImage = null;
 
@@ -60,7 +59,7 @@ public class ReserveTableService {
 
         return reservationRepository.save(
                 Reservation.createReservation(
-                        memberRepository.getReferenceById(reserveReq.getMemberId()), //성능 향상을 위해 proxy 객체를 넣음
+                        memberRepository.getReferenceById(memberId), //성능 향상을 위해 proxy 객체를 넣음
                         projectTableRepository.getReferenceById(reserveReq.getProjectTableId()),
                         reservationQrImage,
                         reserveReq.getStartAt(),

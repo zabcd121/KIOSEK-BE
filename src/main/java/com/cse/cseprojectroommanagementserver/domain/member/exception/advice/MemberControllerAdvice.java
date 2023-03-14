@@ -91,7 +91,7 @@ public class MemberControllerAdvice {
     @ExceptionHandler
     public ResponseError noAuthorityExHandler(NoAuthorityToLoginException ex) {
         log.error("[exceptionHandler] NoAuthorityToLoginException", ex);
-        return new ResponseError(LOGIN_ID_NOT_EXIST);
+        return new ResponseError(ACCESS_DENIED);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -121,6 +121,14 @@ public class MemberControllerAdvice {
         log.error("[exceptionHandler] TokenNotBearerTypeException", ex);
         return new ResponseError(TOKEN_NOT_BEARER);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError refreshTokenIsExpiredExHandler(RefreshTokenIsExpiredException ex) {
+        log.error("[exceptionHandler] RefreshTokenIsExpiredException", ex);
+        return new ResponseError(REFRESH_TOKEN_EXPIRED);
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler

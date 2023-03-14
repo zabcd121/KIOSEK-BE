@@ -2,10 +2,12 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,8 @@ import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberSearchableRepository memberSearchRepository;
+    private final MemberRepository memberRepository;
+    private final MemberSearchableRepository memberSearchableRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDetailsService memberDetailsService;
     private final RedisTemplate redisTemplate;
@@ -39,12 +43,11 @@ public class AuthService {
 
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
-        Authentication authentication = authenticateMember(loginReq.getLoginId(), loginReq.getPassword(), allowedRoleType);
+        Member member = memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId()).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
+        Authentication authentication = authenticateMember(member, loginReq.getLoginId(), loginReq.getPassword(), allowedRoleType);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
         saveRefreshTokenInRedis(refreshToken, authentication);
-
-        Member member = memberSearchRepository.findByAccountLoginId(loginReq.getLoginId()).orElseGet(null);
 
         return LoginRes.builder()
                 .memberInfo(getLoginMemberInfoResponse(member))
@@ -53,12 +56,14 @@ public class AuthService {
     }
 
     @Transactional
-    public TokensDto reissueAccessToken(String refreshToken) {
-        log.info("refresh: {}", refreshToken);
+    public TokensDto reissueToken(String resolvedRefreshToken) {
+        log.info("refresh Token: {}", resolvedRefreshToken);
 
-        String resolvedRefreshToken = resolveToken(refreshToken);
-
-        jwtTokenProvider.validateToken(resolvedRefreshToken);
+        try {
+            jwtTokenProvider.validateToken(resolvedRefreshToken);
+        } catch (ExpiredJwtException ex) {
+            throw new RefreshTokenIsExpiredException();
+        }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
 
@@ -85,14 +90,9 @@ public class AuthService {
 
     /**
      * logout시에 Redis에 해당 멤버의 refreshToken이 있다면 삭제하고 accessToken을 key로 남은 유효기간동안 Redis에 "logout" value와 함께 저장한다.
-     * @param tokensDto
      */
     @Transactional
-    public void logout(TokensDto tokensDto) {
-        String resolvedAccessToken = resolveToken(tokensDto.getAccessToken());
-
-        jwtTokenProvider.validateToken(resolvedAccessToken);
-
+    public void logout(String resolvedAccessToken) {
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedAccessToken);
 
         if(redisTemplate.opsForValue().get(RT + authentication.getName()) != null) {
@@ -103,12 +103,10 @@ public class AuthService {
         Long remainedExpiration = jwtTokenProvider.getExpiration(resolvedAccessToken);
         redisTemplate.opsForValue()
                 .set(resolvedAccessToken, "logout", remainedExpiration, TimeUnit.MILLISECONDS);
-
     }
 
-    public LoginMemberInfoRes searchMemberInfo(String resolvedAccessToken) {
-        String loginId = jwtTokenProvider.getSubject(resolvedAccessToken);
-        Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
+    public LoginMemberInfoRes searchMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistsMemberException());
 
         return LoginMemberInfoRes.builder()
                 .memberId(member.getMemberId())
@@ -117,21 +115,15 @@ public class AuthService {
                 .build();
     }
 
-    public Member searchMatchedMember(String loginId, String password) {
-        Member member = memberSearchRepository.findByAccountLoginId(loginId).orElseThrow(() -> new NotExistsMemberException());
-        matchPassword(password, member.getPassword());
-
-        return member;
-    }
-
     public Member searchMatchedMember(String accountQRContents) {
-        return memberSearchRepository.findByAccountQRContents(accountQRContents)
+        return memberSearchableRepository.findByAccountQRContents(accountQRContents)
                 .orElseThrow(() -> new InvalidAccountQRException());
     }
 
 
-    private Authentication authenticateMember(String loginId, String password, RoleType allowedRoleType){
-        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
+    private Authentication authenticateMember(Member member, String loginId, String password, RoleType allowedRoleType){
+
+        UserDetails userDetails = memberDetailsService.loadUserByUsername(member.getMemberId().toString());
 
         matchPassword(password, userDetails.getPassword());
 
@@ -175,13 +167,4 @@ public class AuthService {
         }
         return true;
     }
-
-    public String resolveToken(String token) {
-        log.info(token);
-        log.info(token);
-        if (token.startsWith(BEARER))
-            return token.substring(7);
-        throw new TokenNotBearerTypeException();
-    }
-
 }

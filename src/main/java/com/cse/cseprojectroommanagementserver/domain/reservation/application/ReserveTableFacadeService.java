@@ -15,11 +15,11 @@ public class ReserveTableFacadeService {
     private final ReserveTableService reserveTableService;
 
     @Transactional
-    public void reserve(ReserveReq reserveReq) {
+    public void reserve(Long memberId, ReserveReq reserveReq) {
         String key = reserveReq.getStartAt().toLocalDate().toString() + reserveReq.getProjectTableId();
         try {
             namedLockReservationRepository.getLock(key);
-            reserveTableService.reserve(reserveReq);
+            reserveTableService.reserve(memberId, reserveReq);
         } finally {
             namedLockReservationRepository.releaseLock(key);
         }
