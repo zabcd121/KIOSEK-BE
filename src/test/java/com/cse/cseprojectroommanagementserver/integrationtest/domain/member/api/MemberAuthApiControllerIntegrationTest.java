@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.member.api
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
+import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,9 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     /**
      * M1.로그인
@@ -72,10 +76,10 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
 
         // When
         ResultActions resultActions = mvc.perform(
-                        delete("/api/v1/members/logout")
+                        delete("/api/v2/members/logout")
                                 .header("Authorization", tokensDto.getAccessToken())
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(tokensDto))
+//                                .contentType(APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(tokensDto))
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());
@@ -94,10 +98,9 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
 
         // When
         ResultActions resultActions = mvc.perform(
-                        post("/api/v1/members/token/reissue")
-                                .header("Authorization", loginRes.getTokenInfo().getAccessToken())
+                        post("/api/v2/members/token/reissue")
+                                .header("Authorization", loginRes.getTokenInfo().getRefreshToken())
                                 .contentType(APPLICATION_JSON)
-                                .param("refreshToken", loginRes.getTokenInfo().getRefreshToken())
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());
@@ -113,14 +116,15 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
         memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
         LoginRes loginRes = authService.login(LoginReq.builder().loginId("20180335").password("password1!").build(), RoleType.ROLE_MEMBER);
         TokensDto tokenInfo = loginRes.getTokenInfo();
-        authService.logout(TokensDto.builder().accessToken(tokenInfo.getAccessToken()).refreshToken(tokenInfo.getRefreshToken()).build());
+
+        authService.logout(jwtTokenProvider.resolveToken(tokenInfo.getAccessToken()));
 
         // When
         ResultActions resultActions = mvc.perform(
-                        post("/api/v1/members/token/reissue")
-                                .header("Authorization", tokenInfo.getAccessToken())
-                                .contentType(APPLICATION_JSON)
-                                .param("refreshToken", tokenInfo.getRefreshToken())
+                        post("/api/v2/members/token/reissue")
+                                .header("Authorization", tokenInfo.getRefreshToken())
+//                                .contentType(APPLICATION_JSON)
+//                                .param("refreshToken", tokenInfo.getRefreshToken())
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());

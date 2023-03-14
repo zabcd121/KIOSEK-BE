@@ -4,6 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,9 @@ public class MemberSetUp {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberSearchableRepository memberSearchableRepository;
 
     public Member saveMember(String loginId, String password, String email, String name) {
         return memberRepository.save(
@@ -37,6 +41,6 @@ public class MemberSetUp {
     }
 
     public Member findMember(String loginId) {
-        return memberRepository.findByAccountLoginId(loginId);
+        return memberSearchableRepository.findByAccountLoginId(loginId).get();
     }
 }

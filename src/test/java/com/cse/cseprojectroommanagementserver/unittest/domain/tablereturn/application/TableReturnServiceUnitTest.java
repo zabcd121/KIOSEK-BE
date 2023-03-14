@@ -1,5 +1,6 @@
 package com.cse.cseprojectroommanagementserver.unittest.domain.tablereturn.application;
 
+import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
@@ -44,7 +45,9 @@ class TableReturnServiceUnitTest {
     void 테이블반납_성공() {
         // Given
         Long reqReservationId = 1L;
+        Long memberId = 3L;
         Reservation findReservation = Reservation.builder()
+                .member(Member.builder().memberId(3L).build())
                 .reservationId(1L)
                 .reservationStatus(ReservationStatus.IN_USE).build();
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
@@ -55,7 +58,7 @@ class TableReturnServiceUnitTest {
         given(tableReturnRepository.save(any())).willReturn(TableReturn.builder().build());
 
         // When
-        tableReturnService.returnTable(reqReservationId, cleanupPhoto);
+        tableReturnService.returnTable(memberId, reqReservationId, cleanupPhoto);
 
         // Then
         assertEquals(ReservationStatus.RETURNED, findReservation.getReservationStatus());
@@ -66,7 +69,9 @@ class TableReturnServiceUnitTest {
     void 테이블반납_실패_사진업로드실패() {
         // Given
         Long reqReservationId = 1L;
+        Long memberId = 3L;
         Reservation findReservation = Reservation.builder()
+                .member(Member.builder().memberId(3L).build())
                 .reservationId(1L)
                 .reservationStatus(ReservationStatus.IN_USE).build();
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
@@ -75,6 +80,6 @@ class TableReturnServiceUnitTest {
         given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willThrow(ImageUploadFailException.class);
 
         // When, Then
-        assertThrows(ImageUploadFailException.class, () -> tableReturnService.returnTable(reqReservationId, cleanupPhoto));
+        assertThrows(ImageUploadFailException.class, () -> tableReturnService.returnTable(memberId, reqReservationId, cleanupPhoto));
     }
 }

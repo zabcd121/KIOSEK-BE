@@ -1,5 +1,6 @@
 package com.cse.cseprojectroommanagementserver.unittest.domain.reservation.application;
 
+import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationCancelService;
@@ -48,11 +49,12 @@ class ReservationCancelServiceUnitTest {
     void 예약취소_성공() {
         // Given
         Long reqReservationId = 1L;
-        Reservation findReservation = getReservationByReservationStatus(reqReservationId, RESERVATION_COMPLETED);
+        Long memberId = 3L;
+        Reservation findReservation = getReservationByReservationStatus(memberId, reqReservationId, RESERVATION_COMPLETED);
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         // When
-        reservationCancelService.cancelReservation(reqReservationId);
+        reservationCancelService.cancelReservation(memberId, reqReservationId);
 
         // Then
         assertEquals(CANCELED, findReservation.getReservationStatus());
@@ -63,10 +65,11 @@ class ReservationCancelServiceUnitTest {
     void 예약취소_실패_존재하지_않는_예약_ID() {
         // Given
         Long reqReservationId = 1L;
+        Long memberId = 3L;
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(NotExistsReservationException.class, () -> reservationCancelService.cancelReservation(reqReservationId));
+        assertThrows(NotExistsReservationException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
     }
 
     @Test
@@ -109,17 +112,19 @@ class ReservationCancelServiceUnitTest {
     private void templateOfReservationCancelTestWithReservationStatus(ReservationStatus reservationStatus) {
         // Given
         Long reqReservationId = 1L;
-        Reservation findReservation = getReservationByReservationStatus(reqReservationId, reservationStatus);
+        Long memberId = 3L;
+        Reservation findReservation = getReservationByReservationStatus(memberId, reqReservationId, reservationStatus);
 
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         // When, Then
-        assertThrows(UnableToCancelReservationException.class, () -> reservationCancelService.cancelReservation(reqReservationId));
+        assertThrows(UnableToCancelReservationException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
     }
 
-    private Reservation getReservationByReservationStatus(Long reservationId, ReservationStatus reservationStatus) {
+    private Reservation getReservationByReservationStatus(Long memberId, Long reservationId, ReservationStatus reservationStatus) {
         return Reservation.builder()
                 .reservationId(reservationId)
+                .member(Member.builder().memberId(memberId).build())
                 .reservationStatus(reservationStatus)
                 .startAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusHours(2))
