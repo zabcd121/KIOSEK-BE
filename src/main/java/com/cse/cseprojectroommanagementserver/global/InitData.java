@@ -76,6 +76,7 @@ public class InitData {
             ProjectTable projectTable10 = ProjectTable.builder().tableName("B4").projectRoom(projectRoom2).build();
             ProjectTable projectTable11 = ProjectTable.builder().tableName("B5").projectRoom(projectRoom2).build();
             ProjectTable projectTable12 = ProjectTable.builder().tableName("B6").projectRoom(projectRoom2).build();
+            ProjectTable projectTable13 = ProjectTable.builder().tableName("B7").projectRoom(projectRoom2).build();
             em.persist(projectTable1);
             em.persist(projectTable2);
             em.persist(projectTable3);
@@ -88,10 +89,11 @@ public class InitData {
             em.persist(projectTable10);
             em.persist(projectTable11);
             em.persist(projectTable12);
+            em.persist(projectTable13);
 
             ReservationPolicy reservationPolicy = ReservationPolicy.builder()
                     .reservationMaxHourPerOnce(new ReservationMaxHourPerOnce(4))
-                    .reservationMaxCountPerDay(new ReservationMaxCountPerDay(1))
+                    .reservationMaxCountPerDay(new ReservationMaxCountPerDay(5))
                     .reservationMaxPeriod(new ReservationMaxPeriod(2))
                     .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();

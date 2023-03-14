@@ -42,7 +42,7 @@ class AuthServiceUnitTest {
     @InjectMocks
     AuthService authService;
 
-    @Mock MemberSearchableRepository memberSearchRepository;
+    @Mock MemberSearchableRepository memberSearchableRepository;
     @Mock JwtTokenProvider jwtTokenProvider;
     @Mock MemberDetailsService memberDetailsService;
     @Mock RedisTemplate redisTemplate;
@@ -80,7 +80,7 @@ class AuthServiceUnitTest {
     @DisplayName("C2-01. 로그인 실패 - 아이디 불일치 ")
     void 로그인_실패_아이디_불일치() {
         // Given
-        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willThrow(UsernameNotFoundException.class);
+        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willThrow(UsernameNotFoundException.class);
 
         // When, Then
         assertThrows(UsernameNotFoundException.class, () -> authService.login(loginReq,ROLE_MEMBER));
@@ -88,10 +88,12 @@ class AuthServiceUnitTest {
 
     @Test
     @DisplayName("C2-02. 로그인 실패 - 아이디 일치, 비밀번호 불일치")
-    void 로그인_실패_아이디비밀번호_모두불일치() {
+    void 로그인_실패_아이디일치_비밀번호불일치() {
         // Given
-        User user = getUserOfSavedMember(getMember(ROLE_MEMBER));
-        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willReturn(user);
+        Member savedMember = getMember(ROLE_MEMBER);
+        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
+        User user = getUserOfSavedMember(savedMember);
+        given(memberDetailsService.loadUserByUsername(savedMember.getMemberId().toString())).willReturn(user);
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
 
         // When, Then
@@ -104,9 +106,11 @@ class AuthServiceUnitTest {
         AccountQR accountQR = getAccountQR();
         savedMember.changeAccountQR(accountQR);
 
+        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
+
         User user = getUserOfSavedMember(savedMember);
 
-        given(memberDetailsService.loadUserByUsername(loginReq.getLoginId())).willReturn(user);
+        given(memberDetailsService.loadUserByUsername(savedMember.getMemberId().toString())).willReturn(user);
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(true);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
@@ -118,7 +122,7 @@ class AuthServiceUnitTest {
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(jwtTokenProvider.getExpiration(getRefreshToken())).willReturn(5L);
         willDoNothing().given(valueOperations).set("RT:" + authentication.getName(), getRefreshToken(), 5L , TimeUnit.MILLISECONDS);
-        given(memberSearchRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
+
 
         // When
         LoginRes loginRes = authService.login(loginReq, roleType);

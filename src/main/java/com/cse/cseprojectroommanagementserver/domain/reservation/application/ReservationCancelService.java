@@ -15,11 +15,10 @@ public class ReservationCancelService {
 
 
     @Transactional
-    public void cancelReservation(Long reservationId) {
+    public void cancelReservation(Long memberId, Long reservationId) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new NotExistsReservationException());
-        findReservation.cancel();
+
+        findReservation.cancel(memberId); //내 예약만 취소할 수 있음.
     }
-
-
 }

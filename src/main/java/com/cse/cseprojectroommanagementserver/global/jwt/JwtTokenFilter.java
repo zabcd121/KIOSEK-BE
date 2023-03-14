@@ -44,11 +44,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("####doFilterInternal진입");
         try{
-            String jwt = resolveToken(request, AUTHORIZATION_HEADER);
-            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-                String isLogout = (String) redisTemplate.opsForValue().get(jwt);
+            String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
+            if (resolvedToken != null && jwtTokenProvider.validateToken(resolvedToken)) {
+                String isLogout = (String) redisTemplate.opsForValue().get(resolvedToken);
                 if (ObjectUtils.isEmpty(isLogout)) {
-                    Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                    Authentication authentication = jwtTokenProvider.getAuthentication(resolvedToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
                 }
@@ -60,8 +60,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (TokenNotBearerException e) {
             request.setAttribute("exception", e);
             log.info("TokenNotBearerException");
-        }
-        catch (SignatureException e) {
+        } catch (SignatureException e) {
             request.setAttribute("exception", e);
             log.info("SignatureException");
         } catch (MalformedJwtException e) {
@@ -79,22 +78,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String resolveToken(HttpServletRequest request, String header) {
-
-        String bearerToken = request.getHeader(header);
-
-        if(bearerToken == null || bearerToken.equals("")) {
-            log.info("bearer token not passed");
-            throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
-        }
-
-        if(!bearerToken.startsWith(BEARER)) {
-            throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
-        }
-        log.info("bearerToken = , {}", bearerToken);
-        return bearerToken.substring(7);
-
     }
 }

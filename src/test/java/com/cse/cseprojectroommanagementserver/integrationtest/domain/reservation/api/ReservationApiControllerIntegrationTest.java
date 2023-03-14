@@ -70,14 +70,13 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
 
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(projectTable.getTableId())
-                .memberId(member.getMemberId())
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
 
         // When
         ResultActions resultActions = mvc.perform(
-                        post("/api/v1/reservations")
+                        post("/api/v2/reservations")
                                 .header("Authorization", accessToken)
                                 .contentType(APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(reserveReq))
@@ -179,9 +178,8 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
 
         // When
         ResultActions resultActions = mvc.perform(
-                        get("/api/v1/reservations/current")
+                        get("/api/v2/reservations/current")
                                 .header("Authorization", accessToken)
-                                .param("memberId", member.getMemberId().toString())
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());
@@ -202,9 +200,8 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
 
         // When
         ResultActions resultActions = mvc.perform(
-                        get("/api/v1/reservations/past")
+                        get("/api/v2/reservations/past")
                                 .header("Authorization", accessToken)
-                                .param("memberId", member.getMemberId().toString())
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());

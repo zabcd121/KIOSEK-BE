@@ -1,5 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
+import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.TOKEN_NOT_BEARER;
+import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.TOKEN_NOT_PASSED;
 
 @Component
 @Slf4j
@@ -93,7 +98,8 @@ public class JwtTokenProvider implements InitializingBean {
             log.error("Invalid JWT token");
             throw e;
         } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token");
+            System.out.println("expired jwt token");
+            //log.error("Expired JWT token");
             throw e;
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token");
@@ -121,5 +127,17 @@ public class JwtTokenProvider implements InitializingBean {
         Long now = new Date().getTime();
 
         return (expiration.getTime() - now);
+    }
+
+    public String resolveToken(String bearerToken) {
+        if(bearerToken == null || bearerToken.equals("")) {
+            log.info("bearer token not passed");
+            throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
+        }
+
+        if(!bearerToken.startsWith(BEARER)) {
+            throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
+        }
+        return bearerToken.substring(7);
     }
 }

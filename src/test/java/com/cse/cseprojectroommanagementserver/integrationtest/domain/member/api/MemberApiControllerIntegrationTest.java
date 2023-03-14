@@ -42,7 +42,7 @@ class MemberApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
 
         // When
         ResultActions resultActions = mvc.perform(
-                        get("/api/v1/members/{id}", savedMember.getMemberId())
+                        get("/api/v2/members")
                                 .header("Authorization", loginRes.getTokenInfo().getAccessToken())
                                 .accept(APPLICATION_JSON))
                 .andDo(print());

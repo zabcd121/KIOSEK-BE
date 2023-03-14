@@ -46,10 +46,11 @@ public enum ResConditionCode {
     TOKEN_EXPIRED("0210", "만료된 토큰이 전달되었습니다."),
     TOKEN_UNSUPPORTED("0211", "지원되지 않는 토큰이 전달되었습니다."),
     ACCESS_DENIED("0212", "접근 거부"),
-    REFRESH_TOKEN_NOT_EXIST_IN_STORE("0213", "refresh 토큰이 만료되었습니다."),
+    REFRESH_TOKEN_NOT_EXIST_IN_STORE("0213", "존재하지 않는 refresh token 입니다."),
     TOKEN_REISSUED("0214", "토큰이 재발급 되었습니다."),
     MEMBER_INFO_REISSUED("0215", "회원 정보 재발급"),
-    MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS("0215", "마이페이지 정보 조회 성공했습니다."),
+    MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS("0216", "마이페이지 정보 조회 성공했습니다."),
+    REFRESH_TOKEN_EXPIRED("0217", "refresh token이 만료되었습니다."),
 
     /**
      * Reservation: 03
@@ -67,7 +68,7 @@ public enum ResConditionCode {
     RESERVATION_CANCEL_SUCCESS("0310", "예약 취소 성공"),
     RESERVATION_CANCEL_FAIL("0311", "예약 취소 실패"),
     RESERVATION_QR_CREATE_FAIL("0312", "예약 QR 생성 실패"),
-    RESERVATION_QR_CHECKIN_SUCCESS("0313", "예약 QR 인증 성공"),
+    RESERVATION_QR_CHECKIN_SUCCESS("0313", "예약 QR 체크인 성공"),
     RESERVATION_QR_CHECKIN_FAIL("0316", "예약 QR 체크인 실패"),
     RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_TIME("0317", "체크인 불가능한 시간입니다."),
     RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_STATUS("0318", "이전 예약 사용중에는 체크인이 불가능합니다."),
@@ -79,6 +80,7 @@ public enum ResConditionCode {
      */
     RETURN_SUCCESS("0400", "반납 성공"),
     RETURN_FAIL("0400", "반납 실패"),
+    RETURN_FAIL_ANOTHER_USERS_RESERVATION("0402", "다른 유저의 예약은 반납할 수 없습니다."),
 
     /**
      * Project Room: 05

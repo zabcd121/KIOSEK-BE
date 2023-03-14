@@ -87,31 +87,30 @@ class ReserveTableServiceUnitTest {
         // Given
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour());
-
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
-        given(penaltySearchRepository.existsByMemberId(reserveReq.getMemberId())).willReturn(false);
+        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
         given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
         given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
 
         given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(reserveReq.getMemberId())).willReturn(reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L);
+        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId)).willReturn(reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L);
 
-        given(memberRepository.getReferenceById(reserveReq.getMemberId())).willReturn(Member.builder().memberId(reserveReq.getMemberId()).build());
+        given(memberRepository.getReferenceById(memberId)).willReturn(Member.builder().memberId(memberId).build());
         given(projectTableRepository.getReferenceById(reserveReq.getProjectTableId())).willReturn(ProjectTable.builder().tableId(reserveReq.getProjectTableId()).build());
         Reservation savedReservation = Reservation.builder().build();
         given(reservationRepository.save(any())).willReturn(savedReservation);
 
         // When
-        reserveTableService.reserve(reserveReq);
+        reserveTableService.reserve(memberId, reserveReq);
 
         // Then
         assertDoesNotThrow(() -> ReservationQRNotCreatedException.class);
@@ -122,38 +121,41 @@ class ReserveTableServiceUnitTest {
     @DisplayName("C2-01. 예약 실패 - 제재중인 회원")
     void 예약_실패_제재중인회원() {
         // Given
+        Long memberId = 3L;
         ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(reserveReq.getMemberId())).willReturn(true);
+        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(true);
 
         // When, Then
-        assertThrows(PenaltyMemberReserveFailException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(PenaltyMemberReserveFailException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
     @DisplayName("C2-02. 예약 실패 - 비활성화된 테이블 선택 (정상 회원, 중복 예약X)")
     void 예약_실패_비활성화된테이블() {
         // Given
+        Long memberId = 3L;
         ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(reserveReq.getMemberId())).willReturn(false);
+        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
         given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(true);
 
 
         // When, Then
-        assertThrows(DisabledTableException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(DisabledTableException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
     @DisplayName("C2-03. 예약 실패 - 중복된 예약 (정상 회원, 활성화된 테이블)")
     void 예약_실패_중복된예약() {
         // Given
+        Long memberId = 3L;
         ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(reserveReq.getMemberId())).willReturn(false);
+        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
         given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
         given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(true);
 
 
         // When, Then
-        assertThrows(DuplicatedReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(DuplicatedReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -163,18 +165,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -184,18 +186,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -205,18 +207,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더, 현재 예약 불가능한 날짜임
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -226,18 +228,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -247,18 +249,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -268,18 +270,18 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxPeriodEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedMaxPeriodEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -289,34 +291,33 @@ class ReserveTableServiceUnitTest {
         LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
         LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
 
+        Long memberId = 3L;
         ReserveReq reserveReq = ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
         long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
 
-        givenTemplateOfReservationPolicyViolationTest(reserveReq, todayReservationCountByMember);
+        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(reserveReq));
+        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
 
-    private void givenTemplateOfReservationPolicyViolationTest(ReserveReq reserveReq, Long todayReservationCountByMember) {
-        given(penaltySearchRepository.existsByMemberId(reserveReq.getMemberId())).willReturn(false);
+    private void givenTemplateOfReservationPolicyViolationTest(Long memberId, ReserveReq reserveReq, Long todayReservationCountByMember) {
+        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
         given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
         given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
 
         given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(reserveReq.getMemberId())).willReturn(todayReservationCountByMember);
+        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId)).willReturn(todayReservationCountByMember);
     }
 
     private ReserveReq getReserveRequest() {
         return ReserveReq.builder()
                 .projectTableId(3L)
-                .memberId(3L)
                 .startAt(LocalDateTime.now().plusDays(1L))
                 .endAt(LocalDateTime.now().plusDays(1L).plusHours(1L))
                 .build();

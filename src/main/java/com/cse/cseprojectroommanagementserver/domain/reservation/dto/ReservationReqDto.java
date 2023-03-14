@@ -17,7 +17,6 @@ public class ReservationReqDto {
     @Getter @Setter
     public static class ReserveReq {
         private Long projectTableId;
-        private Long memberId;
 
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)

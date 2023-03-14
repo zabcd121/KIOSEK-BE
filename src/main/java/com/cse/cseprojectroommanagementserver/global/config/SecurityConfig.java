@@ -50,12 +50,13 @@ public class SecurityConfig {
         return (web -> web.ignoring().mvcMatchers(
                         "/api/v1/reservations/onsite/**",
                         "/api/sensor/**",
+                        "/api/v2/members/token/reissue",
                         "/api/v1/members/login",
                         "/api/admins/v1/login",
-                        "/api/v1/members/token/reissue",
                         "/api/v1/members/signup/**",
+                        "/api/v1/reservations/auth",
                         "/api/v1/rooms",
-                        "/images/**"
+                        "/api/images/**"
                 ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
     }
 
@@ -89,10 +90,10 @@ public class SecurityConfig {
 //                .apply(jwtTokenFilterConfig)
 //                .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/**")
-                .access("hasRole('ROLE_MEMBER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/admins/**")
                 .access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/**")
+                .access("hasRole('ROLE_MEMBER') or hasRole('ROLE_ADMIN')")
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 .build();
