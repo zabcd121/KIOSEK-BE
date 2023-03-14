@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 
-    private final MemberSearchableRepository memberSearchRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * Spring-Security의 유저 인증 처리 과정중 유저객체를 만드는 과정
@@ -32,8 +33,8 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("MemberDetailsService loadUserByUsername: 진입");
-        Member member = memberSearchRepository.findByAccountLoginId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("loginId : " + username + " was not found"));
+        Member member = memberRepository.findById(Long.parseLong(username))
+                .orElseThrow(() -> new UsernameNotFoundException("memberId : " + username + " was not found"));
 
         log.info("loadUserByUsername 통과 ");
         return createUserDetails(member);
@@ -44,7 +45,7 @@ public class MemberDetailsService implements UserDetailsService {
                 .map(authority -> new SimpleGrantedAuthority(authority))
                 .collect(Collectors.toList());
 
-        return new User(member.getLoginId(),
+        return new User(member.getMemberId().toString(),
                 member.getPassword(),
                 grantedAuthorities);
     }
