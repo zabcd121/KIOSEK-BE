@@ -5,7 +5,6 @@ import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +25,7 @@ public class MemberApiController {
     public ResponseSuccess<MemberComplexInfoRes> getMemberProfile(HttpServletRequest request) {
         String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
 
-        MemberComplexInfoRes memberComplexInfo = memberSearchService.searchMemberComplexInfo(
+        MemberComplexInfoRes memberComplexInfo = memberSearchService.searchMyPageInfo(
                 Long.parseLong(jwtTokenProvider.getSubject(resolvedToken)));
         return new ResponseSuccess<>(MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS, memberComplexInfo);
     }

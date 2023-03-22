@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 
 @Service
@@ -23,13 +26,26 @@ public class MemberSearchService {
     private final ReservationSearchableRepository reservationSearchableRepository;
 
 
-    public MemberComplexInfoRes searchMemberComplexInfo(Long memberId) {
+    public MemberComplexInfoRes searchMyPageInfo(Long memberId) {
         Member member = memberSearchableRepository.findMemberWithAccountQRByMemberId(memberId);
         Long violationsCount = violationSearchableRepository.countNotPenalizedViolationsByMemberId(memberId);
-        Penalty penalty = penaltySearchableRepository.findInProgressByMemberId(memberId).orElseGet(() -> null);
         Long pastReservationsCount = reservationSearchableRepository.countPastReservations(memberId);
 
-        return new MemberComplexInfoRes().of(member.getAccountQR(), violationsCount, penalty, pastReservationsCount);
+
+        List<Penalty> penaltyList = penaltySearchableRepository.findAllByMemberId(memberId).orElseGet(() -> null);
+        int penaltyCount = 0;
+        Penalty currentPenalty = null;
+        if(penaltyList != null) {
+            penaltyCount = penaltyList.size();
+            currentPenalty = penaltyList.stream()
+                    .filter(penalty ->
+                            (penalty.getStartDt().isBefore(LocalDate.now()) || penalty.getStartDt().isEqual(LocalDate.now()))
+                            && (penalty.getEndDt().isAfter(LocalDate.now()) || penalty.getEndDt().isEqual(LocalDate.now())))
+                    .findFirst().orElseGet(() -> null);
+        }
+        
+
+        return new MemberComplexInfoRes().of(member.getAccountQR(), violationsCount, currentPenalty, pastReservationsCount, penaltyCount);
     }
 
 }
