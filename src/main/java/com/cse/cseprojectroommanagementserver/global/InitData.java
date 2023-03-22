@@ -103,7 +103,7 @@ public class InitData {
         public void penaltyPolicyDataInit() {
             PenaltyPolicy penaltyPolicy = PenaltyPolicy.builder()
                     .violationCountToImposePenalty(new ViolationCountToImposePenalty(3))
-                    .numberOfSuspensionDay(new NumberOfSuspensionDay(2))
+                    .numberOfSuspensionDay(new NumberOfSuspensionDay(3))
                     .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();
             em.persist(penaltyPolicy);
