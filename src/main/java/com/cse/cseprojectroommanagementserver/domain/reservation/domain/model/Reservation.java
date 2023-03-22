@@ -10,15 +10,12 @@ import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.Ta
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Means.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
 import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
 
 @Entity
@@ -26,7 +23,6 @@ import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 public class Reservation extends BaseTimeEntity {
 
     @Id
