@@ -91,10 +91,12 @@ public class AutoTableReturnSchedulingService {
                     .orElseGet(() -> new ArrayList<>());
 
             if (penaltyPolicy.isPenaltyTarget(violationListNotPenalizedByMember.size())) {
-                Penalty penalty = Penalty.createPenalty(violation.getTargetMember(), penaltyPolicy, violationListNotPenalizedByMember);
-                penaltyList.add(penalty);
+                Penalty savedPenalty = penaltyRepository.save(Penalty.createPenalty(violation.getTargetMember(), penaltyPolicy, violationListNotPenalizedByMember));
+                for (Violation targetViolation : violationListNotPenalizedByMember) {
+                    targetViolation.changePenalty(savedPenalty);
+                }
+                penaltyList.add(savedPenalty);
             }
         }
-        penaltyRepository.saveAllAndFlush(penaltyList);
     }
 }

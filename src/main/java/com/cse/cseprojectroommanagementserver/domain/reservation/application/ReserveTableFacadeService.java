@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.NamedLockReservationRepository;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ public class ReserveTableFacadeService {
     private final NamedLockReservationRepository namedLockReservationRepository;
     private final ReserveTableService reserveTableService;
 
+    @Timed("kiosek.reservation")
     @Transactional
     public void reserve(Long memberId, ReserveReq reserveReq) {
         String key = reserveReq.getStartAt().toLocalDate().toString() + reserveReq.getProjectTableId();

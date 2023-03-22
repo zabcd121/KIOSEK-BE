@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.violation.domain.model;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.domain.violation.domain.mod
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Violation {
+public class Violation extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long violationId;
@@ -54,5 +55,10 @@ public class Violation {
         this.penalty.getViolations().add(this);
         this.processingStatus = PENALIZED;
     }
+
+//    public void changePenalty(Penalty penalty) {
+//        this.penalty = penalty;
+//        this.processingStatus = PENALIZED;
+//    }
 
 }

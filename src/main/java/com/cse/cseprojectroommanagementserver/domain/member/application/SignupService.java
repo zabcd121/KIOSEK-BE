@@ -11,6 +11,7 @@ import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,6 +35,7 @@ public class SignupService {
     private final PasswordEncoder passwordEncoder;
     private final QRGenerator qrGenerator;
 
+    @Timed("kiosek.member")
     @Transactional
     public void signup(SignupReq signupReq) {
         if (!checkDuplicationLoginId(signupReq.getLoginId())

@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.common.Image;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +18,7 @@ import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvi
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class TableReturn {
+public class TableReturn extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long tableReturnId;

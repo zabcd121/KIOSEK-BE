@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,6 +42,7 @@ public class AuthService {
     private final RedisTemplate redisTemplate;
     private final PasswordEncoder passwordEncoder;
 
+    @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
         Member member = memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId()).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));

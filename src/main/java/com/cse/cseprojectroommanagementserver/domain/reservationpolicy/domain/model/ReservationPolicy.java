@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model;
 
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ReservationPolicy {
+public class ReservationPolicy extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long reservationPolicyId;

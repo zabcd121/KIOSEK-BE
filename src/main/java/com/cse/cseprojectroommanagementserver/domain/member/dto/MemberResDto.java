@@ -38,8 +38,9 @@ public class MemberResDto {
         private Long violationCount;
         private MemberPenaltyInfoRes penaltyInfo;
         private Long pastReservationCount;
+        private int penaltyCount;
 
-        public MemberComplexInfoRes of(AccountQR accountQR, Long violationsCount, Penalty penalty, Long pastReservationsCount) {
+        public MemberComplexInfoRes of(AccountQR accountQR, Long violationsCount, Penalty penalty, Long pastReservationsCount, int penaltyCount) {
             this.qrImage = new QRImageRes().of(accountQR);
             this.violationCount = violationsCount;
             if(penalty==null) {
@@ -48,6 +49,7 @@ public class MemberResDto {
                 this.penaltyInfo = new MemberPenaltyInfoRes().of(penalty);
             }
             this.pastReservationCount = pastReservationsCount;
+            this.penaltyCount = penaltyCount;
 
             return this;
         }

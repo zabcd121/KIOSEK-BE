@@ -18,6 +18,7 @@ import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,7 @@ public class ReserveTableService {
      * 현장예약: QR 로그인과 동시에 예약까지 한번에 진행함
      * @param
      */
+    @Timed("kiosek.reservation")
     @Transactional
     public void reserveOnsiteByAccountQR(Member member, OnsiteReservationByQRReq reservationRequest) {
         reserveOnsite(member, reservationRequest.getProjectTableId(), reservationRequest.getStartAt(), reservationRequest.getEndAt());

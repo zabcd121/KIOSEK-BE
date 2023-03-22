@@ -56,7 +56,8 @@ public class SecurityConfig {
                         "/api/v1/members/signup/**",
                         "/api/v1/reservations/auth",
                         "/api/v1/rooms",
-                        "/api/images/**"
+                        "/api/images/**",
+                        "/actuator/**"
                 ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
     }
 
@@ -69,7 +70,6 @@ public class SecurityConfig {
         config.addAllowedHeader("*"); //모든 header에 응답을 허용하겠다.
         config.addAllowedMethod("*"); //모든 post, get, put, delete, patch 요청을 허용하겠다.
         config.addExposedHeader("Authorization");
-
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

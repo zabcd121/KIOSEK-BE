@@ -6,12 +6,14 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Violation;
 import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ProcessingStatus.PENALIZED;
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent.*;
 
 @Entity
@@ -51,7 +53,7 @@ public class Penalty extends BaseTimeEntity {
             else if(violation.getViolationContent().equals(NOT_RETURNED_CONTENT) ) notReturnedCnt++;
         }
 
-        String description = UN_USED_CONTENT.getContent() + " " + unusedCnt + "회 " + NOT_RETURNED_CONTENT + " " + notReturnedCnt + "회";
+        String description = UN_USED_CONTENT.getContent() + " " + unusedCnt + "회 " + NOT_RETURNED_CONTENT.getContent() + " " + notReturnedCnt + "회";
 
         Penalty penalty = Penalty.builder()
                 .member(member)
@@ -60,10 +62,20 @@ public class Penalty extends BaseTimeEntity {
                 .endDt(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()))
                 .build();
 
-        for (Violation violation : violationList) {
-            violation.changePenalty(penalty);
-        }
+//        for (Violation violation : violationList) {
+//            violation.changePenalty(penalty);
+//        }
 
         return penalty;
     }
+
+//    public void addViolation(Violation violation) {
+//        this.violations.add(violation);
+//
+//        if(violation.getPenalty() != this) {
+//            violation.changePenalty(this);
+//        }
+//    }
+
+
 }
