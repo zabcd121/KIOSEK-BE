@@ -46,6 +46,8 @@ dependencies {
     implementation 'mysql:mysql-connector-java' //MYSQL
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
@@ -92,6 +94,9 @@ dependencies {
 
     //thymeleaf
     implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.15.RELEASE'
+
+    //micrometer
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
 
     //json type 변환 문제
@@ -190,6 +195,10 @@ tasks.jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+springBoot {
+    buildInfo()
 }
 
 
