@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.Ta
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class TableReturnService {
     private final ReservationSearchableRepository reservationSearchableRepository;
     private final FileUploadUtil fileUploadUtil;
 
+    @Timed("kiosek.return")
     @Transactional
     public void returnTable(Long memberId, Long reservationId, MultipartFile cleanupPhoto) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)

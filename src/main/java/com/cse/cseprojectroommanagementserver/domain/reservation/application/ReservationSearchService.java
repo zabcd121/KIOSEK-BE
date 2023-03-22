@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.IsNotInUseTableException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class ReservationSearchService {
         return reservationSearchableRepository.findAllByConditionAndPageable(condition, pageable);
     }
 
+    @Timed("kiosek.reservation")
     public List<SearchReservationRes> searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
         return reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(
                 projectRoomId,
