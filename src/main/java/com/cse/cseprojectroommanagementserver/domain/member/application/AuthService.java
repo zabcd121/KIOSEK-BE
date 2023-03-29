@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.Me
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +42,13 @@ public class AuthService {
     private final MemberDetailsService memberDetailsService;
     private final RedisTemplate redisTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final AES256 aes256;
 
     @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
-        Member member = memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId()).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
-        Authentication authentication = authenticateMember(member, loginReq.getLoginId(), loginReq.getPassword(), allowedRoleType);
+        Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
+        Authentication authentication = authenticateMember(member, loginReq.getPassword(), allowedRoleType);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
         saveRefreshTokenInRedis(refreshToken, authentication);
@@ -123,7 +125,7 @@ public class AuthService {
     }
 
 
-    private Authentication authenticateMember(Member member, String loginId, String password, RoleType allowedRoleType){
+    private Authentication authenticateMember(Member member, String password, RoleType allowedRoleType){
 
         UserDetails userDetails = memberDetailsService.loadUserByUsername(member.getMemberId().toString());
 

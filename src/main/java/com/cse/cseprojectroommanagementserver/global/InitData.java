@@ -14,6 +14,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class InitData {
     private final InitService initService;
 
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         initService.adminInit();
         initService.dataInit();
         initService.penaltyPolicyDataInit();
@@ -41,17 +42,18 @@ public class InitData {
     static class InitService {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
+        private final AES256 aes256;
 
         public void adminInit() {
-            Member admin1 = Member.builder().account(Account.builder().loginId("admin1").password(passwordEncoder.encode("admin17540!")).build()).name("관리자1").roleType(RoleType.ROLE_ADMIN).build();
-            Member admin2 = Member.builder().account(Account.builder().loginId("admin2").password(passwordEncoder.encode("admin27540!")).build()).name("관리자1").roleType(RoleType.ROLE_ADMIN).build();
+            Member admin1 = Member.builder().account(Account.builder().loginId(aes256.encrypt("admin1")).password(passwordEncoder.encode("admin17540!")).build()).name("관리자1").roleType(RoleType.ROLE_ADMIN).build();
+            Member admin2 = Member.builder().account(Account.builder().loginId(aes256.encrypt("admin2")).password(passwordEncoder.encode("admin27540!")).build()).name("관리자1").roleType(RoleType.ROLE_ADMIN).build();
             em.persist(admin1);
             em.persist(admin2);
         }
 
-        public void dataInit() {
-            Member member1 = Member.createMember(Account.builder().loginId("20990001").password(passwordEncoder.encode("abcd12345!")).build(), "20990001@kumoh.ac.kr", "홍길동", QRImage.builder().content("123").fileOriName("qwe").fileLocalName("sdad").fileUrl("asdad").build());
-            Member member2 = Member.createMember(Account.builder().loginId("20990002").password(passwordEncoder.encode("abcd12345!")).build(), "20990002@kumoh.ac.kr", "소공이", QRImage.builder().content("231").fileOriName("asdf").fileLocalName("gdsq").fileUrl("evasc").build());
+        public void dataInit() throws Exception {
+            Member member1 = Member.createMember(Account.builder().loginId(aes256.encrypt("20990001")).password(passwordEncoder.encode("abcd12345!")).build(), "20990001@kumoh.ac.kr", "홍길동", QRImage.builder().content("123").fileOriName("qwe").fileLocalName("sdad").fileUrl("asdad").build());
+            Member member2 = Member.createMember(Account.builder().loginId(aes256.encrypt("20990002")).password(passwordEncoder.encode("abcd12345!")).build(), "20990002@kumoh.ac.kr", "소공이", QRImage.builder().content("231").fileOriName("asdf").fileLocalName("gdsq").fileUrl("evasc").build());
 
             //Member admin = Member.builder().account(Account.builder().loginId("admin").password("admin1!").build()).name("관리자1").build();
 //            em.persist(admin);

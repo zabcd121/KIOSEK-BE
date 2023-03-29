@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.exception.AuthCodeNo
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
@@ -34,6 +35,7 @@ public class SignupService {
     private final RedisTemplate redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final QRGenerator qrGenerator;
+    private final AES256 aes256;
 
     @Timed("kiosek.member")
     @Transactional
@@ -44,12 +46,16 @@ public class SignupService {
 
             try {
                 QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
-                Account account = Account.builder().loginId(signupReq.getLoginId()).password(passwordEncoder.encode(signupReq.getPassword())).build();
+                Account account = Account.builder()
+                        .loginId(aes256.encrypt(signupReq.getLoginId()))
+                        .password(passwordEncoder.encode(signupReq.getPassword())).build();
 
-                Member signupMember = Member.createMember(account, signupReq.getEmail(), signupReq.getName(), accountQRCodeImage);
+                Member signupMember = Member.createMember(account,
+                        aes256.encrypt(signupReq.getEmail()),
+                        signupReq.getName(), accountQRCodeImage);
 
                 signupRepository.save(signupMember);
-            } catch (QRNotCreatedException e) {
+            } catch (Exception e) {
                 throw new AccountQRNotCreatedException();
             }
         }
