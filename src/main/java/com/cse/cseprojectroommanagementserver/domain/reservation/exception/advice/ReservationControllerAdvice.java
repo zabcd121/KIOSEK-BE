@@ -154,5 +154,12 @@ public class ReservationControllerAdvice {
         log.error("[exceptionHandler] UnableToCancelReservationException", ex);
         return new ResponseError(RESERVATION_CANCEL_FAIL);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError EndAtIsBeforeStartAtExHandler(EndAtIsBeforeStartAtException ex) {
+        log.error("[exceptionHandler] EndAtIsBeforeStartAtException", ex);
+        return new ResponseError(RESERVATION_FAIL_ENDAT_BEFORE_STARTAT);
+    }
 }
 
