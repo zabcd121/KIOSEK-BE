@@ -7,10 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.reposit
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DisabledTableException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.PenaltyMemberReserveFailException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ReservationQRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.*;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
@@ -100,7 +97,10 @@ public class ReserveTableService {
     }
 
     private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
-        if(!isPenaltyMember(memberId) && !isDisabledTableAtTime(projectTableId, startAt, endAt) && !isDuplicatedReservation(projectTableId, startAt, endAt)) {
+        if(!isPenaltyMember(memberId)
+                && !isDisabledTableAtTime(projectTableId, startAt, endAt)
+                && !isDuplicatedReservation(projectTableId, startAt, endAt)
+                && !isEndAtAfterStartAt(startAt, endAt)) {
             ReservationPolicy reservationPolicy = findReservationPolicy();
             //오늘 이 회원이 예약을 실행한 횟수룰 가져옴
             Long countTodayMemberCreatedReservation = getCountTodayMemberCreatedReservation(memberId);
@@ -126,6 +126,13 @@ public class ReserveTableService {
     private boolean isDuplicatedReservation(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
         if (reservationVerifiableRepository.existsBy(tableId, startAt, endAt)) {
             throw new DuplicatedReservationException();
+        }
+        return false;
+    }
+
+    private boolean isEndAtAfterStartAt(LocalDateTime startAt, LocalDateTime endAt) {
+        if (endAt.isBefore(startAt)) {
+            throw new EndAtIsBeforeStartAtException();
         }
         return false;
     }

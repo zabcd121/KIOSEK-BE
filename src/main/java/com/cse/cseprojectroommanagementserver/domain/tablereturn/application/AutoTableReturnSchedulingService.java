@@ -92,10 +92,12 @@ public class AutoTableReturnSchedulingService {
 
             if (penaltyPolicy.isPenaltyTarget(violationListNotPenalizedByMember.size())) {
                 Penalty savedPenalty = penaltyRepository.save(Penalty.createPenalty(violation.getTargetMember(), penaltyPolicy, violationListNotPenalizedByMember));
-                for (Violation targetViolation : violationListNotPenalizedByMember) {
-                    targetViolation.changePenalty(savedPenalty);
+                if(savedPenalty!=null) {
+                    for (Violation targetViolation : violationListNotPenalizedByMember) {
+                        targetViolation.changePenalty(savedPenalty);
+                    }
+                    penaltyList.add(savedPenalty);
                 }
-                penaltyList.add(savedPenalty);
             }
         }
     }

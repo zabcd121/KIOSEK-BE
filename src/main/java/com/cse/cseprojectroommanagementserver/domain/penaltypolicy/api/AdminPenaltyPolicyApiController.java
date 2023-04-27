@@ -6,6 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPo
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
@@ -21,7 +22,7 @@ public class AdminPenaltyPolicyApiController {
     private final PenaltyPolicySearchService penaltyPolicySearchService;
 
     @PutMapping("/v1/penalties/policies")
-    public ResponseSuccessNoResult changePenaltyPolicy(@RequestBody PenaltyPolicyChangeReq penaltyPolicyChangeReq) {
+    public ResponseSuccessNoResult changePenaltyPolicy(@RequestBody @Validated PenaltyPolicyChangeReq penaltyPolicyChangeReq) {
         penaltyPolicyChangeService.changePenaltyPolicy(penaltyPolicyChangeReq);
         return new ResponseSuccessNoResult(PENALTY_POLICY_CHANGE_SUCCESS);
     }

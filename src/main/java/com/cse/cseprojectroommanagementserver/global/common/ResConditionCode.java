@@ -61,6 +61,7 @@ public enum ResConditionCode {
     RESERVATION_FAIL_EXCEED_MAX_TIME("0303", "예약가능 최대시간을 초과하였습니다."),
     RESERVATION_FAIL_EXCEED_MAX_COUNT("0304", "하루에 최대 예약 가능한 횟수를 초과하였습니다."),
     RESERVATION_FAIL_EXCEED_MAX_PERIOD("0305", "현재 예약 불가능한 날짜입니다."),
+    RESERVATION_FAIL_ENDAT_BEFORE_STARTAT("0319", "종료시간이 시작시간보다 빠릅니다."),
     RESERVATION_START_TIME_EMPTY("0306", "예약 시작시간을 입력해주세요."),
     RESERVATION_END_TIME_EMPTY("0307", "예약 종료시간을 입력해주세요."),
     RESERVATION_SEARCH_SUCCESS("0308", "예약 조회 성공"),

@@ -39,20 +39,27 @@ class AutoTableReturnSchedulingServiceUnitTest {
     @InjectMocks
     AutoTableReturnSchedulingService autoTableReturnSchedulingService;
 
-    @Mock ReservationSearchableRepository reservationSearchableRepository;
-    @Mock TableReturnRepository tableReturnRepository;
-    @Mock ViolationRepository violationRepository;
-    @Mock ViolationSearchableRepository violationSearchableRepository;
-    @Mock PenaltyPolicySearchableRepository penaltyPolicySearchableRepository;
-    @Mock PenaltyRepository penaltyRepository;
+    @Mock
+    ReservationSearchableRepository reservationSearchableRepository;
+    @Mock
+    TableReturnRepository tableReturnRepository;
+    @Mock
+    ViolationRepository violationRepository;
+    @Mock
+    ViolationSearchableRepository violationSearchableRepository;
+    @Mock
+    PenaltyPolicySearchableRepository penaltyPolicySearchableRepository;
+    @Mock
+    PenaltyRepository penaltyRepository;
 
-    /** 테스트 케이스
+    /**
+     * 테스트 케이스
      * M1. 유예시간 후에도 미반납된 예약들 자동 반납 기능
-         * M1-C1. 유예시간 후에도 미반납된 예약들 자동 반납 기능 성공
+     * M1-C1. 유예시간 후에도 미반납된 예약들 자동 반납 기능 성공
      * M2. 예약 자동 취소 기능
-         * M2-C1. 예약 자동 취소 기능 성공
+     * M2-C1. 예약 자동 취소 기능 성공
      * M3. 사용시간 종료후 반납 대기중 상태로 자동 변경
-         * M3-C1. 사용시간 종료후 반납 대기중 상태로 자동 변경 성공
+     * M3-C1. 사용시간 종료후 반납 대기중 상태로 자동 변경 성공
      */
 
     @Test
@@ -79,8 +86,7 @@ class AutoTableReturnSchedulingServiceUnitTest {
                     .willReturn(Optional.of(violationListByMember));
         }
 
-        List<Penalty> penaltyList = new ArrayList<>();
-        given(penaltyRepository.saveAllAndFlush(any())).willReturn(penaltyList); // 반환타입으로 뭐 사용하는게 없어서 테스트는 빈 리스트 반환으로 함.
+        given(penaltyRepository.save(any())).willReturn(null); // 반환타입으로 뭐 사용하는게 없어서 테스트는 빈 리스트 반환으로 함.
 
         // When
         autoTableReturnSchedulingService.autoTableReturn();
@@ -90,7 +96,6 @@ class AutoTableReturnSchedulingServiceUnitTest {
         assertEquals(ReservationStatus.NOT_RETURNED, returnWaitingReservationList.get(1).getReservationStatus());
         then(tableReturnRepository).should(times(1)).saveAll(any());
         then(violationRepository).should(times(1)).saveAllAndFlush(any());
-        then(penaltyRepository).should(times(1)).saveAllAndFlush(any());
     }
 
     @Test
@@ -113,7 +118,7 @@ class AutoTableReturnSchedulingServiceUnitTest {
                     .willReturn(Optional.of(violationListByMember));
         }
 
-        given(penaltyRepository.saveAllAndFlush(any())).willReturn(new ArrayList<>());
+        given(penaltyRepository.save(any())).willReturn(null);
 
         // When
         autoTableReturnSchedulingService.autoCancelUnUsedReservation();
@@ -122,7 +127,6 @@ class AutoTableReturnSchedulingServiceUnitTest {
         assertEquals(ReservationStatus.UN_USED, unUsedReservationList.get(0).getReservationStatus());
         assertEquals(ReservationStatus.UN_USED, unUsedReservationList.get(0).getReservationStatus());
         then(violationRepository).should(times(1)).saveAllAndFlush(any());
-        then(penaltyRepository).should(times(1)).saveAllAndFlush(any());
     }
 
     @Test

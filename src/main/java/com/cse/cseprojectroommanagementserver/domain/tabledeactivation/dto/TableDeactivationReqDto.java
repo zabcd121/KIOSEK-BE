@@ -4,6 +4,8 @@ import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.mo
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +19,15 @@ public class TableDeactivationReqDto {
     @NoArgsConstructor
     @Getter
     public static class TableDeactivationReq {
+
+        @NotNull
         private Long projectRoomId;
 
+        @NotNull
         @Builder.Default
         private List<Long> projectTableIdList = new ArrayList<>();
 
+        @NotNull
         private TableDeactivationInfoReq tableDeactivationInfoReq;
     }
 
@@ -30,6 +36,7 @@ public class TableDeactivationReqDto {
     @NoArgsConstructor
     @Getter
     public static class TableDeactivationInfoReq {
+        @NotNull
         private String reason;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)

@@ -21,7 +21,7 @@ public class AdminAuthApiController {
     private final AuthService authService;
 
     @PostMapping("/v1/login")
-    public ResponseSuccess<LoginReq> login(@RequestBody @Validated LoginReq loginReq) {
+    public ResponseSuccess<LoginRes> login(@RequestBody @Validated LoginReq loginReq) {
         LoginRes loginResponse = authService.login(loginReq, RoleType.ROLE_ADMIN);
         return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
     }

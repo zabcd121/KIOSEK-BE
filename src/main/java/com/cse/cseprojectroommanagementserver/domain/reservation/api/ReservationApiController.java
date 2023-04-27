@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class ReservationApiController {
 
     //일반 웹 예약
     @PostMapping("/v2/reservations")
-    public ResponseSuccessNoResult reserveByWeb(@RequestBody ReserveReq reserveReq, HttpServletRequest request) {
+    public ResponseSuccessNoResult reserveByWeb(@RequestBody @Validated ReserveReq reserveReq, HttpServletRequest request) {
         Long memberId = Long.parseLong(jwtTokenProvider.getSubject(jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER))));
         reserveTableFacadeService.reserve(memberId, reserveReq);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
@@ -40,7 +41,7 @@ public class ReservationApiController {
 
     //현장 예약
     @PostMapping("/v1/reservations/onsite/qr")
-    public ResponseSuccessNoResult reserveOnSiteByQRAuth(@RequestBody OnsiteReservationByQRReq reservationReq) {
+    public ResponseSuccessNoResult reserveOnSiteByQRAuth(@RequestBody @Validated OnsiteReservationByQRReq reservationReq) {
         Member matchedMember = authService.searchMatchedMember(reservationReq.getAccountQRContents());
         reserveTableService.reserveOnsiteByAccountQR(matchedMember, reservationReq);
         return new ResponseSuccessNoResult(RESERVATION_SUCCESS);
@@ -92,7 +93,7 @@ public class ReservationApiController {
     }
 
     @PostMapping("/v1/reservations/auth")
-    public ResponseSuccessNoResult checkInWithReservationQR(@RequestBody QRAuthReq qrContent) {
+    public ResponseSuccessNoResult checkInWithReservationQR(@RequestBody @Validated QRAuthReq qrContent) {
         reservationAuthService.checkInWIthReservationQR(qrContent);
         return new ResponseSuccessNoResult(RESERVATION_QR_CHECKIN_SUCCESS);
     }

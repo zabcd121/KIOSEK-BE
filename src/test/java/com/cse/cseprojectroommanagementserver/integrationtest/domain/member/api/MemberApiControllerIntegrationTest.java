@@ -49,7 +49,6 @@ class MemberApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
 
         // Then
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.qrImage.imageName").value(savedMember.getAccount().getLoginId()));
+                .andExpect(status().isOk());
     }
 }

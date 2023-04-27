@@ -44,9 +44,10 @@ public class BaseIntegrationTestWithSecurityFilter {
 
     @BeforeEach
     void setUp() {
-        member = memberSetUp.saveMember("29999999", passwordEncoder.encode("password1!"), "email@kumoh.ac.kr", "홍길동");
+        String loginId = "29999999";
+        member = memberSetUp.saveMember(loginId, passwordEncoder.encode("password1!"), "email@kumoh.ac.kr", "홍길동");
 //        member = memberSetUp.findMember("29999999");
-        LoginRes loginRes = authService.login(MemberReqDto.LoginReq.builder().loginId(member.getLoginId()).password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(MemberReqDto.LoginReq.builder().loginId(loginId).password("password1!").build(), RoleType.ROLE_MEMBER);
         accessToken = loginRes.getTokenInfo().getAccessToken();
     }
 }

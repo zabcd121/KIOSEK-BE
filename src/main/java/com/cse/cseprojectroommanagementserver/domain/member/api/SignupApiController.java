@@ -9,7 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
@@ -28,7 +29,7 @@ public class SignupApiController {
     }
 
     @GetMapping("/v1/members/signup/check-email")
-    public ResponseSuccessNoResult isDuplicatedEmail(@RequestParam String email) {
+    public ResponseSuccessNoResult isDuplicatedEmail(@RequestParam @Email(message = "유효하지 않은 이메일 형식입니다.", regexp = "^[a-zA-Z0-9._%+-]+@kumoh.ac.kr$") @Size(max = 50) String email) {
         signupService.checkDuplicationEmail(email);
         return new ResponseSuccessNoResult(EMAIL_USABLE);
     }
@@ -41,7 +42,7 @@ public class SignupApiController {
     }
 
     @PostMapping("/v1/members/signup/authcode")
-    public ResponseSuccessNoResult verifyAuthCodeToEmail(@RequestBody EmailAuthCodeVerifyReq emailAuthCodeReq) {
+    public ResponseSuccessNoResult verifyAuthCodeToEmail(@RequestBody @Validated EmailAuthCodeVerifyReq emailAuthCodeReq) {
         emailService.verifyEmailAuthCode(emailAuthCodeReq.email, emailAuthCodeReq.getCode());
 
         return new ResponseSuccessNoResult(AUTH_CODE_VERIFY_SUCCESS);

@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessN
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto.*;
@@ -22,7 +23,7 @@ public class AdminTableDeactivationApiController {
     private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
 
     @PostMapping("/v1/table-deactivations")
-    public ResponseSuccessNoResult deactivateTables(@RequestBody TableDeactivationReq tableDeactivationRequest) {
+    public ResponseSuccessNoResult deactivateTables(@RequestBody @Validated TableDeactivationReq tableDeactivationRequest) {
         tableDeactivateService.deactivateTables(tableDeactivationRequest);
         return new ResponseSuccessNoResult(TABLE_DEACTIVATE_SUCCESS);
     }

@@ -10,12 +10,14 @@ import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidPas
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -47,6 +49,7 @@ class AuthServiceUnitTest {
     @Mock MemberDetailsService memberDetailsService;
     @Mock RedisTemplate redisTemplate;
     @Mock PasswordEncoder passwordEncoder;
+    @Mock AES256 aes256;
 
     LoginReq loginReq;
 
@@ -65,13 +68,13 @@ class AuthServiceUnitTest {
     }
 
     @Test
-    @DisplayName("C1-01. 로그인 성공 - 관리자 아이디, 패스워드 모두 일치")
+    @DisplayName("C1-01. 로그인 성공 - 일반 회원 아이디, 패스워드 모두 일치")
     void 로그인_성공_일반회원_아이디패스워드_모두일치() {
         templateOfLoginSuccessTest(ROLE_MEMBER);
     }
 
     @Test
-    @DisplayName("C1-02. 로그인 성공 - 일반 회원 아이디, 패스워드 모두 일치")
+    @DisplayName("C1-02. 로그인 성공 - 관리자 아이디, 패스워드 모두 일치")
     void 로그인_성공_관리자_아이디패스워드_모두일치() {
         templateOfLoginSuccessTest(ROLE_ADMIN);
     }
@@ -80,10 +83,11 @@ class AuthServiceUnitTest {
     @DisplayName("C2-01. 로그인 실패 - 아이디 불일치 ")
     void 로그인_실패_아이디_불일치() {
         // Given
-        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willThrow(UsernameNotFoundException.class);
+        given(aes256.encrypt(loginReq.getLoginId())).willReturn("encryptId");
+        given(memberSearchableRepository.findByAccountLoginId("encryptId")).willThrow(UsernameNotFoundException.class);
 
         // When, Then
-        assertThrows(UsernameNotFoundException.class, () -> authService.login(loginReq,ROLE_MEMBER));
+        assertThrows(UsernameNotFoundException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
 
     @Test
@@ -91,7 +95,9 @@ class AuthServiceUnitTest {
     void 로그인_실패_아이디일치_비밀번호불일치() {
         // Given
         Member savedMember = getMember(ROLE_MEMBER);
-        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
+
+        given(aes256.encrypt(loginReq.getLoginId())).willReturn("encryptId");
+        given(memberSearchableRepository.findByAccountLoginId("encryptId")).willReturn(Optional.of(savedMember));
         User user = getUserOfSavedMember(savedMember);
         given(memberDetailsService.loadUserByUsername(savedMember.getMemberId().toString())).willReturn(user);
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
@@ -106,7 +112,8 @@ class AuthServiceUnitTest {
         AccountQR accountQR = getAccountQR();
         savedMember.changeAccountQR(accountQR);
 
-        given(memberSearchableRepository.findByAccountLoginId(loginReq.getLoginId())).willReturn(Optional.of(savedMember));
+        given(aes256.encrypt(loginReq.getLoginId())).willReturn("encryptId");
+        given(memberSearchableRepository.findByAccountLoginId("encryptId")).willReturn(Optional.of(savedMember));
 
         User user = getUserOfSavedMember(savedMember);
 
@@ -135,8 +142,8 @@ class AuthServiceUnitTest {
         return Member.builder()
                 .memberId(1L)
                 .name("김현석")
-                .email("20180335@kumoh.ac.kr")
-                .account(Account.builder().loginId("20180335").password("kiosek1234!").build())
+                .email("encryptEmail")
+                .account(Account.builder().loginId("encryptId").password("kiosek1234!").build())
                 .roleType(roleType)
                 .build();
     }
