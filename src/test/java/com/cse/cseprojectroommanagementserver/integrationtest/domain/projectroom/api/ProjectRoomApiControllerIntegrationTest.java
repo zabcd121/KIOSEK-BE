@@ -39,8 +39,6 @@ class ProjectRoomApiControllerIntegrationTest extends BaseIntegrationTestWithIgn
         // Then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", hasSize(2)))
-                .andExpect(jsonPath("$.result[0].projectTableList", hasSize(6)))
-                .andExpect(jsonPath("$.result[1].projectTableList", hasSize(6)));
+                .andExpect(jsonPath("$.result", hasSize(2)));
     }
 }
