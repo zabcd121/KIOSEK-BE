@@ -4,6 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Re
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -43,14 +44,14 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<SearchReservationRes> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
         return queryFactory
                 .select(Projections.fields(SearchReservationRes.class,
-                        reservation.projectTable.tableId.as("projectTableId"), projectTable.tableName,
+                        projectTable.tableId.as("projectTableId"), projectTable.tableName,
                         reservation.startAt, reservation.endAt, tableReturn.returnedAt))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
                 .where(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
                         .and(reservation.startAt.between(firstAt, lastAt)
-                                .and(reservation.reservationStatus.notIn(CANCELED))))
+                                .and(reservation.reservationStatus.notIn(CANCELED, UN_USED, RETURNED))))
                 .fetch();
     }
 
@@ -64,7 +65,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
-                .join(reservation.projectTable.projectRoom, projectRoom)
+                .join(projectTable.projectRoom, projectRoom)
                 .leftJoin(reservation.reservationQR, reservationQR)
                 .where(reservation.member.memberId.eq(memberId)
                         .and(reservation.reservationStatus.in(RESERVATION_COMPLETED, IN_USE, RETURN_WAITING)))
@@ -166,14 +167,15 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public Page<SearchReservationByPagingRes> findAllByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         List<SearchReservationByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchReservationByPagingRes.class,
-                            Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus, reservation.projectTable.projectRoom.roomName, reservation.projectTable.tableName).as("reservation"),
-                            Projections.fields(TableReturnSimpleInfoRes.class, reservation.tableReturn.tableReturnId, reservation.tableReturn.returnedAt, reservation.tableReturn.cleanUpPhoto).as("tableReturn"),
-                            Projections.fields(MemberSimpleInfoRes.class, reservation.member.memberId,reservation.member.account.loginId, reservation.member.name).as("member")
+                            Projections.fields(ReservationSimpleInfoRes.class, reservation.reservationId, reservation.startAt, reservation.endAt, reservation.reservationStatus, projectTable.projectRoom.roomName, projectTable.tableName).as("reservation"),
+                            Projections.fields(TableReturnSimpleInfoRes.class, tableReturn.tableReturnId, tableReturn.returnedAt, tableReturn.cleanUpPhoto).as("tableReturn"),
+                            Projections.fields(MemberSimpleInfoRes.class, member.memberId, member.account.loginId, member.name).as("member")
                 ))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.member, member)
-                .join(reservation.projectTable.projectRoom, projectRoom)
+                .join(reservation.projectTable, projectTable)
+                .join(projectTable.projectRoom, projectRoom)
                 .where(
                         startDtBetween(condition.getStartDt(), condition.getEndDt()),
                         memberNameEq(condition.getMemberName()),
@@ -191,7 +193,8 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.member, member)
-                .join(reservation.projectTable.projectRoom, projectRoom)
+                .join(reservation.projectTable, projectTable)
+                .join(projectTable.projectRoom, projectRoom)
                 .where(
                         startDtBetween(condition.getStartDt(), condition.getEndDt()),
                         memberNameEq(condition.getMemberName()),
