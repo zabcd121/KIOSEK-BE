@@ -36,7 +36,7 @@ class PenaltyApiControllerIntegrationTest extends BaseIntegrationTestWithSecurit
 
         // When
         ResultActions resultActions = mvc.perform(
-                        get("/api/v1/penalties")
+                        get("/api/v2/penalties")
                                 .header("Authorization", accessToken)
                                 .param("memberId", memberId.toString())
                                 .characterEncoding("UTF-8")
