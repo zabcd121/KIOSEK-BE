@@ -47,12 +47,11 @@ public class SignupService {
             try {
                 QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
                 Account account = Account.builder()
-                        .loginId(aes256.encrypt(signupReq.getLoginId()))
+                        .loginId((aes256.encrypt(signupReq.getLoginId())))
                         .password(passwordEncoder.encode(signupReq.getPassword())).build();
 
                 Member signupMember = Member.createMember(account,
-                        aes256.encrypt(signupReq.getEmail()),
-                        signupReq.getName(), accountQRCodeImage);
+                        aes256.encrypt(signupReq.getEmail()), signupReq.getName(), accountQRCodeImage);
 
                 signupRepository.save(signupMember);
             } catch (Exception e) {
@@ -70,14 +69,14 @@ public class SignupService {
     }
 
     public boolean checkDuplicationLoginId(String loginId) {
-        if(signupRepository.existsByAccountLoginId(loginId)) {
+        if(signupRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
             throw new LoginIdDuplicatedException();
         }
         return false;
     }
 
     public boolean checkDuplicationEmail(String email) {
-        if(signupRepository.existsByEmail(email)) {
+        if(signupRepository.existsByEmail(aes256.encrypt(email))) {
             throw new EmailDuplicatedException();
         }
         return false;

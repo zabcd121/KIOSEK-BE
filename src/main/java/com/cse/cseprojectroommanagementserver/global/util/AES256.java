@@ -1,5 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.util.Base64;
 public class AES256 {
 
     private String keyDir;
+    private String ivDir;
 
     private static String alg = "AES/CBC/PKCS5Padding";
 
@@ -23,7 +25,9 @@ public class AES256 {
 
     private byte[] key;
 
-    public AES256(@Value("${fileDir.aeskey}") String keyDir) throws Exception {
+    public AES256(@Value("${fileDir.aeskey}") String keyDir,
+                  @Value("${fileDir.iv}") String ivDir) throws Exception {
+        this.ivDir = ivDir;
         this.keyDir = keyDir;
         this.key = getKey();
         this.iv = generateIv();
@@ -69,11 +73,21 @@ public class AES256 {
         return new String(decrypted, "UTF-8");
     }
 
+//    private byte[] generateIv() throws Exception {
+//        SecureRandom secureRandom = new SecureRandom();
+//        byte[] iv = new byte[16];
+//        secureRandom.nextBytes(iv);
+//        return iv;
+//    }
+
     private byte[] generateIv() throws Exception {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] iv = new byte[16];
-        secureRandom.nextBytes(iv);
-        return iv;
+        File keyFile = new File(ivDir);
+        FileInputStream fis = new FileInputStream(keyFile);
+        byte[] keyBytes = new byte[(int) keyFile.length()];
+        fis.read(keyBytes);
+        fis.close();
+
+        return keyBytes;
     }
 
     private byte[] getKey() throws Exception {

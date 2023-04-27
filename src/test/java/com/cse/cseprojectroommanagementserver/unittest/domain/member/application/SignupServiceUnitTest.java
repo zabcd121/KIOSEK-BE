@@ -11,6 +11,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDupli
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
 import com.cse.cseprojectroommanagementserver.global.config.RedisConfig;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
 import com.google.zxing.WriterException;
@@ -46,6 +47,7 @@ public class SignupServiceUnitTest {
     @Mock QRGenerator qrGenerator;
     @Spy PasswordEncoder passwordEncoder;
     @Mock RedisTemplate redisTemplate;
+    @Mock AES256 aes256;
 
     SignupReq signupReq;
 
@@ -71,8 +73,11 @@ public class SignupServiceUnitTest {
     @DisplayName("C1. 회원가입 성공")
     void 회원가입_성공() {
         //Given
-        given(signupRepository.existsByAccountLoginId(signupReq.getLoginId())).willReturn(false);
-        given(signupRepository.existsByEmail(signupReq.getEmail())).willReturn(false);
+        given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
+        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+
+        given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
+        given(signupRepository.existsByEmail("encryptEmail")).willReturn(false);
         ValueOperations valueOperations = mock(ValueOperations.class);
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");
@@ -107,7 +112,8 @@ public class SignupServiceUnitTest {
     @DisplayName("C2-01. 회원가입 실패 - 중복 아이디")
     void 회원가입_실패_중복아이디() {
         // Given
-        given(signupRepository.existsByAccountLoginId(signupReq.getLoginId())).willThrow(LoginIdDuplicatedException.class);
+        given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
+        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(LoginIdDuplicatedException.class);
 
         // When, Then
         assertThrows(LoginIdDuplicatedException.class, () -> signupService.signup(signupReq));
@@ -117,7 +123,11 @@ public class SignupServiceUnitTest {
     @DisplayName("C2-02. 회원가입 실패 - 중복 이메일")
     void 회원가입_실패_중복이메일() {
         // Given
-        given(signupRepository.existsByEmail(signupReq.getEmail())).willThrow(EmailDuplicatedException.class);
+        given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
+        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+
+        given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
+        given(signupRepository.existsByEmail("encryptEmail")).willThrow(EmailDuplicatedException.class);
 
         // When, Then
         assertThrows(EmailDuplicatedException.class, () -> signupService.signup(signupReq));
@@ -127,8 +137,11 @@ public class SignupServiceUnitTest {
     @DisplayName("C2-03. 회원가입 실패 - QR 생성 실패")
     void 회원가입_실패_QR생성실패() {
         // Given
-        given(signupRepository.existsByAccountLoginId(signupReq.getLoginId())).willReturn(false);
-        given(signupRepository.existsByEmail(signupReq.getEmail())).willReturn(false);
+        given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
+        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+
+        given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
+        given(signupRepository.existsByEmail("encryptEmail")).willReturn(false);
         ValueOperations valueOperations = mock(ValueOperations.class);
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");

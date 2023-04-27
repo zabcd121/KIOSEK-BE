@@ -47,6 +47,7 @@ public class AuthService {
     @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
+        System.out.println("AES256 loginID" + aes256.encrypt(loginReq.getLoginId()));
         Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
         Authentication authentication = authenticateMember(member, loginReq.getPassword(), allowedRoleType);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);

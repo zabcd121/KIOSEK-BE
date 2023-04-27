@@ -6,6 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleTyp
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +21,14 @@ public class MemberSetUp {
     @Autowired
     private MemberSearchableRepository memberSearchableRepository;
 
+    @Autowired
+    private AES256 aes256;
+
     public Member saveMember(String loginId, String password, String email, String name) {
         return memberRepository.save(
                 Member.createMember(
-                        Account.builder().loginId(loginId).password(password).build(),
-                        email, name,
+                        Account.builder().loginId(aes256.encrypt(loginId)).password(password).build(),
+                        aes256.encrypt(email), name,
                         QRImage.builder().fileOriName(loginId).fileLocalName(loginId).fileUrl("/accounts/2023/03/1").content("!@#ASdasd1!").build()
                 )
         );
@@ -33,7 +37,7 @@ public class MemberSetUp {
     public Member saveAdmin(String loginId, String password) {
         return memberRepository.save(
                 Member.builder()
-                        .account(Account.builder().loginId(loginId).password(password).build())
+                        .account(Account.builder().loginId(aes256.encrypt(loginId)).password(password).build())
                         .roleType(ROLE_ADMIN)
                         .build()
 
