@@ -23,6 +23,7 @@ public class TableReturnService {
     private final ReservationSearchableRepository reservationSearchableRepository;
     private final FileUploadUtil fileUploadUtil;
 
+
     @Timed("kiosek.return")
     @Transactional
     public void returnTable(Long memberId, Long reservationId, MultipartFile cleanupPhoto) {
@@ -34,9 +35,7 @@ public class TableReturnService {
             throw new UnableToReturnAnotherUserReservationException();
         }
 
-        System.out.println("upload 전");
         Image image = fileUploadUtil.uploadReturnsImage(cleanupPhoto);
-        System.out.println("upload 후");
 
         tableReturnRepository.save(TableReturn.createReturn(findReservation, image));
     }
