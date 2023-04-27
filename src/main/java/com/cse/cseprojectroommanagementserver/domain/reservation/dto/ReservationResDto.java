@@ -93,7 +93,7 @@ public class ReservationResDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
-    @Getter
+    @Getter @Setter
     public static class SearchReservationByPagingRes {
         private ReservationSimpleInfoRes reservation;
 
