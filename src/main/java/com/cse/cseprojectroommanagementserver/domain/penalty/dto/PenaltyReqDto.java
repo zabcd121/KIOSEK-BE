@@ -5,6 +5,7 @@ import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalt
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_FORMAT;
@@ -16,7 +17,10 @@ public class PenaltyReqDto {
     @NoArgsConstructor
     @Getter
     public static class PenaltyImpositionReq {
+
+        @NotNull
         private Long memberId;
+
         private String description;
 
         @DateTimeFormat(pattern =LOCAL_DATE_FORMAT)

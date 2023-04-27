@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
@@ -16,13 +19,17 @@ public class ReservationReqDto {
     @NoArgsConstructor
     @Getter @Setter
     public static class ReserveReq {
+
+        @NotNull
         private Long projectTableId;
 
-        @NotBlank
+        @NotNull
+        @Future
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime startAt;
 
-        @NotBlank
+        @NotNull
+        @Future
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime endAt;
     }
@@ -32,15 +39,20 @@ public class ReservationReqDto {
     @NoArgsConstructor
     @Getter
     public static class OnsiteReservationByQRReq {
-        private String accountQRContents;
-        private Long projectTableId;
 
         @NotBlank
+        private String accountQRContents;
+
+        @NotNull
+        private Long projectTableId;
+
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime startAt;
 
-        @NotBlank
+        @NotNull
+        @Future
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime endAt;
@@ -51,8 +63,14 @@ public class ReservationReqDto {
     @NoArgsConstructor
     @Getter
     public static class OnsiteReservationByLoginFormReq {
+
+        @NotBlank
         private String loginId;
+
+        @NotBlank
         private String password;
+
+        @NotNull
         private Long projectTableId;
 
         @NotBlank
@@ -61,6 +79,7 @@ public class ReservationReqDto {
         private LocalDateTime startAt;
 
         @NotBlank
+        @Future
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE_TIME_FORMAT)
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime endAt;
@@ -83,6 +102,8 @@ public class ReservationReqDto {
     @NoArgsConstructor
     @Getter
     public static class QRAuthReq {
+
+        @NotBlank
         private String qrContent;
     }
 }

@@ -4,6 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.complaint.application.Compl
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
@@ -18,7 +19,7 @@ public class ComplaintApiController {
     private final ComplainService complainService;
 
     @PostMapping(value = "/v1/complaints", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE} )
-    public ResponseSuccessNoResult complain(ComplainReq complainReq) {
+    public ResponseSuccessNoResult complain(@ModelAttribute ComplainReq complainReq) {
         complainService.complain(complainReq);
         return new ResponseSuccessNoResult(COMPLAIN_SUCCESS);
     }

@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.Reser
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
 import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto.*;
@@ -23,7 +24,7 @@ public class AdminReservationPolicyApiController {
     private final ReservationPolicySearchService reservationPolicySearchService;
 
     @PutMapping("/v1/reservations/policies")
-    public ResponseSuccessNoResult changeReservationPolicy(@RequestBody ReservationPolicyChangeReq reservationPolicyChangeReq) {
+    public ResponseSuccessNoResult changeReservationPolicy(@RequestBody @Validated ReservationPolicyChangeReq reservationPolicyChangeReq) {
         reservationPolicyChangeService.changeReservationPolicy(reservationPolicyChangeReq);
 
         return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);

@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessN
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyReqDto.*;
@@ -28,7 +29,7 @@ public class AdminPenaltyApiController {
     }
 
     @PostMapping("/v1/penalties")
-    public ResponseSuccessNoResult imposePenalty(@RequestBody PenaltyImpositionReq penaltyReq) {
+    public ResponseSuccessNoResult imposePenalty(@RequestBody @Validated PenaltyImpositionReq penaltyReq) {
         penaltyImpositionService.imposePenalty(penaltyReq);
         return new ResponseSuccessNoResult(PENALTY_IMPOSITION_SUCCESS);
     }
