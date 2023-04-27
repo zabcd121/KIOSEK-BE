@@ -90,7 +90,7 @@ public class MemberResDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
-    @Getter
+    @Getter @Setter
     public static class MemberSimpleInfoRes {
         private Long memberId;
         private String loginId;
