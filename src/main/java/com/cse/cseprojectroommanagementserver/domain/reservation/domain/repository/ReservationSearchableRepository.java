@@ -12,7 +12,7 @@ import java.util.Optional;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
 
 public interface ReservationSearchableRepository {
-    List<SearchReservationRes> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt);
+    List<ReservationSearchRes> findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt);
 
     List<CurrentReservationByMemberRes> findCurrentAllByMemberId(Long memberId);
 

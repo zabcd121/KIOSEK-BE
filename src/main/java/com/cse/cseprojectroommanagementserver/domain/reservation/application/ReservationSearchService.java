@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.IsNotInUseTableException;
+import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 @RequiredArgsConstructor
 public class ReservationSearchService {
     private final ReservationSearchableRepository reservationSearchableRepository;
+    private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
     private final AES256 aes256;
 
     public Page<SearchReservationByPagingRes> searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
@@ -46,12 +49,24 @@ public class ReservationSearchService {
     }
 
     @Timed("kiosek.reservation")
-    public List<SearchReservationRes> searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
-        return reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(
-                projectRoomId,
-                firstAndLastDateTimeReq.getFirstAt(),
-                firstAndLastDateTimeReq.getLastAt()
+    public ReservationImpossibleSearchRes searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
+        ReservationImpossibleSearchRes reservationImpossibleSearchRes = new ReservationImpossibleSearchRes();
+
+        reservationImpossibleSearchRes.setReservedList(
+                reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(
+                        projectRoomId,
+                        firstAndLastDateTimeReq.getFirstAt(),
+                        firstAndLastDateTimeReq.getLastAt())
         );
+
+        reservationImpossibleSearchRes.setTableDeactivationList(
+                tableDeactivationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(
+                        projectRoomId,
+                        firstAndLastDateTimeReq.getFirstAt(),
+                        firstAndLastDateTimeReq.getLastAt())
+        );
+
+        return reservationImpossibleSearchRes;
     }
 
 
@@ -64,7 +79,7 @@ public class ReservationSearchService {
     }
 
     public boolean checkIsInUseTable(String tableName) {
-        if(!reservationSearchableRepository.existsCurrentInUseReservationByTableName(tableName)){
+        if (!reservationSearchableRepository.existsCurrentInUseReservationByTableName(tableName)) {
             throw new IsNotInUseTableException();
         }
         return true;
