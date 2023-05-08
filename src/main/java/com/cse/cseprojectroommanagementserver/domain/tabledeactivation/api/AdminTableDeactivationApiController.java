@@ -29,7 +29,7 @@ public class AdminTableDeactivationApiController {
     }
 
     @GetMapping("/v1/table-deactivations")
-    public ResponseSuccess<Page<AdminTableDeactivationSearchRes>> getDeactivationTableList(Pageable pageable) {
+    public ResponseSuccess<Page<TableDeactivationSearchRes>> getDeactivationTableList(Pageable pageable) {
         return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }
 

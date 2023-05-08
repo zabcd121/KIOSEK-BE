@@ -4,7 +4,6 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Re
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -41,11 +40,11 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<SearchReservationRes> findAllByProjectRoomIdAndBetweenFirstDateTimeAndLastDateTime(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
+    public List<ReservationSearchRes> findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
         return queryFactory
-                .select(Projections.fields(SearchReservationRes.class,
+                .select(Projections.fields(ReservationSearchRes.class,
                         projectTable.tableId.as("projectTableId"), projectTable.tableName,
-                        reservation.startAt, reservation.endAt, tableReturn.returnedAt))
+                        reservation.startAt, reservation.endAt, tableReturn.returnedAt, reservation.reservationStatus))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)

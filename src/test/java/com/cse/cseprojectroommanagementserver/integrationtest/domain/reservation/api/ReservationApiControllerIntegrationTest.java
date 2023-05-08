@@ -143,7 +143,7 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
 
         // Then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", hasSize(1)));
+                .andExpect(jsonPath("$.result.reservedList", hasSize(1)));
     }
 
     @Test

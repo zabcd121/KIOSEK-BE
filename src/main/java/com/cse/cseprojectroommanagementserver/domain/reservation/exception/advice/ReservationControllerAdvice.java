@@ -101,9 +101,9 @@ public class ReservationControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError notExistsReservationExHandler(InvalidAccountQRException ex) {
+    public ResponseError invalidAccountQRExHandler(InvalidAccountQRException ex) {
         log.error("[exceptionHandler] InvalidAccountQRException", ex);
-        return new ResponseError(RESERVATION_SEARCH_FAIL);
+        return new ResponseError(ACCOUNT_QR_INVALID);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -157,9 +157,16 @@ public class ReservationControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError EndAtIsBeforeStartAtExHandler(EndAtIsBeforeStartAtException ex) {
+    public ResponseError endAtIsBeforeStartAtExHandler(EndAtIsBeforeStartAtException ex) {
         log.error("[exceptionHandler] EndAtIsBeforeStartAtException", ex);
         return new ResponseError(RESERVATION_FAIL_ENDAT_BEFORE_STARTAT);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ResponseError disabledTableExHandler(DisabledTableException ex) {
+        log.error("[exceptionHandler] DisabledTableException", ex);
+        return new ResponseError(DISABLED_TABLE);
     }
 }
 

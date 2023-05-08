@@ -10,8 +10,9 @@ public class TableDeactivationResDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
-    public static class AdminTableDeactivationSearchRes {
+    public static class TableDeactivationSearchRes {
         private String roomName;
+        private Long projectTableId;
         private String tableName;
         private LocalDateTime startAt;
         private LocalDateTime endAt;
