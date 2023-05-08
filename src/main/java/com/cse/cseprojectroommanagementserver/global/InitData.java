@@ -95,7 +95,7 @@ public class InitData {
 
             ReservationPolicy reservationPolicy = ReservationPolicy.builder()
                     .reservationMaxHourPerOnce(new ReservationMaxHourPerOnce(4))
-                    .reservationMaxCountPerDay(new ReservationMaxCountPerDay(1))
+                    .reservationMaxCountPerDay(new ReservationMaxCountPerDay(20))
                     .reservationMaxPeriod(new ReservationMaxPeriod(2))
                     .appliedStatus(AppliedStatus.CURRENTLY)
                     .build();

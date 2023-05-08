@@ -3,7 +3,8 @@ package com.cse.cseprojectroommanagementserver.domain.tablereturn.application;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotExistsReservationException;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnAnotherUserReservationException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.global.common.Image;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class TableReturnService {
 
     private final TableReturnRepository tableReturnRepository;
+    private final TableReturnSearchableRepository tableReturnSearchableRepository;
     private final ReservationSearchableRepository reservationSearchableRepository;
     private final FileUploadUtil fileUploadUtil;
 
@@ -30,13 +32,20 @@ public class TableReturnService {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new NotExistsReservationException());
 
-        if(!findReservation.getMember().getMemberId().equals(memberId)) {
-            System.out.println("자기 예약이 아닌것은 반납할 수 없음");
-            throw new UnableToReturnAnotherUserReservationException();
+        if(!isMyReservation(memberId, findReservation) || isAlreadyReturnedReservation(reservationId)) {
+            throw new UnableToReturnException();
         }
 
         Image image = fileUploadUtil.uploadReturnsImage(cleanupPhoto);
 
         tableReturnRepository.save(TableReturn.createReturn(findReservation, image));
+    }
+
+    private boolean isMyReservation(Long memberId, Reservation reservation) {
+        return reservation.getMember().getMemberId().equals(memberId);
+    }
+
+    private boolean isAlreadyReturnedReservation(Long reservationId) {
+        return tableReturnSearchableRepository.existsByReservationId(reservationId);
     }
 }

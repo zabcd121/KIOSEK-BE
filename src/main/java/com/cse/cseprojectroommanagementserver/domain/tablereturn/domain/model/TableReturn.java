@@ -24,8 +24,8 @@ public class TableReturn extends BaseTimeEntity {
     private Long tableReturnId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id")
-    private Reservation targetReservation;
+    @JoinColumn(name = "reservation_id", unique = true)
+    private Reservation reservation;
 
     @Embedded
     private Image cleanUpPhoto;
@@ -54,21 +54,21 @@ public class TableReturn extends BaseTimeEntity {
     }
 
     private void changeReservation(Reservation reservation){
-        if(this.targetReservation != null) {
-            this.targetReservation.setTableReturn(null);
+        if(this.reservation != null) {
+            this.reservation.setTableReturn(null);
         }
-        this.targetReservation = reservation;
-        this.targetReservation.setTableReturn(this);
-        this.targetReservation.setReservationStatus(RETURNED);
+        this.reservation = reservation;
+        this.reservation.setTableReturn(this);
+        this.reservation.setReservationStatus(RETURNED);
     }
 
     private void changeReservationByAutoReturn(Reservation reservation) {
-        if(this.targetReservation != null) {
-            this.targetReservation.setTableReturn(null);
+        if(this.reservation != null) {
+            this.reservation.setTableReturn(null);
         }
-        this.targetReservation = reservation;
-        this.targetReservation.setTableReturn(this);
-        this.targetReservation.setReservationStatus(NOT_RETURNED);
+        this.reservation = reservation;
+        this.reservation.setTableReturn(this);
+        this.reservation.setReservationStatus(NOT_RETURNED);
     }
 
 }

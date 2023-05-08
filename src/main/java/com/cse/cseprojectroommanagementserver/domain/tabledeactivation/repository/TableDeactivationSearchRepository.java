@@ -37,10 +37,11 @@ public class TableDeactivationSearchRepository implements TableDeactivationSearc
     }
 
     @Override
-    public Page<AdminTableDeactivationSearchRes> findAllByPageable(Pageable pageable) {
-        List<AdminTableDeactivationSearchRes> content = queryFactory
-                .select(Projections.fields(AdminTableDeactivationSearchRes.class,
+    public Page<TableDeactivationSearchRes> findAllByPageable(Pageable pageable) {
+        List<TableDeactivationSearchRes> content = queryFactory
+                .select(Projections.fields(TableDeactivationSearchRes.class,
                         tableDeactivation.projectTable.projectRoom.roomName,
+                        tableDeactivation.projectTable.tableId.as("projectTableId"),
                         tableDeactivation.projectTable.tableName,
                         tableDeactivation.tableDeactivationInfo.startAt,
                         tableDeactivation.tableDeactivationInfo.endAt,
@@ -59,5 +60,25 @@ public class TableDeactivationSearchRepository implements TableDeactivationSearc
                 .from(tableDeactivation);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<TableDeactivationSearchRes> findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
+        return queryFactory
+                .select(Projections.fields(TableDeactivationSearchRes.class,
+                        tableDeactivation.projectTable.projectRoom.roomName,
+                        tableDeactivation.projectTable.tableId.as("projectTableId"),
+                        tableDeactivation.projectTable.tableName,
+                        tableDeactivation.tableDeactivationInfo.startAt,
+                        tableDeactivation.tableDeactivationInfo.endAt,
+                        tableDeactivation.tableDeactivationInfo.reason
+                ))
+                .from(tableDeactivation)
+                .join(tableDeactivation.projectTable, projectTable)
+                .join(tableDeactivation.projectTable.projectRoom, projectRoom)
+                .where(tableDeactivation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
+                        .and(tableDeactivation.tableDeactivationInfo.startAt.lt(lastAt))
+                        .and(tableDeactivation.tableDeactivationInfo.endAt.gt(firstAt)))
+                .fetch();
     }
 }

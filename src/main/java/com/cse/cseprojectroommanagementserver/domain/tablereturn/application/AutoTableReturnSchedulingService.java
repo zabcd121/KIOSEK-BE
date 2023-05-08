@@ -54,7 +54,7 @@ public class AutoTableReturnSchedulingService {
     public void autoCancelUnUsedReservation() {
         List<Reservation> unUsedReservationList = reservationSearchableRepository.findUnUsedReservations();
         for (Reservation unUsedReservation : unUsedReservationList) {
-            log.info("autoCancelUnUsedReservation 동작: reservation is unused");
+            log.debug("autoCancelUnUsedReservation 동작: reservation is unused");
             unUsedReservation.setReservationStatus(UN_USED);
         }
         addViolationLog(unUsedReservationList, ViolationContent.UN_USED_CONTENT);

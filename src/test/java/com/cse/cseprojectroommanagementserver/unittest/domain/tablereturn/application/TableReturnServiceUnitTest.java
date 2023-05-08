@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.application.TableReturnService;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
 import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
@@ -31,6 +32,7 @@ class TableReturnServiceUnitTest {
     TableReturnService tableReturnService;
 
     @Mock TableReturnRepository tableReturnRepository;
+    @Mock TableReturnSearchableRepository tableReturnSearchableRepository;
     @Mock ReservationSearchableRepository reservationSearchableRepository;
     @Mock FileUploadUtil fileUploadUtil;
 
@@ -51,6 +53,7 @@ class TableReturnServiceUnitTest {
                 .reservationId(1L)
                 .reservationStatus(ReservationStatus.IN_USE).build();
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
+        given(tableReturnSearchableRepository.existsByReservationId(reqReservationId)).willReturn(false);
 
         MockMultipartFile cleanupPhoto = new MockMultipartFile("cleanupPhoto", "imageBytes".getBytes(StandardCharsets.UTF_8));
         given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willReturn(Image.builder().build());

@@ -56,10 +56,10 @@ public class ReservationApiController {
 //    }
 
     @GetMapping("/v1/reservations")
-    public ResponseSuccess<List<SearchReservationRes>> getReservationListByProjectRoom(@RequestParam Long projectRoomId,
+    public ResponseSuccess<ReservationImpossibleSearchRes> getReservationListByProjectRoom(@RequestParam Long projectRoomId,
                                                                                        @ModelAttribute FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
-        List<SearchReservationRes> searchReservationList = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
-        return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, searchReservationList);
+        ReservationImpossibleSearchRes reservationImpossibleSearchRes = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
+        return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, reservationImpossibleSearchRes);
     }
 
     /**

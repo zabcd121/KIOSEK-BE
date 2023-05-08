@@ -59,23 +59,10 @@ public class Penalty extends BaseTimeEntity {
                 .member(member)
                 .description(description)
                 .startDt(LocalDate.now())
-                .endDt(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()))
+                .endDt(LocalDate.now().plusDays(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay()-1))
                 .build();
-
-//        for (Violation violation : violationList) {
-//            violation.changePenalty(penalty);
-//        }
 
         return penalty;
     }
-
-//    public void addViolation(Violation violation) {
-//        this.violations.add(violation);
-//
-//        if(violation.getPenalty() != this) {
-//            violation.changePenalty(this);
-//        }
-//    }
-
 
 }

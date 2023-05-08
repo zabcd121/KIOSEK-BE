@@ -37,7 +37,7 @@ public class Reservation extends BaseTimeEntity {
     @JoinColumn(name = "project_table_id")
     private ProjectTable projectTable;
 
-    @OneToOne(mappedBy = "targetReservation", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY)
     private TableReturn tableReturn;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -109,7 +109,7 @@ public class Reservation extends BaseTimeEntity {
     public void checkIn(boolean isPreviousReservationInUse) {
         if (isPreviousReservationInUse)
             throw new UnableToCheckInStatusException(); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
-        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 10분이상 전에는 체크인 불가
+        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
                 || LocalDateTime.now().isAfter(this.startAt.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
             throw new UnableToCheckInTimeException();
         }

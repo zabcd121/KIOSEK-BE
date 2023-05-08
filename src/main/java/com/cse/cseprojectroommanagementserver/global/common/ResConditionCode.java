@@ -51,6 +51,7 @@ public enum ResConditionCode {
     MEMBER_INFO_REISSUED("0215", "회원 정보 재발급"),
     MEMBER_MY_PAGE_INFO_SEARCH_SUCCESS("0216", "마이페이지 정보 조회 성공했습니다."),
     REFRESH_TOKEN_EXPIRED("0217", "refresh token이 만료되었습니다."),
+    ACCOUNT_QR_INVALID("0218", "유효하지 않은 QR 코드입니다."),
 
     /**
      * Reservation: 03
@@ -75,13 +76,14 @@ public enum ResConditionCode {
     RESERVATION_CHECKIN_FAIL_UNABLE_TO_CHECKIN_STATUS("0318", "이전 예약 사용중에는 체크인이 불가능합니다."),
     IN_USE_TABLE("0314", "사용중인 테이블입니다."),
     NOT_IN_USE_TABLE("0315", "예약 확인 후 사용해주세요"),
+    DISABLED_TABLE("0316", "현재 사용 불가능한 테이블입니다."),
 
     /**
      * Table Return: 04
      */
     RETURN_SUCCESS("0400", "반납 성공"),
     RETURN_FAIL("0400", "반납 실패"),
-    RETURN_FAIL_ANOTHER_USERS_RESERVATION("0402", "다른 유저의 예약은 반납할 수 없습니다."),
+    //RETURN_FAIL_ANOTHER_USERS_RESERVATION("0402", "다른 유저의 예약은 반납할 수 없습니다."),
 
     /**
      * Project Room: 05

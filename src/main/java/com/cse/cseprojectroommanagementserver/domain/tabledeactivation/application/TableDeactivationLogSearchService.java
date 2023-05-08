@@ -16,7 +16,7 @@ public class TableDeactivationLogSearchService {
 
     private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
 
-    public Page<AdminTableDeactivationSearchRes> searchTableDeactivationLog(Pageable pageable) {
+    public Page<TableDeactivationSearchRes> searchTableDeactivationLog(Pageable pageable) {
 
         return tableDeactivationSearchableRepository.findAllByPageable(pageable);
     }
