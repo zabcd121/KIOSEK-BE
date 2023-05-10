@@ -18,7 +18,7 @@
   </p>
 </div>
 
-<div align=center><h1>📚 STACKS</h1>
+<div align=center><h1>📚 BACKEND STACKS</h1>
 <img src="https://img.shields.io/badge/java-2E64FE?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 <br>
@@ -75,19 +75,40 @@
 <h1 align="center">🏗️ 서버 내부 구조</h1>
 <br>
 <div align="center">
-<img src="https://github.com/zabcd121/CSE-projectroom-management-Server/assets/68465716/d3258a2f-2ec4-49a5-9a5a-27a65d23cf92" width="900" align="center"></img>
+<img src="https://user-images.githubusercontent.com/68465716/237288889-b163ff56-208a-4ab4-a064-77ce5c9e9564.png" width="900" align="center"></img>
 </div>
 <br>
 <hr>
 
+<h1 align="center">설계 및 기술적인 고민 해결</h1>
+<hr>
+<br>
+<div align="center">
+    <h1 align="center">🎥 주요 기능 시연 영상</h1>
+    <h2 align="center"> 1️⃣ 예약 </h2>
+    <img src="https://user-images.githubusercontent.com/68465716/237363611-50fa5d46-1ef7-48b9-8c25-d083c4dab047.gif">
+    <h2 align="center"> 2️⃣ 체크인 </h2>
+    <img src="https://user-images.githubusercontent.com/68465716/237354711-477b7b4c-4f2c-4cba-ace2-a6efcd7530f4.gif">
+    <br>
+    <br>
+    <h2 align="center"> 3️⃣ 반납 시연 </h2>
+    <img src="https://user-images.githubusercontent.com/68465716/237363643-b9caf7a8-a994-471f-8f19-1b0c2ba420ab.gif">
+    <br>
+    <br>
+    <h2 align="center"> 4️⃣ 현장예약 시연 </h2>
+    <img src="https://user-images.githubusercontent.com/68465716/237353578-eb4f7cd4-34d4-4b54-a643-81401d435519.gif">
+</div>
+<hr>
+<br>
 <h1 align="center">🎨 UI 구현</h1>
+<div align="center">
 <h2 align="center"> 1️⃣ 예약 사용자 UI </h2>
-<h3>1. 회원가입</h3>
+<h2>1. 회원가입</h2>
 <img src="https://user-images.githubusercontent.com/68465716/237120059-495aacfe-5d8b-4278-a629-4faea41ad812.png" height="500">
-<h3>2. 예약페이지</h3>
+<h2>2. 예약페이지</h2>
 <img src="https://user-images.githubusercontent.com/68465716/237120048-f416e183-f514-45b1-ae4c-30e3f093d46f.png" height="700">
 
-<h3>3. 마이페이지</h3>
+<h2>3. 마이페이지</h2>
     <h3>(1) 예약 내역 조회</h3>
     <img src="https://user-images.githubusercontent.com/68465716/237259301-a39c3739-de01-4c99-825a-c3af3b892e06.png" width="800" height="500">
     <h3>(2) 과거 예약 내역 조회</h3>
@@ -104,30 +125,38 @@
 <hr>
 
 <h2 align="center"> 2️⃣ 키오스크 UI</h2>
-    <h3>1. 메인페이지</h3>
+    <h2>1. 메인페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237259321-8c4f14c4-0d4a-4d87-bf27-e1a09b60e5e5.png">
-    <h3>2. 현장예약 페이지</h3>
-    <p>(1) 사용할 테이블을 선택 - 각 테이블별로 최대 사용가능한 시간 표시</p>
+    <br>
+    <h2>2. 현장예약 페이지</h2>
+    <h3>(1) 사용할 테이블을 선택 - 각 테이블별로 최대 사용가능한 시간 표시</h3>
     <img src="https://user-images.githubusercontent.com/68465716/237259328-6902dd58-c793-4814-9ec3-7f73559bdc85.png">
-    <p>(2) 선택한 테이블의 사용 종료 시간 선택</p>
+    <br>
+    <br>
+    <h3>(2) 선택한 테이블의 사용 종료 시간 선택</h3>
     <img src="https://user-images.githubusercontent.com/68465716/237259332-f03fb3e7-b02b-4991-9478-4cc85562f560.png">
-    <p>(3) 마이페이지의 현장예약용 QR코드 인식</p>
-    <h3>3. 현장예약 페이지</h3>
+    <br>
+    <br>
+    <h3>(3) 마이페이지의 현장예약용 QR코드 인식</h3>
+    <br>
+    <h2>3. 예약확인 페이지</h2>
+    <img src="https://user-images.githubusercontent.com/68465716/237354711-477b7b4c-4f2c-4cba-ace2-a6efcd7530f4.gif">
 
 <hr>
 
-<h2 align="center">3️⃣ 관리자 UI</h2>
-    <h3>1. 예약 관리페이지</h3>
+<h2 align="center"> 3️⃣ 관리자 UI</h2>
+    <h2>1. 예약 관리페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237266147-1a8aef45-b9a2-4ac5-8908-1c6d294bce56.png">
     <img src="https://user-images.githubusercontent.com/68465716/237266141-639cffbf-97fd-4d0a-a4c4-2ad313c35c99.png">
-    <h3>2. 민원 관리페이지</h3>
+    <h2>2. 민원 관리페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237265815-d1c6bc82-e63d-41ff-8194-77b142be514d.png">
     <img src="https://user-images.githubusercontent.com/68465716/237267461-866a4696-d70d-4184-8bf8-ebee00230ba1.png">
-    <h3>3. 사용자 제재 관리페이지</h3>
+    <h2>3. 사용자 제재 관리페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237265818-353b0e3d-ee13-4cce-ab8c-ecab4f4ad5f9.png" width="1000" height="650">
     <img src="https://user-images.githubusercontent.com/68465716/237265823-fcd4e39b-f061-473e-8139-30abe9010106.png">
-    <h3>4. 예약 비활성화 관리페이지</h3>
+    <h2>4. 예약 비활성화 관리페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237265805-c26ccdb1-595b-4908-9017-0942e3291ffa.png" width="1000" height="650">
     <img src="https://user-images.githubusercontent.com/68465716/237265811-d1f74613-6134-4cb4-8fb4-aa51523e5182.png">
-    <h3>5. 정책 관리페이지</h3>
+    <h2>5. 정책 관리페이지</h2>
     <img src="https://user-images.githubusercontent.com/68465716/237265824-47bb161e-025c-4bff-9bf6-aec4ec2f920c.png" width="1000" height="650">
+</div>
