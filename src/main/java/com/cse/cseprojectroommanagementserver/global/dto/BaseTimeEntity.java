@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.common;
+package com.cse.cseprojectroommanagementserver.global.dto;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

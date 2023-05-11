@@ -7,7 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicyRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotExistsReservationPolicyException;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

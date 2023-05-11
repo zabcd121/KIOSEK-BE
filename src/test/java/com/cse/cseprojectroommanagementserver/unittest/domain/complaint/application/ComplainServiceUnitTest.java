@@ -6,7 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomRepository;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

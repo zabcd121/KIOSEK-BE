@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.UUID;
 

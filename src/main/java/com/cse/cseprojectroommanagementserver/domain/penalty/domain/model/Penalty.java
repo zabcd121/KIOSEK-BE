@@ -4,16 +4,14 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.penalty.exception.ImpossibleExtensionReqException;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Violation;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ProcessingStatus.PENALIZED;
 import static com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent.*;
 
 @Entity

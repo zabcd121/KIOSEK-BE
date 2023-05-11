@@ -1,6 +1,5 @@
-package com.cse.cseprojectroommanagementserver.global.common.dto;
+package com.cse.cseprojectroommanagementserver.global.dto;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

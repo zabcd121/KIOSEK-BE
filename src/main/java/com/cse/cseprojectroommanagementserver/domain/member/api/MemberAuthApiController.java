@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccessNoResult;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.TokenDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController
@@ -49,13 +49,13 @@ public class MemberAuthApiController {
     public ResponseSuccess<TokensDto> reissueToken(HttpServletRequest request){
         TokensDto tokensDto = authService.reissueToken(
                 jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER)));
-        return new ResponseSuccess(TOKEN_REISSUED, tokensDto);
+        return new ResponseSuccess(TOKEN_REISSUE_SUCCESS, tokensDto);
     }
 
     @GetMapping("/v1/members/reissue")
     public ResponseSuccess<LoginMemberInfoRes> refreshMemberInfo(HttpServletRequest request) {
         String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
         LoginMemberInfoRes memberInfo = authService.searchMemberInfo(Long.parseLong(jwtTokenProvider.getSubject(resolvedToken)));
-        return new ResponseSuccess<>(MEMBER_INFO_REISSUED, memberInfo);
+        return new ResponseSuccess<>(MEMBER_INFO_REISSUE_SUCCESS, memberInfo);
     }
 }

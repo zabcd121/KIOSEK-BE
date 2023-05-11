@@ -9,7 +9,7 @@ import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.Ta
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

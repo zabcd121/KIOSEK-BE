@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.integrationtest.domain.penaltypolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilterForAdmin;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltyPolicySetUp;
 import org.junit.jupiter.api.DisplayName;

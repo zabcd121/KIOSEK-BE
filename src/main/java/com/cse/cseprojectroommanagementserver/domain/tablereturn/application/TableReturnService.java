@@ -7,7 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;

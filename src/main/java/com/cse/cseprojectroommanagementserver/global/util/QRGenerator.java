@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.util;
 
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;

@@ -2,16 +2,15 @@ package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.application.PenaltyPolicyChangeService;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.application.PenaltyPolicySearchService;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResDto;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

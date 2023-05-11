@@ -17,8 +17,8 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.TOKEN_NOT_BEARER;
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.TOKEN_NOT_PASSED;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.BAD_REQUEST_TOKEN_NOT_BEARER;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.BAD_REQUEST_TOKEN_NOT_PASSED;
 
 @Component
 @Slf4j
@@ -132,11 +132,11 @@ public class JwtTokenProvider implements InitializingBean {
     public String resolveToken(String bearerToken) {
         if(bearerToken == null || bearerToken.equals("")) {
             log.info("bearer token not passed");
-            throw new TokenNotPassedException(TOKEN_NOT_PASSED.getMessage());
+            throw new TokenNotPassedException(BAD_REQUEST_TOKEN_NOT_PASSED.getMessage());
         }
 
         if(!bearerToken.startsWith(BEARER)) {
-            throw new TokenNotBearerException(TOKEN_NOT_BEARER.getMessage());
+            throw new TokenNotBearerException(BAD_REQUEST_TOKEN_NOT_BEARER.getMessage());
         }
         return bearerToken.substring(7);
     }

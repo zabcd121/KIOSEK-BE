@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.*;
 
 import javax.persistence.*;

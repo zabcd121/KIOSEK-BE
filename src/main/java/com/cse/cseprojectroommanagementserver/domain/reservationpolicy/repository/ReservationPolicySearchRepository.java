@@ -1,15 +1,13 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.QReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.QReservationPolicy.*;
-import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus.*;
 
 @Repository
 @RequiredArgsConstructor

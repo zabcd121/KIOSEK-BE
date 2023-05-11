@@ -4,7 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

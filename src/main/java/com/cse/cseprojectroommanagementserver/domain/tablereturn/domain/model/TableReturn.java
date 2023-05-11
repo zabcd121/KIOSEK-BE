@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

@@ -2,18 +2,16 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicyChangeService;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicySearchService;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyResDto;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccess;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseSuccessNoResult;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccessNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_CHANGE_SUCCESS;
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.RESERVATION_POLICY_CHANGE_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.RESERVATION_POLICY_SEARCH_SUCCESS;
 
 @RestController
 @RequestMapping("/api/admins")

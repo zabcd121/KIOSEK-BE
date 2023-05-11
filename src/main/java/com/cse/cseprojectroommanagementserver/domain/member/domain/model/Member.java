@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.member.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import lombok.*;
 
 import javax.persistence.*;

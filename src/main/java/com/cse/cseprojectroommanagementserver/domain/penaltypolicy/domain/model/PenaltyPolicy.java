@@ -1,12 +1,12 @@
 package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
 
-import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus.*;
 
 @Entity
 @Builder

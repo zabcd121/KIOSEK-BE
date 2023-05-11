@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.unittest.domain.tablereturn.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltyRepository;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.NumberOfSuspensionDay;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
@@ -17,7 +16,7 @@ import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Viol
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.ViolationContent;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.repository.ViolationRepository;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.repository.ViolationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

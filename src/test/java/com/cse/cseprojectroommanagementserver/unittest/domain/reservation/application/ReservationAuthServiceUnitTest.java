@@ -9,7 +9,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.exception.Unabl
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class ReservationAuthServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        qrAuthReq = QRAuthReq.builder().qrContent("example").build();
+        qrAuthReq = new QRAuthReq("example");
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
+import com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException{
-        setResponse(response, ResConditionCode.ACCESS_DENIED);
+        setResponse(response, ResConditionCode.ACCESS_FAIL_NO_AUTHORITY);
     }
 
     private void setResponse(HttpServletResponse response, ResConditionCode exceptionCode) throws IOException {

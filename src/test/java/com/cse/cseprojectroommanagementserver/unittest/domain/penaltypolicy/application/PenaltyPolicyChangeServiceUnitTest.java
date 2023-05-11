@@ -6,7 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.repository.PenaltyPolicyRepository;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotExistsPenaltyPolicyException;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

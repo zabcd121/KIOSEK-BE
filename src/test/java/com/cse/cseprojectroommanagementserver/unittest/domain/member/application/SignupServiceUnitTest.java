@@ -9,12 +9,10 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.Si
 import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRNotCreatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
-import com.cse.cseprojectroommanagementserver.global.config.RedisConfig;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
-import com.google.zxing.WriterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,8 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.io.IOException;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;

@@ -7,8 +7,8 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.exception.Unabl
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import lombok.*;
 
 import javax.persistence.*;

@@ -3,7 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.violation.domain.model;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;

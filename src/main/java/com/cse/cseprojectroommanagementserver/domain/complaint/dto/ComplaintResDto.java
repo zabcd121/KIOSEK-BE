@@ -1,16 +1,16 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.dto;
 
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.ProjectRoomResDto.*;
 
 
 public class ComplaintResDto {
-    @Builder
-    @AllArgsConstructor
+    @Builder(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
     public static class AdminComplaintSearchRes {
         private Long complaintId;
         private String subject;
