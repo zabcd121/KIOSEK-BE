@@ -2,23 +2,24 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exceptio
 
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api.AdminReservationPolicyApiController;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotExistsReservationPolicyException;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
+import com.cse.cseprojectroommanagementserver.global.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.RESERVATION_POLICY_SEARCH_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.RESERVATION_POLICY_SEARCH_FAIL;
 
 @RestControllerAdvice(assignableTypes = {AdminReservationPolicyApiController.class})
 @Slf4j
 public class ReservationPolicyControllerAdvice {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
-    public ResponseError notExistsReservationPolicyExHandler(NotExistsReservationPolicyException ex) {
+    public ResponseEntity<ErrorResponse> notExistsReservationPolicyExHandler(NotExistsReservationPolicyException ex) {
         log.error("[exceptionHandler] NotExistsReservationPolicyException", ex);
-        return new ResponseError(RESERVATION_POLICY_SEARCH_FAIL);
+        return ErrorResponse.toResponseEntity(RESERVATION_POLICY_SEARCH_FAIL);
     }
 }

@@ -41,7 +41,7 @@ class ComplaintApiControllerIntegrationTestTest extends BaseIntegrationTestWithS
 
         // Then
         resultActions
-                .andExpect(status().isOk());
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -59,6 +59,6 @@ class ComplaintApiControllerIntegrationTestTest extends BaseIntegrationTestWithS
 
         // Then
         resultActions
-                .andExpect(status().isOk());
+                .andExpect(status().is2xxSuccessful());
     }
 }

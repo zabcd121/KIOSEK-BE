@@ -217,7 +217,7 @@ class SignupApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
                 .andDo(print());
 
         // Then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isConflict());
     }
 
     @Test

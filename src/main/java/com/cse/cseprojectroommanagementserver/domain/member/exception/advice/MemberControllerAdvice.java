@@ -5,9 +5,10 @@ import com.cse.cseprojectroommanagementserver.domain.member.api.MemberApiControl
 import com.cse.cseprojectroommanagementserver.domain.member.api.MemberAuthApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.api.SignupApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
-import com.cse.cseprojectroommanagementserver.global.common.dto.ResponseError;
+import com.cse.cseprojectroommanagementserver.global.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -17,21 +18,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
 
 @RestControllerAdvice(assignableTypes = {MemberAuthApiController.class, AdminAuthApiController.class, SignupApiController.class, MemberApiController.class})
 @Slf4j
 public class MemberControllerAdvice {
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    
     @ExceptionHandler
-    public ResponseError emptyArgument(MethodArgumentNotValidException ex) {
-        ResponseError responseError = makeErrorResponse(ex.getBindingResult());
-        return responseError;
+    public ResponseEntity<ErrorResponse> methodArgumentExHandler(MethodArgumentNotValidException ex) {
+        return makeErrorResponse(ex.getBindingResult());
     }
 
-    private ResponseError makeErrorResponse(BindingResult bindingResult) {
-        ResponseError responseError = null;
+    private ResponseEntity<ErrorResponse> makeErrorResponse(BindingResult bindingResult) {
+        ResponseEntity<ErrorResponse> responseError = null;
 
         if (bindingResult.hasErrors()) {
             String bindResultField = bindingResult.getFieldError().getField();
@@ -41,31 +40,31 @@ public class MemberControllerAdvice {
             if(isNotBlank) {
                 switch(bindResultField) {
                     case "loginId":
-                        responseError = new ResponseError(LOGIN_ID_WRONG_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_LOGIN_ID_INVALID_TYPE);
                         break;
                     case "password":
-                        responseError = new ResponseError(PASSWORD_WRONG_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_PASSWORD_INVALID_TYPE);
                         break;
                     case "email":
-                        responseError = new ResponseError(EMAIL_WRONG_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_EMAIL_INVALID_TYPE);
                         break;
                     case "name":
-                        responseError = new ResponseError(NAME_WRONG_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_NAME_INVALID_TYPE);
                         break;
                 }
             } else {
                 switch (bindResultField) {
                     case "loginId":
-                        responseError = new ResponseError(LOGIN_ID_NULL);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_LOGIN_ID_NULL);
                         break;
                     case "password":
-                        responseError = new ResponseError(PASSWORD_NULL);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_PASSWORD_NULL);
                         break;
                     case "email":
-                        responseError = new ResponseError(EMAIL_NULL);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_EMAIL_NULL);
                         break;
                     case "name":
-                        responseError = new ResponseError(NAME_NULL);
+                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_NAME_NULL);
                         break;
                 }
             }
@@ -75,87 +74,87 @@ public class MemberControllerAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ResponseError notExistIdExHandler(UsernameNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> notExistIdExHandler(UsernameNotFoundException ex) {
         log.error("[exceptionHandler] UsernameNotFoundException", ex);
-        return new ResponseError(LOGIN_ID_NOT_EXIST);
+        return ErrorResponse.toResponseEntity(LOGIN_FAIL_ID_NOT_EXIST);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ResponseError invalidPWExHandler(InvalidPasswordException ex) {
+    public ResponseEntity<ErrorResponse> invalidPWExHandler(InvalidPasswordException ex) {
         log.error("[exceptionHandler] InvalidPasswordException", ex);
-        return new ResponseError(PASSWORD_INVALID);
+        return ErrorResponse.toResponseEntity(LOGIN_FAIL_PASSWORD_INVALID);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler
-    public ResponseError noAuthorityExHandler(NoAuthorityToLoginException ex) {
+    public ResponseEntity<ErrorResponse> noAuthorityExHandler(NoAuthorityToLoginException ex) {
         log.error("[exceptionHandler] NoAuthorityToLoginException", ex);
-        return new ResponseError(ACCESS_DENIED);
+        return ErrorResponse.toResponseEntity(ACCESS_FAIL_NO_AUTHORITY);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public ResponseError duplicatedLoginIdExHandler(LoginIdDuplicatedException ex) {
+    public ResponseEntity<ErrorResponse> duplicatedLoginIdExHandler(LoginIdDuplicatedException ex) {
         log.error("[exceptionHandler] LoginIdDuplicatedException", ex);
-        return new ResponseError(LOGIN_ID_DUPLICATED);
+        return ErrorResponse.toResponseEntity(LOGIN_ID_DUPLICATION_CHECK_FAIL_UNUSABLE);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public ResponseError duplicatedEmailExHandler(EmailDuplicatedException ex) {
+    public ResponseEntity<ErrorResponse> duplicatedEmailExHandler(EmailDuplicatedException ex) {
         log.error("[exceptionHandler] EmailDuplicatedException", ex);
-        return new ResponseError(EMAIL_DUPLICATED);
+        return ErrorResponse.toResponseEntity(EMAIL_DUPLICATION_CHECK_FAIL_UNUSABLE);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
-    public ResponseError notExistEqualRefreshTokenExHandler(NotExistsEqualRefreshTokenException ex) {
+    public ResponseEntity<ErrorResponse> notExistEqualRefreshTokenExHandler(NotExistsRefreshTokenException ex) {
         log.error("[exceptionHandler] NotExistsEqualRefreshTokenException", ex);
-        return new ResponseError(REFRESH_TOKEN_NOT_EXIST_IN_STORE);
+        return ErrorResponse.toResponseEntity(TOKEN_REISSUE_FAIL_REFRESH_TOKEN_NOT_EXIST_IN_STORE);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ResponseError notBearerTokenExHandler(TokenNotBearerTypeException ex) {
+    public ResponseEntity<ErrorResponse> notBearerTypeExHandler(TokenNotBearerTypeException ex) {
         log.error("[exceptionHandler] TokenNotBearerTypeException", ex);
-        return new ResponseError(TOKEN_NOT_BEARER);
+        return ErrorResponse.toResponseEntity(BAD_REQUEST_TOKEN_NOT_BEARER);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ResponseError refreshTokenIsExpiredExHandler(RefreshTokenIsExpiredException ex) {
+    public ResponseEntity<ErrorResponse> refreshTokenIsExpiredExHandler(RefreshTokenIsExpiredException ex) {
         log.error("[exceptionHandler] RefreshTokenIsExpiredException", ex);
-        return new ResponseError(REFRESH_TOKEN_EXPIRED);
+        return ErrorResponse.toResponseEntity(TOKEN_REISSUE_FAIL_REFRESH_TOKEN_EXPIRED);
     }
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ResponseError notCreatedAccountQRExHandler(AccountQRNotCreatedException ex) {
+    public ResponseEntity<ErrorResponse> notCreatedAccountQRExHandler(AccountQRNotCreatedException ex) {
         log.error("[exceptionHandler] AccountQRNotCreatedException", ex);
-        return new ResponseError(ACCOUNT_QR_CREATE_FAIL);
+        return ErrorResponse.toResponseEntity(ACCOUNT_QR_CREATE_FAIL);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
-    public ResponseError authCodeNotFoundExHandler(AuthCodeNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> authCodeNotFoundExHandler(AuthCodeNotFoundException ex) {
         log.error("[exceptionHandler] AuthCodeNotFoundException", ex);
-        return new ResponseError(AUTH_CODE_NOT_FOUND);
+        return ErrorResponse.toResponseEntity(AUTH_CODE_VERIFY_FAIL_NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public ResponseError authCodeNotEqExHandler(AuthCodeNotEqException ex) {
+    public ResponseEntity<ErrorResponse> authCodeNotEqExHandler(AuthCodeNotEqException ex) {
         log.error("[exceptionHandler] AuthCodeNotEqException", ex);
-        return new ResponseError(AUTH_CODE_VERIFY_FAIL);
+        return ErrorResponse.toResponseEntity(AUTH_CODE_VERIFY_FAIL);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public ResponseError authCodeNotVerifiedExHandler(AuthCodeNotVerifiedException ex) {
+    public ResponseEntity<ErrorResponse> authCodeNotVerifiedYetExHandler(AuthCodeNotVerifiedYetException ex) {
         log.error("[exceptionHandler] AuthCodeNotVerifiedException", ex);
-        return new ResponseError(AUTH_CODE_NOT_VERIFIED);
+        return ErrorResponse.toResponseEntity(AUTH_CODE_NOT_VERIFIED);
     }
 
 
