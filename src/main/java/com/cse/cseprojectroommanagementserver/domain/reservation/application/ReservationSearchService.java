@@ -2,7 +2,6 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.IsNotInUseTableException;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.util.AES256;
 import io.micrometer.core.annotation.Timed;
@@ -14,12 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
+import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
 
 @Service
 @Slf4j
@@ -30,45 +29,28 @@ public class ReservationSearchService {
     private final TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
     private final AES256 aes256;
 
+    /**
+     * TODO: decrypt에서 발생하는 예외처리 하기
+     */
     public Page<SearchReservationByPagingRes> searchReservationListByConditionAndPageable(ReservationSearchCondition condition, Pageable pageable) {
         Page<SearchReservationByPagingRes> reservationListByPage = reservationSearchableRepository.findAllByConditionAndPageable(condition, pageable);
-        List<SearchReservationByPagingRes> content = reservationListByPage.getContent();
-        List<SearchReservationByPagingRes> decryptedContent = content.stream()
-                .map(reservation -> {
-                    String decryptedLoginId = null;
-                    try {
-                        decryptedLoginId = aes256.decrypt(reservation.getMember().getLoginId());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    reservation.getMember().setLoginId(decryptedLoginId);
-                    return reservation;
-                }).collect(Collectors.toList());
 
+        List<SearchReservationByPagingRes> decryptedContent = decryptPersonalInfoInReservationContent(reservationListByPage.getContent());
+        
         return new PageImpl<>(decryptedContent, pageable, reservationListByPage.getTotalElements());
     }
 
     @Timed("kiosek.reservation")
-    public ReservationImpossibleSearchRes searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
-        ReservationImpossibleSearchRes reservationImpossibleSearchRes = new ReservationImpossibleSearchRes();
+    public ReservedAndTableDeactivationInfoRes searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
 
-        reservationImpossibleSearchRes.setReservedList(
-                reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(
-                        projectRoomId,
-                        firstAndLastDateTimeReq.getFirstAt(),
-                        firstAndLastDateTimeReq.getLastAt())
-        );
+        List<ReservationSearchRes> reservedList = reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
 
-        reservationImpossibleSearchRes.setTableDeactivationList(
-                tableDeactivationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(
-                        projectRoomId,
-                        firstAndLastDateTimeReq.getFirstAt(),
-                        firstAndLastDateTimeReq.getLastAt())
-        );
 
-        return reservationImpossibleSearchRes;
+        List<TableDeactivationSearchRes> tableDeactivationInfo = tableDeactivationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
+
+
+        return ReservedAndTableDeactivationInfoRes.of(reservedList, tableDeactivationInfo);
     }
-
 
     public List<CurrentReservationByMemberRes> searchMyCurrentReservationList(Long memberId) {
         return reservationSearchableRepository.findCurrentAllByMemberId(memberId);
@@ -78,11 +60,17 @@ public class ReservationSearchService {
         return reservationSearchableRepository.findPastAllByMemberId(memberId);
     }
 
-    public boolean checkIsInUseTable(String tableName) {
-        if (!reservationSearchableRepository.existsCurrentInUseReservationByTableName(tableName)) {
-            throw new IsNotInUseTableException();
-        }
-        return true;
+    private List<SearchReservationByPagingRes> decryptPersonalInfoInReservationContent(List<SearchReservationByPagingRes> encryptedContent) {
+        return encryptedContent.stream()
+                .map(reservationDto -> {
+                    try {
+                        String decryptedLoginId = aes256.decrypt(reservationDto.getMember().getLoginId());
+                        reservationDto.getMember().setLoginId(decryptedLoginId);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return reservationDto;
+                }).collect(Collectors.toList());
     }
 
 }
