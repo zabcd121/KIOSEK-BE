@@ -11,10 +11,9 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.exception.*;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
-import com.google.zxing.WriterException;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,7 +110,7 @@ public class ReserveTableService {
 
     private boolean isPenaltyMember(Long memberId) {
         if (penaltySearchRepository.existsByMemberId(memberId)) {
-            throw new PenaltyMemberReserveFailException();
+            throw new StoppedAccountException();
         }
         return false;
     }
@@ -132,7 +131,7 @@ public class ReserveTableService {
 
     private boolean isEndAtAfterStartAt(LocalDateTime startAt, LocalDateTime endAt) {
         if (endAt.isBefore(startAt)) {
-            throw new EndAtIsBeforeStartAtException();
+            throw new InvalidReservationRequestException();
         }
         return false;
     }

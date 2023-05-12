@@ -11,7 +11,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DisabledTableException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.PenaltyMemberReserveFailException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.StoppedAccountException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ReservationQRNotCreatedException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
@@ -126,7 +126,7 @@ class ReserveTableServiceUnitTest {
         given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(true);
 
         // When, Then
-        assertThrows(PenaltyMemberReserveFailException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(StoppedAccountException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
