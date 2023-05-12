@@ -92,14 +92,13 @@
     <h1 id="video">🎥 주요 기능 시연 영상</h1>
     <h2> 1️⃣ 예약 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237363611-50fa5d46-1ef7-48b9-8c25-d083c4dab047.gif">
+    <br><br>
     <h2> 2️⃣ 체크인 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237354711-477b7b4c-4f2c-4cba-ace2-a6efcd7530f4.gif">
-    <br>
-    <br>
+    <br><br>
     <h2> 3️⃣ 반납 시연 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237363643-b9caf7a8-a994-471f-8f19-1b0c2ba420ab.gif">
-    <br>
-    <br>
+    <br><br>
     <h2> 4️⃣ 현장예약 시연 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237353578-eb4f7cd4-34d4-4b54-a643-81401d435519.gif">
 <hr>
