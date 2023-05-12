@@ -8,9 +8,9 @@ import com.cse.cseprojectroommanagementserver.domain.tablereturn.application.Tab
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.FailedToUploadReturnImageException;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
-import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
+import com.cse.cseprojectroommanagementserver.global.util.fileupload.FileUploadUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,9 +80,9 @@ class TableReturnServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         MockMultipartFile cleanupPhoto = new MockMultipartFile("cleanupPhoto", "imageBytes".getBytes(StandardCharsets.UTF_8));
-        given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willThrow(ImageUploadFailException.class);
+        given(fileUploadUtil.uploadReturnsImage(cleanupPhoto)).willThrow(FailedToUploadReturnImageException.class);
 
         // When, Then
-        assertThrows(ImageUploadFailException.class, () -> tableReturnService.returnTable(memberId, reqReservationId, cleanupPhoto));
+        assertThrows(FailedToUploadReturnImageException.class, () -> tableReturnService.returnTable(memberId, reqReservationId, cleanupPhoto));
     }
 }

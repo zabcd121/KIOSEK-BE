@@ -5,9 +5,9 @@ import com.cse.cseprojectroommanagementserver.domain.complaint.domain.model.Comp
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository.ComplaintRepository;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomRepository;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.FailedToUploadReturnImageException;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
-import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
+import com.cse.cseprojectroommanagementserver.global.util.fileupload.FileUploadUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +58,7 @@ class ComplainServiceUnitTest {
         complainService.complain(complainReq);
 
         // Then
-        assertDoesNotThrow(() -> ImageUploadFailException.class);
+        assertDoesNotThrow(() -> FailedToUploadReturnImageException.class);
         then(complaintRepository).should(times(1)).save(any());
     }
 
@@ -68,9 +68,9 @@ class ComplainServiceUnitTest {
         // Given
         MockMultipartFile photo = new MockMultipartFile("example", "example".getBytes(StandardCharsets.UTF_8));
         ComplainReq complainReq = ComplainReq.builder().projectRoomId(1L).subject("subject").content("content").photo(photo).build();
-        given(fileUploadUtil.uploadComplainsImage(photo)).willThrow(ImageUploadFailException.class);
+        given(fileUploadUtil.uploadComplainsImage(photo)).willThrow(FailedToUploadReturnImageException.class);
 
         // When, Then
-        assertThrows(ImageUploadFailException.class, () -> complainService.complain(complainReq));
+        assertThrows(FailedToUploadReturnImageException.class, () -> complainService.complain(complainReq));
     }
 }

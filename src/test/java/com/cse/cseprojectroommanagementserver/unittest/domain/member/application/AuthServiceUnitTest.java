@@ -6,11 +6,11 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidPasswordException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.WrongPasswordException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -102,7 +102,7 @@ class AuthServiceUnitTest {
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
 
         // When, Then
-        assertThrows(InvalidPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
+        assertThrows(WrongPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
     
     private void templateOfLoginSuccessTest(RoleType roleType) {

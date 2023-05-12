@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
 import lombok.*;
 
 import javax.persistence.Embeddable;

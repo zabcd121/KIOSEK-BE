@@ -2,13 +2,14 @@ package com.cse.cseprojectroommanagementserver.domain.tablereturn.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotExistsReservationException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotFoundReservationException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnStatusException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.NoAuthorityToReturnException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
-import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
+import com.cse.cseprojectroommanagementserver.global.util.fileupload.FileUploadUtil;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,14 @@ public class TableReturnService {
     @Transactional
     public void returnTable(Long memberId, Long reservationId, MultipartFile cleanupPhoto) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
-                .orElseThrow(() -> new NotExistsReservationException());
+                .orElseThrow(() -> new NotFoundReservationException());
 
-        if(!isMyReservation(memberId, findReservation) || isAlreadyReturnedReservation(reservationId)) {
-            throw new UnableToReturnException();
+        if(!isMyReservation(memberId, findReservation)) {
+            throw new NoAuthorityToReturnException();
+        }
+
+        if(isAlreadyReturnedReservation(reservationId)) {
+            throw new UnableToReturnStatusException();
         }
 
         Image image = fileUploadUtil.uploadReturnsImage(cleanupPhoto);

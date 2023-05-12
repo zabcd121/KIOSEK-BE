@@ -12,14 +12,14 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DisabledTableException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.StoppedAccountException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.ReservationQRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.FailedToCreateReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
+import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,7 +113,7 @@ class ReserveTableServiceUnitTest {
         reserveTableService.reserve(memberId, reserveReq);
 
         // Then
-        assertDoesNotThrow(() -> ReservationQRNotCreatedException.class);
+        assertDoesNotThrow(() -> FailedToCreateReservationQRException.class);
         then(reservationRepository).should(times(1)).save(any());
     }
 

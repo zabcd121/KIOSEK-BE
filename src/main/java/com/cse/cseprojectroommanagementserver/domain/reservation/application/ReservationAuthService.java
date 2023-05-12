@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.InvalidReservationQRException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.WrongReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,10 @@ public class ReservationAuthService {
     @Transactional
     public void checkInWIthReservationQR(QRAuthReq qrAuthReq) {
         Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())
-                .orElseThrow(() -> new InvalidReservationQRException());
+                .orElseThrow(() -> new WrongReservationQRException());
+
         boolean isPreviousReservationInUse = reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt());
+
         findReservation.checkIn(isPreviousReservationInUse);
     }
 }

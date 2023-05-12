@@ -3,14 +3,12 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRNotCreatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.AuthCodeNotVerifiedYetException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.NotYetVerifiedAuthCodeException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedEmailException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedLoginIdException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
-import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
-import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,40 +38,37 @@ public class SignupService {
                 && !checkDuplicationEmail(signupReq.getEmail())
                 && checkAuthCodeIsVerified(signupReq.getEmail())) {
 
-            try {
-                QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
-                Account account = Account.builder()
-                        .loginId((aes256.encrypt(signupReq.getLoginId())))
-                        .password(passwordEncoder.encode(signupReq.getPassword())).build();
+            QRImage accountQRCodeImage = qrGenerator.createAccountQRCodeImage();
 
-                Member signupMember = Member.createMember(account,
-                        aes256.encrypt(signupReq.getEmail()), signupReq.getName(), accountQRCodeImage);
+            Account account = Account.builder()
+                    .loginId((aes256.encrypt(signupReq.getLoginId())))
+                    .password(passwordEncoder.encode(signupReq.getPassword())).build();
 
-                signupRepository.save(signupMember);
-            } catch (QRNotCreatedException ex) {
-                throw new AccountQRNotCreatedException();
-            }
+            Member signupMember = Member.createMember(account,
+                    aes256.encrypt(signupReq.getEmail()), signupReq.getName(), accountQRCodeImage);
+
+            signupRepository.save(signupMember);
         }
     }
 
     public boolean checkAuthCodeIsVerified(String email) {
-        if(redisTemplate.opsForValue().get(EV + email) == null) {
-            throw new AuthCodeNotVerifiedYetException();
+        if (redisTemplate.opsForValue().get(EV + email) == null) {
+            throw new NotYetVerifiedAuthCodeException();
         }
         redisTemplate.delete(EV + email);
         return true;
     }
 
     public boolean checkDuplicationLoginId(String loginId) {
-        if(signupRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
-            throw new LoginIdDuplicatedException();
+        if (signupRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
+            throw new DuplicatedLoginIdException();
         }
         return false;
     }
 
     public boolean checkDuplicationEmail(String email) {
-        if(signupRepository.existsByEmail(aes256.encrypt(email))) {
-            throw new EmailDuplicatedException();
+        if (signupRepository.existsByEmail(aes256.encrypt(email))) {
+            throw new DuplicatedEmailException();
         }
         return false;
     }

@@ -1,7 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.exception;
 
-public class StoppedAccountException extends RuntimeException {
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessLogicException;
+
+public class StoppedAccountException extends BusinessLogicException {
     public StoppedAccountException() {
-        super();
+        super(ErrorCode.RESERVE_FAIL_PENALTY_USER);
     }
 }

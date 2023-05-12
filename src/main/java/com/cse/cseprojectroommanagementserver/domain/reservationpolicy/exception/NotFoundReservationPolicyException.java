@@ -3,8 +3,8 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exceptio
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessLogicException;
 
-public class ExceedMaxTimeEnableReservationException extends BusinessLogicException {
-    public ExceedMaxTimeEnableReservationException() {
-        super(ErrorCode.RESERVE_FAIL_EXCEED_MAX_TIME);
+public class NotFoundReservationPolicyException extends BusinessLogicException {
+    public NotFoundReservationPolicyException() {
+        super(ErrorCode.RESERVATION_POLICY_SEARCH_FAIL);
     }
 }
