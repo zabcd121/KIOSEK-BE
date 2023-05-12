@@ -7,7 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.Me
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +66,7 @@ public class AuthService {
         try {
             jwtTokenProvider.validateToken(resolvedRefreshToken);
         } catch (ExpiredJwtException ex) {
-            throw new RefreshTokenIsExpiredException();
+            throw new ExpiredRefreshTokenException();
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
@@ -74,7 +74,7 @@ public class AuthService {
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new NotExistsRefreshTokenException();
+            throw new NotFoundRefreshTokenException();
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
@@ -107,15 +107,15 @@ public class AuthService {
                 .set(resolvedAccessToken, "logout", remainedExpiration, TimeUnit.MILLISECONDS);
     }
 
-    public LoginMemberInfoRes searchMemberInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistsMemberException());
+    public LoginMemberInfoRes searchMemberInfoByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundMemberException());
 
         return LoginMemberInfoRes.of(member);
     }
 
-    public Member searchMatchedMember(String accountQRContents) {
+    public Member searchMemberByAccountQR(String accountQRContents) {
         return memberSearchableRepository.findByAccountQRContents(accountQRContents)
-                .orElseThrow(() -> new InvalidAccountQRException());
+                .orElseThrow(() -> new WrongAccountQRException());
     }
 
 
@@ -146,7 +146,7 @@ public class AuthService {
 
     private boolean validatePassword(String requestPassword, String originPassword) {
         if(!passwordEncoder.matches(requestPassword, originPassword)) {
-            throw new InvalidPasswordException();
+            throw new WrongPasswordException();
         }
         return true;
     }

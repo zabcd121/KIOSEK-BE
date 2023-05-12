@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.TokenDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController
@@ -55,7 +55,7 @@ public class MemberAuthApiController {
     @GetMapping("/v1/members/reissue")
     public SuccessResponse<LoginMemberInfoRes> refreshMemberInfo(HttpServletRequest request) {
         String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
-        LoginMemberInfoRes memberInfo = authService.searchMemberInfo(Long.parseLong(jwtTokenProvider.getSubject(resolvedToken)));
+        LoginMemberInfoRes memberInfo = authService.searchMemberInfoByMemberId(Long.parseLong(jwtTokenProvider.getSubject(resolvedToken)));
         return new SuccessResponse<>(MEMBER_INFO_REISSUE_SUCCESS, memberInfo);
     }
 }

@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.LOGIN_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.LOGIN_SUCCESS;
 
 @RestController
 @RequestMapping("/api/admins")

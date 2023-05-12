@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penalty.application.PenaltySearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController

@@ -2,16 +2,16 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicyChangeService;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicySearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservationpolicy.dto.ReservationPolicyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.RESERVATION_POLICY_CHANGE_SUCCESS;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.RESERVATION_POLICY_SEARCH_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.RESERVATION_POLICY_CHANGE_SUCCESS;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.RESERVATION_POLICY_SEARCH_SUCCESS;
 
 @RestController
 @RequestMapping("/api/admins")

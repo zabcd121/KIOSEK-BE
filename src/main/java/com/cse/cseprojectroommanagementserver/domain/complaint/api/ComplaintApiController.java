@@ -1,13 +1,13 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.api;
 
 import com.cse.cseprojectroommanagementserver.domain.complaint.application.ComplainService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api")

@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.EmailService;
 import com.cse.cseprojectroommanagementserver.domain.member.application.SignupService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api")

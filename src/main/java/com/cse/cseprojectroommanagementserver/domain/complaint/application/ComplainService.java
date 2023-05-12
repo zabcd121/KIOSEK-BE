@@ -4,7 +4,7 @@ import com.cse.cseprojectroommanagementserver.domain.complaint.domain.model.Comp
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository.ComplaintRepository;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
-import com.cse.cseprojectroommanagementserver.global.util.FileUploadUtil;
+import com.cse.cseprojectroommanagementserver.global.util.fileupload.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.api;
 
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.application.TableReturnService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController

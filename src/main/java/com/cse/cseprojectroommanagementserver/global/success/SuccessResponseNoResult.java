@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.dto;
+package com.cse.cseprojectroommanagementserver.global.success;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SuccessResponse<T> {
+public class SuccessResponseNoResult {
     private String code;
     private String message;
-    private T result;
 
-    public SuccessResponse(SuccessCode conditionCode, T result) {
+    public SuccessResponseNoResult(SuccessCode conditionCode) {
         this.code = conditionCode.getCode();
         this.message = conditionCode.getMessage();
-        this.result = result;
     }
 }

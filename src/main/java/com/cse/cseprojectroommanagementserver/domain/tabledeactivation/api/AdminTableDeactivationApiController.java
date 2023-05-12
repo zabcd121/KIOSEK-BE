@@ -2,8 +2,8 @@ package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivateService;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivationLogSearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

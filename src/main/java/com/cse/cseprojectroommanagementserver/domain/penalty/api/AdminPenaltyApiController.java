@@ -3,8 +3,8 @@ package com.cse.cseprojectroommanagementserver.domain.penalty.api;
 import com.cse.cseprojectroommanagementserver.domain.penalty.application.PenaltyImpositionService;
 import com.cse.cseprojectroommanagementserver.domain.penalty.application.PenaltySearchService;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
-import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.success.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
+import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/admins")
