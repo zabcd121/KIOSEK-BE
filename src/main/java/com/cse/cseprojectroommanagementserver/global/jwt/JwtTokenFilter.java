@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.*;
 
 @Slf4j
