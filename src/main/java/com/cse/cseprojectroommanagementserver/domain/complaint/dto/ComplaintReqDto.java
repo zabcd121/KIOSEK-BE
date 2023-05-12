@@ -9,10 +9,9 @@ import java.io.Serializable;
 public class ComplaintReqDto {
 
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
-    @Setter
     public static class ComplainReq {
         @NotEmpty
         private Long projectRoomId;

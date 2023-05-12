@@ -34,30 +34,38 @@ public class TableDeactivateService {
      */
     @Transactional
     public void deactivateTables(TableDeactivationReq tableDeactivationReq) {
-        List<TableDeactivation> tableDeactivationList = getTableDeactivationList(tableDeactivationReq);
+        List<TableDeactivation> tableDeactivationList = convertToTableDeactivationList(tableDeactivationReq);
+
         cancelExistsReservationListWithTableDeactivation(tableDeactivationReq);
+
         tableDeactivationRepository.saveAll(tableDeactivationList);
     }
 
-    private List<TableDeactivation> getTableDeactivationList(TableDeactivationReq tableDeactivationReq) {
-        TableDeactivationInfo info = tableDeactivationReq.getTableDeactivationInfoReq().toEntity();
+    private List<TableDeactivation> convertToTableDeactivationList(TableDeactivationReq tableDeactivationReq) {
+        List<Long> projectTableIdList = tableDeactivationReq.getProjectTableIdList();
+        TableDeactivationInfoReq tableDeactivationInfoReq = tableDeactivationReq.getTableDeactivationInfoReq();
+
+        TableDeactivationInfo tableDeactivationInfo = tableDeactivationInfoReq.toEntity();
 
         List<TableDeactivation> tableDeactivationList = new ArrayList<>();
 
-        for (Long tableId : tableDeactivationReq.getProjectTableIdList()) {
-            if(!isDuplicatedDeactivation(tableId, info.getStartAt(), info.getEndAt())) {
+        projectTableIdList.forEach(tableId -> {
+            if(!isDuplicatedDeactivation(tableId, tableDeactivationInfo.getStartAt(), tableDeactivationInfo.getEndAt())) {
                 tableDeactivationList.add(
-                        TableDeactivation.createTableDeactivation(projectTableRepository.getReferenceById(tableId), info)
+                        TableDeactivation.createTableDeactivation(projectTableRepository.getReferenceById(tableId), tableDeactivationInfo)
                 );
             }
-        }
+        });
 
         return tableDeactivationList;
     }
 
     private void cancelExistsReservationListWithTableDeactivation(TableDeactivationReq tableDeactivationReq) {
         List<Long> projectTableIdList = tableDeactivationReq.getProjectTableIdList();
-        TableDeactivationInfo tableDeactivationInfo = tableDeactivationReq.getTableDeactivationInfoReq().toEntity();
+        TableDeactivationInfoReq tableDeactivationInfoReq = tableDeactivationReq.getTableDeactivationInfoReq();
+
+        TableDeactivationInfo tableDeactivationInfo = tableDeactivationInfoReq.toEntity();
+
         reservationUpdatableRepository.updateStatusBy(CANCELED, projectTableIdList, tableDeactivationInfo.getStartAt(), tableDeactivationInfo.getEndAt());
     }
 

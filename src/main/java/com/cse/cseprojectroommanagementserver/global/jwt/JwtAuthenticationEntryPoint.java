@@ -1,6 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.common.ResConditionCode;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.cse.cseprojectroommanagementserver.global.common.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 
 @Slf4j
@@ -33,29 +33,29 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         if(exception == null) {
             log.error("null token");
-            setResponse(response, ACCESS_DENIED);
+            setResponse(response, ACCESS_FAIL_NO_AUTHORITY);
         } else if(exception instanceof TokenNotPassedException) {
-            log.error(TOKEN_NOT_PASSED.getMessage());
-            setResponse(response, TOKEN_NOT_PASSED);
+            log.error(BAD_REQUEST_TOKEN_NOT_PASSED.getMessage());
+            setResponse(response, BAD_REQUEST_TOKEN_NOT_PASSED);
         } else if(exception instanceof TokenNotBearerException) {
-            log.error(TOKEN_NOT_BEARER.getMessage());
-            setResponse(response, TOKEN_NOT_BEARER);
+            log.error(BAD_REQUEST_TOKEN_NOT_BEARER.getMessage());
+            setResponse(response, BAD_REQUEST_TOKEN_NOT_BEARER);
         } else if(exception instanceof SignatureException) {
-            log.error(TOKEN_WRONG_SIGNATURE.getMessage());
-            setResponse(response, TOKEN_WRONG_SIGNATURE);
+            log.error(BAD_REQUEST_TOKEN_WRONG_SIGNATURE.getMessage());
+            setResponse(response, BAD_REQUEST_TOKEN_WRONG_SIGNATURE);
         } else if(exception instanceof ExpiredJwtException) {
-            log.error(TOKEN_EXPIRED.getMessage());
-            setResponse(response, TOKEN_EXPIRED);
+            log.error(BAD_REQUEST_TOKEN_EXPIRED.getMessage());
+            setResponse(response, BAD_REQUEST_TOKEN_EXPIRED);
         } else {
-            log.error(TOKEN_WRONG_TYPE.getMessage());
-            setResponse(response, TOKEN_WRONG_TYPE);
+            log.error(BAD_REQUEST_TOKEN_WRONG_TYPE.getMessage());
+            setResponse(response, BAD_REQUEST_TOKEN_WRONG_TYPE);
         }
 
         log.error("exception: {}", exception.getMessage());
 
     }
 
-    private void setResponse(HttpServletResponse response, ResConditionCode exceptionCode) throws IOException {
+    private void setResponse(HttpServletResponse response, ErrorCode exceptionCode) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 

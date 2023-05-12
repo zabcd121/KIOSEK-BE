@@ -2,15 +2,11 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.penalty.ap
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto;
 import com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltySearchCondition;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithIgnoringURI;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilterForAdmin;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.PenaltySetUp;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 
-import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penalty.dto.PenaltyReqDto.*;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.*;

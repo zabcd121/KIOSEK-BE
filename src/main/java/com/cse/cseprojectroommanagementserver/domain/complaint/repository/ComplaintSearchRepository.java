@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.repository;
 
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository.ComplaintSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;

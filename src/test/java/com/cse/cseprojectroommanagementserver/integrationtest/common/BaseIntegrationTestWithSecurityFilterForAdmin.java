@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
+
 @SpringBootTest
 @Disabled
 @AutoConfigureMockMvc
@@ -45,7 +47,7 @@ public class BaseIntegrationTestWithSecurityFilterForAdmin {
     void setUp() {
         String loginId = RandomStringUtils.random(8, true, true);
         admin = memberSetUp.saveAdmin(loginId, passwordEncoder.encode("admin1!"));
-        MemberResDto.LoginRes loginRes = authService.login(MemberReqDto.LoginReq.builder().loginId(loginId).password("admin1!").build(), RoleType.ROLE_ADMIN);
+        MemberResDto.LoginRes loginRes = authService.login(new LoginReq(loginId, "admin1!"), RoleType.ROLE_ADMIN);
         accessToken = loginRes.getTokenInfo().getAccessToken();
     }
 }

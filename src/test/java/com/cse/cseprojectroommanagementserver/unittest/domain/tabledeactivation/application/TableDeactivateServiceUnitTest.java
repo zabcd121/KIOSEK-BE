@@ -48,7 +48,16 @@ class TableDeactivateServiceUnitTest {
         List tableList = new ArrayList<>();
         tableList.add(1L);
         tableList.add(2L);
-        tableDeactivationReq = TableDeactivationReq.builder().projectRoomId(1L).projectTableIdList(tableList).tableDeactivationInfoReq(TableDeactivationInfoReq.builder().reason("특식 배부").startAt(LocalDateTime.now().plusDays(2)).endAt(LocalDateTime.now().plusDays(2).plusHours(3)).build()).build();
+        tableDeactivationReq = TableDeactivationReq.builder()
+                .projectRoomId(1L)
+                .projectTableIdList(tableList)
+                .tableDeactivationInfoReq(
+                        TableDeactivationInfoReq.builder()
+                                .reason("특식 배부")
+                                .startAt(LocalDateTime.now().plusDays(2))
+                                .endAt(LocalDateTime.now().plusDays(2).plusHours(3))
+                                .build())
+                .build();
     }
 
     /**

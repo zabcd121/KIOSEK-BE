@@ -1,7 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.InvalidReservationStatusCodeException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NullReservationStatusCodeException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public enum ReservationStatus {
 
     public static ReservationStatus ofCode(String inputStatusCode) {
         if(inputStatusCode == null) {
-            throw new NullReservationStatusCodeException();
+            throw new InvalidReservationStatusCodeException();
         }
 
         for (ReservationStatus rs : ReservationStatus.values()) {
@@ -37,7 +36,7 @@ public enum ReservationStatus {
 
     public static ReservationStatus ofStatus(String status) {
         if(status == null) {
-            throw new NullReservationStatusCodeException();
+            throw new InvalidReservationStatusCodeException();
         }
 
         for (ReservationStatus rs : ReservationStatus.values()) {

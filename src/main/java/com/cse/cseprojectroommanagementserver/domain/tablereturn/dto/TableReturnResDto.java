@@ -1,16 +1,15 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.dto;
 
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
 
 public class TableReturnResDto {
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+
     @NoArgsConstructor
     @Getter
     public static class TableReturnSimpleInfoRes {

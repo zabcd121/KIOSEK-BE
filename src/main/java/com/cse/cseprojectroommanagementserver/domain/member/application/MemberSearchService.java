@@ -45,7 +45,7 @@ public class MemberSearchService {
         }
         
 
-        return new MemberComplexInfoRes().of(member.getAccountQR(), violationsCount, currentPenalty, pastReservationsCount, penaltyCount);
+        return MemberComplexInfoRes.of(member.getAccountQR(), violationsCount, currentPenalty, pastReservationsCount, penaltyCount);
     }
 
 }

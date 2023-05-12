@@ -1,5 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.exception;
 
-public class DisabledTableException extends RuntimeException{
-    public DisabledTableException() {}
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessLogicException;
+
+public class DisabledTableException extends BusinessLogicException {
+    public DisabledTableException() {
+        super(ErrorCode.RESERVATION_FAIL_DISABLED_TABLE);
+    }
 }

@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Embeddable
 @Getter
@@ -27,7 +26,7 @@ public class ReservationMaxPeriod {
         LocalDateTime maxAvailableDateTimeForReservation = LocalDateTime.of(current.toLocalDate().plusDays(maxPeriod *7+1), LocalTime.of(8, 0));
 
         if(reservationEndDateTime.isAfter(maxAvailableDateTimeForReservation)) {
-            throw new ExceedMaxPeriodEnableReservationException("최대 " + maxAvailableDateTimeForReservation.format(DateTimeFormatter.ofPattern("MM월 dd알 HH시 mm분")) + " 까지만 예약 가능합니다." );
+            throw new ExceedMaxPeriodEnableReservationException();
         }
         return true;
     }

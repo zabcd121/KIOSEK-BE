@@ -1,13 +1,13 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.global.common.AppliedStatus.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus.*;
 
 @Entity
 @Builder

@@ -4,12 +4,12 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.P
 import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationAuthService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.InvalidReservationQRException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.WrongReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -42,7 +42,7 @@ class ReservationAuthServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        qrAuthReq = QRAuthReq.builder().qrContent("example").build();
+        qrAuthReq = new QRAuthReq("example");
     }
 
     /**
@@ -91,7 +91,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(InvalidReservationQRException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(WrongReservationQRException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
     @Test

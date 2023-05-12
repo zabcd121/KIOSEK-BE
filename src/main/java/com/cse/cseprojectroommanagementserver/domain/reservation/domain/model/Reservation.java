@@ -2,13 +2,14 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelStatusException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelReservationException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NoAuthorityToCancelException;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Means.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
-import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy.*;
 
 @Entity
 @Builder
@@ -99,10 +100,9 @@ public class Reservation extends BaseTimeEntity {
     }
 
     public void cancel(Long memberId) {
-        if ((this.reservationStatus != RESERVATION_COMPLETED)
-                || !memberId.equals(member.getMemberId())) {
-            throw new UnableToCancelReservationException();
-        }
+        if ((this.reservationStatus != RESERVATION_COMPLETED)) throw new UnableToCancelStatusException();
+        if(!memberId.equals(member.getMemberId())) throw new NoAuthorityToCancelException();
+
         this.reservationStatus = CANCELED;
     }
 

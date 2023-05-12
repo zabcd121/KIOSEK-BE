@@ -15,7 +15,6 @@ public class ReservationPolicySearchService {
 
     @Transactional
     public ReservationPolicySearchRes searchReservationPolicy() {
-        return new ReservationPolicySearchRes()
-                .of(reservationPolicySearchableRepository.findCurrentlyPolicy());
+        return ReservationPolicySearchRes.of(reservationPolicySearchableRepository.findCurrentlyPolicy());
     }
 }

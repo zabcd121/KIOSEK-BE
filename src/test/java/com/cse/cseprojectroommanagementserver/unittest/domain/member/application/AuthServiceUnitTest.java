@@ -6,18 +6,17 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.InvalidPasswordException;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.WrongPasswordException;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -64,7 +63,7 @@ class AuthServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        loginReq = LoginReq.builder().loginId("20180335").password("kiosek1234!").build();
+        loginReq = new LoginReq("20180335", "kiosek1234!");
     }
 
     @Test
@@ -103,7 +102,7 @@ class AuthServiceUnitTest {
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
 
         // When, Then
-        assertThrows(InvalidPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
+        assertThrows(WrongPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
     
     private void templateOfLoginSuccessTest(RoleType roleType) {

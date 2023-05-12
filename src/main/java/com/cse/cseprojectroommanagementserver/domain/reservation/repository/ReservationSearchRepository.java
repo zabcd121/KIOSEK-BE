@@ -30,7 +30,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 import static com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.QReservationQR.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.ReservationFixedPolicy.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository

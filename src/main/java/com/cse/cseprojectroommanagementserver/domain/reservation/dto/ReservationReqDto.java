@@ -7,16 +7,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 
 public class ReservationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter @Setter
     public static class ReserveReq {
 
@@ -36,7 +35,7 @@ public class ReservationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class OnsiteReservationByQRReq {
 
@@ -60,7 +59,7 @@ public class ReservationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class OnsiteReservationByLoginFormReq {
 
@@ -87,9 +86,10 @@ public class ReservationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter @Setter
     public static class FirstAndLastDateTimeReq {
+
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime firstAt;
 
@@ -97,9 +97,8 @@ public class ReservationReqDto {
         private LocalDateTime lastAt;
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class QRAuthReq {
 

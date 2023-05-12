@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.config;
 
-import com.cse.cseprojectroommanagementserver.global.config.formatter.LocalDateFormatter;
-import com.cse.cseprojectroommanagementserver.global.config.formatter.LocalDateTimeFormatter;
+import com.cse.cseprojectroommanagementserver.global.formatter.LocalDateFormatter;
+import com.cse.cseprojectroommanagementserver.global.formatter.LocalDateTimeFormatter;
 import io.micrometer.core.aop.CountedAspect;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;

@@ -16,7 +16,6 @@ public class PenaltyPolicySearchService {
 
     @Transactional
     public PenaltyPolicySearchRes searchPenaltyPolicy() {
-        return new PenaltyPolicySearchRes()
-                .of(penaltyPolicySearchableRepository.findCurrentPenaltyPolicy());
+        return PenaltyPolicySearchRes.of(penaltyPolicySearchableRepository.findCurrentPenaltyPolicy());
     }
 }

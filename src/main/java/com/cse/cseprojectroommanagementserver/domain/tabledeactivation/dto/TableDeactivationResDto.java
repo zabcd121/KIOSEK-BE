@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 public class TableDeactivationResDto {
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
     public static class TableDeactivationSearchRes {

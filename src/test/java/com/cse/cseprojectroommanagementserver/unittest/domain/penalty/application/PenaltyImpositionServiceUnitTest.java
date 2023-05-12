@@ -6,7 +6,7 @@ import com.cse.cseprojectroommanagementserver.domain.penalty.application.Penalty
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.model.Penalty;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltyRepository;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.penalty.exception.ImpossibleExtensionReqException;
+import com.cse.cseprojectroommanagementserver.domain.penalty.exception.AlreadyStoppedAccountUntilRequestDateException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -88,6 +88,6 @@ class PenaltyImpositionServiceUnitTest {
         given(penaltySearchableRepository.findInProgressByMemberId(penaltyImpositionReq.getMemberId())).willReturn(Optional.of(inProgressPenalty));
 
         // When, Then
-        Assertions.assertThrows(ImpossibleExtensionReqException.class, () -> penaltyImpositionService.imposePenalty(penaltyImpositionReq));
+        Assertions.assertThrows(AlreadyStoppedAccountUntilRequestDateException.class, () -> penaltyImpositionService.imposePenalty(penaltyImpositionReq));
     }
 }

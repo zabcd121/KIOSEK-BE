@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.penaltypolicy.application;
 
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.repository.PenaltyPolicyRepository;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotExistsPenaltyPolicyException;
+import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotFoundPenaltyPolicyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ public class PenaltyPolicyChangeService {
     @Transactional
     public void changePenaltyPolicy(PenaltyPolicyChangeReq changeReq) {
         PenaltyPolicy originPolicy = penaltyPolicyRepository.findById(changeReq.getPenaltyPolicyId())
-                .orElseThrow(() -> new NotExistsPenaltyPolicyException());
+                .orElseThrow(() -> new NotFoundPenaltyPolicyException());
 
         penaltyPolicyRepository.save(createNewPenaltyPolicy(changeReq));
         originPolicy.toDeprecated();

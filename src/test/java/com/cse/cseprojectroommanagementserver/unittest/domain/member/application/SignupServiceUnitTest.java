@@ -6,15 +6,13 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.AccountQRNotCreatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.EmailDuplicatedException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.LoginIdDuplicatedException;
-import com.cse.cseprojectroommanagementserver.global.common.QRImage;
-import com.cse.cseprojectroommanagementserver.global.config.RedisConfig;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
-import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
-import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
-import com.google.zxing.WriterException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.FailedToCreateAccountQRException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedEmailException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedLoginIdException;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
+import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRNotCreatedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,8 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.io.IOException;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*;
@@ -113,10 +109,10 @@ public class SignupServiceUnitTest {
     void 회원가입_실패_중복아이디() {
         // Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(LoginIdDuplicatedException.class);
+        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(DuplicatedLoginIdException.class);
 
         // When, Then
-        assertThrows(LoginIdDuplicatedException.class, () -> signupService.signup(signupReq));
+        assertThrows(DuplicatedLoginIdException.class, () -> signupService.signup(signupReq));
     }
 
     @Test
@@ -127,10 +123,10 @@ public class SignupServiceUnitTest {
         given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
 
         given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
-        given(signupRepository.existsByEmail("encryptEmail")).willThrow(EmailDuplicatedException.class);
+        given(signupRepository.existsByEmail("encryptEmail")).willThrow(DuplicatedEmailException.class);
 
         // When, Then
-        assertThrows(EmailDuplicatedException.class, () -> signupService.signup(signupReq));
+        assertThrows(DuplicatedEmailException.class, () -> signupService.signup(signupReq));
     }
 
     @Test
@@ -150,6 +146,6 @@ public class SignupServiceUnitTest {
         given(qrGenerator.createAccountQRCodeImage()).willThrow(QRNotCreatedException.class);
 
         // When, Then
-        assertThrows(AccountQRNotCreatedException.class, () -> signupService.signup(signupReq));
+        assertThrows(FailedToCreateAccountQRException.class, () -> signupService.signup(signupReq));
     }
 }

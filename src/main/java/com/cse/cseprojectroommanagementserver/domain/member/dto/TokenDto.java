@@ -4,12 +4,14 @@ import lombok.*;
 
 public class TokenDto {
 
-    @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
     @Getter
     public static class TokensDto {
         private String accessToken;
         private String refreshToken;
+
+        public static TokensDto of(String accessToken, String refreshToken) {
+            return new TokensDto(accessToken, refreshToken);
+        }
     }
 }

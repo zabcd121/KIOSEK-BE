@@ -7,11 +7,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_FORMAT;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.LOCAL_DATE_FORMAT;
 
 public class PenaltyResDto {
 
-    @Builder
+    @NoArgsConstructor
+    @Getter
+    public static class SearchPenaltyByPagingRes {
+        private PenaltyLogRes penalty;
+        private MemberSimpleInfoRes member;
+    }
+
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
@@ -26,22 +32,9 @@ public class PenaltyResDto {
 
         private String description;
 
-        public PenaltyLogRes of(Penalty penalty) {
-            this.penaltyId = penalty.getPenaltyId();
-            this.startDt = penalty.getStartDt();
-            this.endDt = penalty.getEndDt();
-            this.description = penalty.getDescription();
+        public static PenaltyLogRes of(Penalty penalty) {
+            return new PenaltyLogRes(penalty.getPenaltyId(), penalty.getStartDt(), penalty.getEndDt(), penalty.getDescription());
 
-            return this;
         }
-    }
-
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter
-    public static class SearchPenaltyByPagingRes {
-        private PenaltyLogRes penalty;
-        private MemberSimpleInfoRes member;
     }
 }

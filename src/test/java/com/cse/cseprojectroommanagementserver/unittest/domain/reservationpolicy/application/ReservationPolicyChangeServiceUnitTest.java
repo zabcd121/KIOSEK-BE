@@ -6,8 +6,8 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxPeriod;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicyRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotExistsReservationPolicyException;
-import com.cse.cseprojectroommanagementserver.global.common.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.NotFoundReservationPolicyException;
+import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,6 +83,6 @@ class ReservationPolicyChangeServiceUnitTest {
         given(reservationPolicyRepository.findById(changeReq.getReservationPolicyId())).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(NotExistsReservationPolicyException.class, () -> reservationPolicyChangeService.changeReservationPolicy(changeReq));
+        assertThrows(NotFoundReservationPolicyException.class, () -> reservationPolicyChangeService.changeReservationPolicy(changeReq));
     }
 }

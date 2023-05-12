@@ -7,7 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.Me
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -47,27 +47,26 @@ public class AuthService {
     @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
-        System.out.println("AES256 loginID" + aes256.encrypt(loginReq.getLoginId()));
         Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
+
         Authentication authentication = authenticateMember(member, loginReq.getPassword(), allowedRoleType);
+
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
+
         saveRefreshTokenInRedis(refreshToken, authentication);
 
-        return LoginRes.builder()
-                .memberInfo(getLoginMemberInfoResponse(member))
-                .tokenInfo(getTokensDto(accessToken, refreshToken))
-                .build();
+        return LoginRes.of(
+                TokensDto.of(BEARER + accessToken, BEARER + refreshToken),
+                LoginMemberInfoRes.of(member));
     }
 
     @Transactional
     public TokensDto reissueToken(String resolvedRefreshToken) {
-        log.info("refresh Token: {}", resolvedRefreshToken);
-
         try {
             jwtTokenProvider.validateToken(resolvedRefreshToken);
         } catch (ExpiredJwtException ex) {
-            throw new RefreshTokenIsExpiredException();
+            throw new ExpiredRefreshTokenException();
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
@@ -75,11 +74,12 @@ public class AuthService {
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new NotExistsEqualRefreshTokenException();
+            throw new NotFoundRefreshTokenException();
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
         String newRefreshToken = jwtTokenProvider.createRefreshToken(authentication);
+
         redisTemplate.opsForValue().set(
                 RT + authentication.getName(),
                 newRefreshToken,
@@ -87,10 +87,7 @@ public class AuthService {
                 TimeUnit.MILLISECONDS);
 
 
-        return TokensDto.builder()
-                .accessToken(BEARER + newAccessToken)
-                .refreshToken(BEARER + newRefreshToken)
-                .build();
+        return TokensDto.of(BEARER + newAccessToken, BEARER + newRefreshToken);
     }
 
     /**
@@ -110,19 +107,15 @@ public class AuthService {
                 .set(resolvedAccessToken, "logout", remainedExpiration, TimeUnit.MILLISECONDS);
     }
 
-    public LoginMemberInfoRes searchMemberInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistsMemberException());
+    public LoginMemberInfoRes searchMemberInfoByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundMemberException());
 
-        return LoginMemberInfoRes.builder()
-                .memberId(member.getMemberId())
-                .name(member.getName())
-                .roleType(member.getRoleType())
-                .build();
+        return LoginMemberInfoRes.of(member);
     }
 
-    public Member searchMatchedMember(String accountQRContents) {
+    public Member searchMemberByAccountQR(String accountQRContents) {
         return memberSearchableRepository.findByAccountQRContents(accountQRContents)
-                .orElseThrow(() -> new InvalidAccountQRException());
+                .orElseThrow(() -> new WrongAccountQRException());
     }
 
 
@@ -130,7 +123,7 @@ public class AuthService {
 
         UserDetails userDetails = memberDetailsService.loadUserByUsername(member.getMemberId().toString());
 
-        matchPassword(password, userDetails.getPassword());
+        validatePassword(password, userDetails.getPassword());
 
         String role = "";
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
@@ -151,24 +144,9 @@ public class AuthService {
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
     }
 
-    private LoginMemberInfoRes getLoginMemberInfoResponse(Member member) {
-        return LoginMemberInfoRes.builder()
-                .memberId(member.getMemberId())
-                .name(member.getName())
-                .roleType(member.getRoleType())
-                .build();
-    }
-
-    private TokensDto getTokensDto(String accessToken, String refreshToken) {
-        return TokensDto.builder()
-                .accessToken(BEARER + accessToken)
-                .refreshToken(BEARER + refreshToken)
-                .build();
-    }
-
-    private boolean matchPassword(String requestPassword, String originPassword) {
+    private boolean validatePassword(String requestPassword, String originPassword) {
         if(!passwordEncoder.matches(requestPassword, originPassword)) {
-            throw new InvalidPasswordException();
+            throw new WrongPasswordException();
         }
         return true;
     }

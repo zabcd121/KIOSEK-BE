@@ -1,9 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.member.application;
 
-import com.cse.cseprojectroommanagementserver.domain.member.exception.AuthCodeNotEqException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.AuthCodeNotFoundException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.WrongAuthCodeException;
+import com.cse.cseprojectroommanagementserver.domain.member.exception.ExpiredAuthCodeException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -40,8 +38,8 @@ public class EmailService {
 
     public boolean verifyEmailAuthCode(String toEmail, String code) {
         String authCode = (String) redisTemplate.opsForValue().get(EM + toEmail);
-        if(authCode == null) throw new AuthCodeNotFoundException();
-        if(!authCode.equals(code)) throw new AuthCodeNotEqException();
+        if(authCode == null) throw new ExpiredAuthCodeException();
+        if(!authCode.equals(code)) throw new WrongAuthCodeException();
 
         redisTemplate.opsForValue()
                 .set(EV + toEmail, "completed", 180000L, TimeUnit.MILLISECONDS); // 인증완료 되었다는것을 저장해둠.

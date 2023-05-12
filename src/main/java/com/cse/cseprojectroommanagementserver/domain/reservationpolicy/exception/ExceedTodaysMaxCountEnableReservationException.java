@@ -1,7 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception;
 
-public class ExceedTodaysMaxCountEnableReservationException extends RuntimeException{
-    public ExceedTodaysMaxCountEnableReservationException(String message) {
-        super(message);
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessLogicException;
+
+public class ExceedTodaysMaxCountEnableReservationException extends BusinessLogicException {
+    public ExceedTodaysMaxCountEnableReservationException() {
+        super(ErrorCode.RESERVE_FAIL_EXCEED_MAX_COUNT);
     }
 }

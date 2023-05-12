@@ -48,6 +48,7 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
          * C1-03. 예약 내역 조회 성공 - 로그인 ID 조건 사용
          * C1-04. 예약 내역 조회 성공 - 예약 상태 조건 사용
          * C1-05. 예약 내역 조회 성공 - 프로젝트실 이름 조건 사용
+         * C1-05. 예약 내역 조회 성공 - 조건 없음
      */
 
     @Test
@@ -183,5 +184,29 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
         // Then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.content", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("C1-06. 예약 내역 조회 성공 - 조건 없음")
+    void 예약내역조회_성공_조건없음() throws Exception {
+        // Given
+        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
+        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
+        reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
+        reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusHours(3), LocalDateTime.now());
+
+        // When
+        ResultActions resultActions = mvc.perform(
+                        get("/api/admins/v1/reservations")
+                                .header("Authorization", accessToken)
+                                .param("pageNumber", "0")
+                                .characterEncoding("UTF-8")
+                                .accept(APPLICATION_JSON))
+                .andDo(print());
+
+        // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content", hasSize(2)));
     }
 }

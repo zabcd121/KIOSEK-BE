@@ -5,21 +5,20 @@ import lombok.*;
 
 public class PenaltyPolicyResDto {
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
     @Getter
     public static class PenaltyPolicySearchRes {
         private Long penaltyPolicyId;
         private Integer violationCountToImposePenalty;
         private Integer numberOfSuspensionDay;
 
-        public PenaltyPolicySearchRes of(PenaltyPolicy penaltyPolicy) {
-            this.penaltyPolicyId = penaltyPolicy.getPenaltyPolicyId();
-            this.violationCountToImposePenalty = penaltyPolicy.getViolationCountToImposePenalty().getCountOfViolationsToImposePenalty();
-            this.numberOfSuspensionDay = penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay();
-
-            return this;
+        public static PenaltyPolicySearchRes of(PenaltyPolicy penaltyPolicy) {
+            return PenaltyPolicySearchRes.builder()
+                    .penaltyPolicyId(penaltyPolicy.getPenaltyPolicyId())
+                    .violationCountToImposePenalty(penaltyPolicy.getViolationCountToImposePenalty().getCountOfViolationsToImposePenalty())
+                    .numberOfSuspensionDay(penaltyPolicy.getNumberOfSuspensionDay().getNumberOfSuspensionDay())
+                    .build();
         }
     }
 

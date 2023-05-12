@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.global.common.BaseTimeEntity;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.NOT_RETURNED;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.RETURNED;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 
 @Entity
 @Builder

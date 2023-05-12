@@ -3,7 +3,7 @@ package com.cse.cseprojectroommanagementserver.integrationtest.setup;
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.model.Complaint;
 import com.cse.cseprojectroommanagementserver.domain.complaint.domain.repository.ComplaintRepository;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
-import com.cse.cseprojectroommanagementserver.global.common.Image;
+import com.cse.cseprojectroommanagementserver.global.dto.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

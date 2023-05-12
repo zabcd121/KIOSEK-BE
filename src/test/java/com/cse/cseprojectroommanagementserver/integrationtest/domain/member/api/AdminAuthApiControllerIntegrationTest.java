@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,7 +35,7 @@ class AdminAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgnor
     void 관리자로그인_성공() throws Exception {
         // Given
         Member savedMember = memberSetUp.saveAdmin("20180335", passwordEncoder.encode("password1!"));
-        MemberReqDto.LoginReq loginReq = MemberReqDto.LoginReq.builder().loginId("20180335").password("password1!").build();
+        LoginReq loginReq = new LoginReq("20180335", "password1!");
 
         // When
         ResultActions resultActions = mvc.perform(

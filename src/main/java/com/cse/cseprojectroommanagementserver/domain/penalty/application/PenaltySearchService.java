@@ -26,7 +26,7 @@ public class PenaltySearchService {
 
         List<PenaltyLogRes> penaltyLogResList = new ArrayList<>();
         for (Penalty penalty : penaltyList) {
-            penaltyLogResList.add(new PenaltyLogRes().of(penalty));
+            penaltyLogResList.add(PenaltyLogRes.of(penalty));
         }
 
         return penaltyLogResList;
