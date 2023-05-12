@@ -67,8 +67,8 @@ public class PenaltySearchRepository implements PenaltySearchableRepository {
     public Page<SearchPenaltyByPagingRes> findAllByConditionAndPageable(PenaltySearchCondition condition, Pageable pageable) {
         List<SearchPenaltyByPagingRes> content = queryFactory
                 .select(Projections.fields(SearchPenaltyByPagingRes.class,
-                        Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDt, penalty.endDt, penalty.description).as("penalty"),
-                        Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name).as("member")
+                            Projections.fields(PenaltyLogRes.class, penalty.penaltyId, penalty.startDt, penalty.endDt, penalty.description).as("penalty"),
+                            Projections.fields(MemberSimpleInfoRes.class, penalty.member.memberId, penalty.member.account.loginId, penalty.member.name).as("member")
                 ))
                 .from(penalty)
                 .join(penalty.member, member)
