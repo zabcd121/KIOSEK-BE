@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
 import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
 
 @RestController

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api")

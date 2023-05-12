@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

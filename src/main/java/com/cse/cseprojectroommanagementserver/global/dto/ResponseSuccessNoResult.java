@@ -10,7 +10,7 @@ public class ResponseSuccessNoResult {
     private String code;
     private String message;
 
-    public ResponseSuccessNoResult(ResConditionCode conditionCode) {
+    public ResponseSuccessNoResult(SuccessCode conditionCode) {
         this.code = conditionCode.getCode();
         this.message = conditionCode.getMessage();
     }

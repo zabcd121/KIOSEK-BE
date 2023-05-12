@@ -11,7 +11,7 @@ public class ResponseSuccess<T> {
     private String message;
     private T result;
 
-    public ResponseSuccess(ResConditionCode conditionCode, T result) {
+    public ResponseSuccess(SuccessCode conditionCode, T result) {
         this.code = conditionCode.getCode();
         this.message = conditionCode.getMessage();
         this.result = result;

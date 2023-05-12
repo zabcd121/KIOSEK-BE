@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import static org.springframework.http.HttpStatus.*;
 
 @Getter
-public enum ResConditionCode {
+public enum SuccessCode {
     /**
      * Signup: 01
      */
@@ -81,7 +81,7 @@ public enum ResConditionCode {
     private final String code;
     private final String message;
 
-    ResConditionCode(final HttpStatus httpStatus, final String code, final String message) {
+    SuccessCode(final HttpStatus httpStatus, final String code, final String message) {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;

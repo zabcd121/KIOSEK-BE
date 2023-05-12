@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
 import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.penaltypolicy.dto.PenaltyPolicyResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.dto.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/admins")

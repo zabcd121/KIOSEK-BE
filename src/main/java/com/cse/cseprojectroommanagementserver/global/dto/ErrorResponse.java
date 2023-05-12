@@ -18,7 +18,7 @@ public class ErrorResponse {
         return new ResponseEntity<>(e, errorCode.getHttpStatus());
     }
 
-    public static ErrorResponse of(ResConditionCode errorCode) {
+    public static ErrorResponse of(SuccessCode errorCode) {
         return ErrorResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
