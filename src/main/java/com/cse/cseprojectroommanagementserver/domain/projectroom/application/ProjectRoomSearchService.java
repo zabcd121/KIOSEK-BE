@@ -25,7 +25,7 @@ public class ProjectRoomSearchService {
 
         for (ProjectRoom projectRoom : projectRoomRepository.findAll()) {
             List<ProjectTable> projectTableList = projectTableRepository.findAllByProjectRoom(projectRoom);
-            projectRoomSearchList.add(new ProjectRoomAndTableSearchRes().of(projectRoom, projectTableList));
+            projectRoomSearchList.add(ProjectRoomAndTableSearchRes.of(projectRoom, projectTableList));
         }
 
         return projectRoomSearchList;

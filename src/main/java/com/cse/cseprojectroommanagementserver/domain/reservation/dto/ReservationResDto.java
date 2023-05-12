@@ -15,7 +15,6 @@ import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvi
 
 public class ReservationResDto {
 
-    @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     public static class ReservationSimpleInfoRes {
@@ -34,16 +33,18 @@ public class ReservationResDto {
         private String tableName;
     }
 
-    @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter @Setter
-    public static class ReservationImpossibleSearchRes {
+    @Getter
+    public static class ReservedAndTableDeactivationInfoRes {
         List<ReservationSearchRes> reservedList;
         List<TableDeactivationSearchRes> tableDeactivationList;
+
+        public static ReservedAndTableDeactivationInfoRes of(List<ReservationSearchRes> reservedList, List<TableDeactivationSearchRes> tableDeactivationList) {
+            return new ReservedAndTableDeactivationInfoRes(reservedList, tableDeactivationList);
+        }
     }
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
@@ -62,16 +63,15 @@ public class ReservationResDto {
 
         private ReservationStatus reservationStatus;
 
-        public ReservationSearchRes of(Reservation reservation) {
-            this.projectTableId = reservation.getProjectTable().getTableId();
-            this.tableName = reservation.getProjectTable().getTableName();
-            this.startAt = reservation.getStartAt();
-            this.endAt = reservation.getEndAt();
-            if(reservation.getTableReturn() != null) {
-                this.returnedAt = reservation.getTableReturn().getReturnedAt();
-            }
-            this.reservationStatus = reservation.getReservationStatus();
-            return this;
+        public static ReservationSearchRes of(Reservation reservation) {
+            return ReservationSearchRes.builder()
+                    .projectTableId(reservation.getProjectTable().getTableId())
+                    .tableName(reservation.getProjectTable().getTableName())
+                    .startAt(reservation.getStartAt())
+                    .endAt(reservation.getEndAt())
+                    .returnedAt(reservation.getTableReturn() != null ? reservation.getTableReturn().getReturnedAt() : null)
+                    .reservationStatus(reservation.getReservationStatus())
+                    .build();
         }
     }
 
@@ -100,8 +100,6 @@ public class ReservationResDto {
         private String imageURL;
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
     public static class PastReservationByMemberRes {
@@ -123,10 +121,8 @@ public class ReservationResDto {
         private String tableName;
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
     public static class SearchReservationByPagingRes {
         private ReservationSimpleInfoRes reservation;
 

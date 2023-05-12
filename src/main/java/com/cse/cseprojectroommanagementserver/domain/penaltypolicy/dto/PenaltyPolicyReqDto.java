@@ -9,7 +9,7 @@ public class PenaltyPolicyReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class PenaltyPolicyChangeReq {
 

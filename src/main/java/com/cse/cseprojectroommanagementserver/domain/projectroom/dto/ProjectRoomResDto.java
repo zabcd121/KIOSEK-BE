@@ -6,35 +6,31 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.dto.ProjectTableResDto.*;
 
 public class ProjectRoomResDto {
 
+    @Builder(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter @Setter
+    @Getter
     public static class ProjectRoomAndTableSearchRes {
         private Integer priority;
         private Long projectRoomId;
         private String roomName;
         private List<ProjectTableSearchRes> projectTableList = new ArrayList<>();
 
-        public ProjectRoomAndTableSearchRes of(ProjectRoom projectRoom, List<ProjectTable> projectTableList) {
-            this.priority = projectRoom.getPriority();
-            this.projectRoomId = projectRoom.getProjectRoomId();
-            this.roomName = projectRoom.getRoomName();
-
-            for (ProjectTable projectTable : projectTableList) {
-                this.projectTableList.add(new ProjectTableSearchRes().of(projectTable));
-            }
-
-            return this;
+        public static ProjectRoomAndTableSearchRes of(ProjectRoom projectRoom, List<ProjectTable> projectTableList) {
+            return ProjectRoomAndTableSearchRes.builder()
+                    .priority(projectRoom.getPriority())
+                    .projectRoomId(projectRoom.getProjectRoomId())
+                    .roomName(projectRoom.getRoomName())
+                    .projectTableList(projectTableList.stream().map(ProjectTableSearchRes::of).collect(Collectors.toList()))
+                    .build();
         }
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor
     @Getter
     public static class SimpleProjectRoomRes {

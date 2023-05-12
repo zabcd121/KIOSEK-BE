@@ -7,11 +7,8 @@ import javax.validation.constraints.NotNull;
 
 public class TableReturnReqDto {
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @AllArgsConstructor
     @Getter
-    @Setter
     public static class TableReturnReq {
         @NotNull
         private Long reservationId;

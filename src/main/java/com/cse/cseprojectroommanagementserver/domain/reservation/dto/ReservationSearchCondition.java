@@ -11,9 +11,7 @@ import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvi
 
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
 @Getter
-@Setter
 public class ReservationSearchCondition {
 
     @DateTimeFormat(pattern = LOCAL_DATE_FORMAT)

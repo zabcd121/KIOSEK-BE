@@ -16,7 +16,7 @@ public class TableDeactivationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class TableDeactivationReq {
 
@@ -33,7 +33,7 @@ public class TableDeactivationReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class TableDeactivationInfoReq {
         @NotNull
@@ -47,9 +47,9 @@ public class TableDeactivationReqDto {
 
         public TableDeactivationInfo toEntity() {
             return TableDeactivationInfo.builder()
-                    .reason(reason)
-                    .startAt(startAt)
-                    .endAt(endAt)
+                    .reason(this.reason)
+                    .startAt(this.startAt)
+                    .endAt(this.endAt)
                     .build();
         }
     }

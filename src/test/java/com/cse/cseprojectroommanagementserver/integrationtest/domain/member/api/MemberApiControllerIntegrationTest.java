@@ -38,7 +38,7 @@ class MemberApiControllerIntegrationTest extends BaseIntegrationTestWithIgnoring
     void 회원개인정보조회_성공() throws Exception {
         // Given
         Member savedMember = memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
-        LoginRes loginRes = authService.login(LoginReq.builder().loginId("20180335").password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(new LoginReq("20180335", "password1!"), RoleType.ROLE_MEMBER);
 
         // When
         ResultActions resultActions = mvc.perform(

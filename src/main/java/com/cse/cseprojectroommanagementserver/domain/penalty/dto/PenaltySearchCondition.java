@@ -4,8 +4,7 @@ import lombok.*;
 
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
-@Getter @Setter
+@Getter
 public class PenaltySearchCondition {
     private String memberName;
     private String loginId;

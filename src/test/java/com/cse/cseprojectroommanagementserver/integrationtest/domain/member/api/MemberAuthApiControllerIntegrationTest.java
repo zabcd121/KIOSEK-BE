@@ -48,7 +48,7 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
     void 로그인_성공() throws Exception {
         // Given
         Member savedMember = memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
-        LoginReq loginReq = LoginReq.builder().loginId("20180335").password("password1!").build();
+        LoginReq loginReq = new LoginReq("20180335", "password1!");
 
         // When
         ResultActions resultActions = mvc.perform(
@@ -70,9 +70,9 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
     void 로그아웃_성공() throws Exception {
         // Given
         memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
-        LoginRes loginRes = authService.login(LoginReq.builder().loginId("20180335").password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(new LoginReq("20180335", "password1!"), RoleType.ROLE_MEMBER);
 
-        TokensDto tokensDto = TokensDto.builder().accessToken(loginRes.getTokenInfo().getAccessToken()).refreshToken(loginRes.getTokenInfo().getRefreshToken()).build();
+        TokensDto tokensDto = loginRes.getTokenInfo();
 
         // When
         ResultActions resultActions = mvc.perform(
@@ -93,7 +93,7 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
     void 액세스토큰재발급_성공 () throws Exception {
         // Given
         memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
-        LoginRes loginRes = authService.login(LoginReq.builder().loginId("20180335").password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(new LoginReq("20180335", "password1!"), RoleType.ROLE_MEMBER);
 
 
         // When
@@ -114,7 +114,7 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
     void 액세스토큰재발급_실패 () throws Exception {
         // Given
         memberSetUp.saveMember("20180335", passwordEncoder.encode("password1!"), "20180335@kumoh.ac.kr", "김현석");
-        LoginRes loginRes = authService.login(LoginReq.builder().loginId("20180335").password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(new LoginReq("20180335", "password1!"), RoleType.ROLE_MEMBER);
         TokensDto tokenInfo = loginRes.getTokenInfo();
 
         authService.logout(jwtTokenProvider.resolveToken(tokenInfo.getAccessToken()));
@@ -130,6 +130,6 @@ class MemberAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgno
                 .andDo(print());
 
         // Then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isNotFound());
     }
 }

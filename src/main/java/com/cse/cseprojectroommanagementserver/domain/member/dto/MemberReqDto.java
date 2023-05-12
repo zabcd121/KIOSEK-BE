@@ -8,9 +8,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class MemberReqDto {
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class LoginReq {
 
@@ -24,8 +24,8 @@ public class MemberReqDto {
 
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
-    @Getter @Setter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
     public static class SignupReq {
 
         @NotBlank(message = "학번을 입력해주세요.")
@@ -34,8 +34,6 @@ public class MemberReqDto {
         @Size(max = 8)
         private String loginId;
 
-
-        // regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[@#!~$%^&-+=()])(?=\\S+$).{8,16}$"
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Pattern(message = "최소 한개 이상의 대문자 또는 소문자와 숫자, 특수문자를 포함한 8자 이상 16자 이하의 비밀번호를 입력해야 합니다.",
                 regexp = "^(?=.*[a-zA-Z])(?=.*[\\W_])(?=.*\\d)(?!.*\\s).{8,16}$")
@@ -55,11 +53,11 @@ public class MemberReqDto {
         private String email;
     }
 
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class EmailAuthCodeVerifyReq {
+
         @NotBlank(message = "이메일을 입력해주세요.")
         @Email(message = "유효하지 않은 이메일 형식입니다.",
                 regexp = "^[a-zA-Z0-9._%+-]+@kumoh.ac.kr$")
