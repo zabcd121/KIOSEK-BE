@@ -2,8 +2,8 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.api;
 
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicyChangeService;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.application.ReservationPolicySearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccessNoResult;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +22,14 @@ public class AdminReservationPolicyApiController {
     private final ReservationPolicySearchService reservationPolicySearchService;
 
     @PutMapping("/v1/reservations/policies")
-    public ResponseSuccessNoResult changeReservationPolicy(@RequestBody @Validated ReservationPolicyChangeReq reservationPolicyChangeReq) {
+    public SuccessResponseNoResult changeReservationPolicy(@RequestBody @Validated ReservationPolicyChangeReq reservationPolicyChangeReq) {
         reservationPolicyChangeService.changeReservationPolicy(reservationPolicyChangeReq);
 
-        return new ResponseSuccessNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);
+        return new SuccessResponseNoResult(RESERVATION_POLICY_CHANGE_SUCCESS);
     }
 
     @GetMapping("/v1/reservations/policies")
-    public ResponseSuccess<ReservationPolicySearchRes> getCurrentReservationPolicy() {
-        return new ResponseSuccess(RESERVATION_POLICY_SEARCH_SUCCESS, reservationPolicySearchService.searchReservationPolicy());
+    public SuccessResponse<ReservationPolicySearchRes> getCurrentReservationPolicy() {
+        return new SuccessResponse(RESERVATION_POLICY_SEARCH_SUCCESS, reservationPolicySearchService.searchReservationPolicy());
     }
 }

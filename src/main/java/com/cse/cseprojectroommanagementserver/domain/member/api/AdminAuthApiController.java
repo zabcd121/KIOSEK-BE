@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.member.api;
 
 import com.cse.cseprojectroommanagementserver.domain.member.application.AuthService;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,8 @@ public class AdminAuthApiController {
     private final AuthService authService;
 
     @PostMapping("/v1/login")
-    public ResponseSuccess<LoginRes> login(@RequestBody @Validated LoginReq loginReq) {
+    public SuccessResponse<LoginRes> login(@RequestBody @Validated LoginReq loginReq) {
         LoginRes loginResponse = authService.login(loginReq, RoleType.ROLE_ADMIN);
-        return new ResponseSuccess(LOGIN_SUCCESS, loginResponse);
+        return new SuccessResponse(LOGIN_SUCCESS, loginResponse);
     }
 }

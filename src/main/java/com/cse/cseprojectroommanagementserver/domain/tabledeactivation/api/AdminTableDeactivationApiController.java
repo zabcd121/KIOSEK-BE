@@ -2,8 +2,8 @@ package com.cse.cseprojectroommanagementserver.domain.tabledeactivation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivateService;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.application.TableDeactivationLogSearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccessNoResult;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponseNoResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +23,14 @@ public class AdminTableDeactivationApiController {
     private final TableDeactivationLogSearchService tableDeactivationLogSearchService;
 
     @PostMapping("/v1/table-deactivations")
-    public ResponseSuccessNoResult deactivateTables(@RequestBody @Validated TableDeactivationReq tableDeactivationRequest) {
+    public SuccessResponseNoResult deactivateTables(@RequestBody @Validated TableDeactivationReq tableDeactivationRequest) {
         tableDeactivateService.deactivateTables(tableDeactivationRequest);
-        return new ResponseSuccessNoResult(TABLE_DEACTIVATE_SUCCESS);
+        return new SuccessResponseNoResult(TABLE_DEACTIVATE_SUCCESS);
     }
 
     @GetMapping("/v1/table-deactivations")
-    public ResponseSuccess<Page<TableDeactivationSearchRes>> getDeactivationTableList(Pageable pageable) {
-        return new ResponseSuccess(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
+    public SuccessResponse<Page<TableDeactivationSearchRes>> getDeactivationTableList(Pageable pageable) {
+        return new SuccessResponse(TABLE_DEACTIVATION_SEARCH_SUCCESS, tableDeactivationLogSearchService.searchTableDeactivationLog(pageable));
     }
 
 }

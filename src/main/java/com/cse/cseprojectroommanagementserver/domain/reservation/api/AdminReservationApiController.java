@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.api;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationSearchService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public class AdminReservationApiController {
     private final ReservationSearchService reservationSearchService;
 
     @GetMapping("/v1/reservations")
-    public ResponseSuccess<Page<SearchReservationByPagingRes>> getReservationList(ReservationSearchCondition searchCondition, Pageable pageable) {
-        return new ResponseSuccess(RESERVATION_SEARCH_SUCCESS, reservationSearchService.searchReservationListByConditionAndPageable(searchCondition, pageable));
+    public SuccessResponse<Page<SearchReservationByPagingRes>> getReservationList(ReservationSearchCondition searchCondition, Pageable pageable) {
+        return new SuccessResponse(RESERVATION_SEARCH_SUCCESS, reservationSearchService.searchReservationListByConditionAndPageable(searchCondition, pageable));
     }
 }

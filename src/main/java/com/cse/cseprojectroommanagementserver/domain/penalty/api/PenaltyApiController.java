@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.api;
 
 import com.cse.cseprojectroommanagementserver.domain.penalty.application.PenaltySearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +24,9 @@ public class PenaltyApiController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/v2/penalties")
-    public ResponseSuccess<List<PenaltyLogRes>> getPenaltyListByMemberId(HttpServletRequest request) {
+    public SuccessResponse<List<PenaltyLogRes>> getPenaltyListByMemberId(HttpServletRequest request) {
         Long memberId = Long.parseLong(jwtTokenProvider.getSubject(jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER))));
         List<PenaltyLogRes> penaltyLogResponseList = penaltySearchService.searchMemberPenaltyLogList(memberId);
-        return new ResponseSuccess(PENALTY_LOGS_SEARCH_SUCCESS, penaltyLogResponseList);
+        return new SuccessResponse(PENALTY_LOGS_SEARCH_SUCCESS, penaltyLogResponseList);
     }
 }

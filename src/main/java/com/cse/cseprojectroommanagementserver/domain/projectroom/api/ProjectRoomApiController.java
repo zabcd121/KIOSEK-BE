@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.projectroom.api;
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.application.ProjectRoomSearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,7 @@ public class ProjectRoomApiController {
     private final ProjectRoomSearchService projectRoomSearchService;
 
     @GetMapping("/v1/rooms")
-    public ResponseSuccess<List<ProjectRoomAndTableSearchRes>> getProjectRoomAndTableList() {
-        return new ResponseSuccess<>(PROJECT_ROOM_SEARCH_SUCCESS, projectRoomSearchService.searchAllProjectRoomAndTable());
+    public SuccessResponse<List<ProjectRoomAndTableSearchRes>> getProjectRoomAndTableList() {
+        return new SuccessResponse<>(PROJECT_ROOM_SEARCH_SUCCESS, projectRoomSearchService.searchAllProjectRoomAndTable());
     }
 }

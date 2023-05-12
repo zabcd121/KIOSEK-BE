@@ -1,7 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.complaint.api;
 
 import com.cse.cseprojectroommanagementserver.domain.complaint.application.ComplaintSearchService;
-import com.cse.cseprojectroommanagementserver.global.dto.ResponseSuccess;
+import com.cse.cseprojectroommanagementserver.global.dto.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ public class AdminComplaintApiController {
     private final ComplaintSearchService complaintSearchService;
 
     @GetMapping("/v1/complaints")
-    public ResponseSuccess<Page<AdminComplaintSearchRes>> getComplaintList(Pageable pageable) {
-        return new ResponseSuccess<>(COMPLAINT_SEARCH_SUCCESS, complaintSearchService.searchComplaintListByPageable(pageable));
+    public SuccessResponse<Page<AdminComplaintSearchRes>> getComplaintList(Pageable pageable) {
+        return new SuccessResponse<>(COMPLAINT_SEARCH_SUCCESS, complaintSearchService.searchComplaintListByPageable(pageable));
     }
 }

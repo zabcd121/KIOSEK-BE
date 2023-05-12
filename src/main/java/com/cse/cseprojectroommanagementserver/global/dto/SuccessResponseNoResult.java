@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ResponseSuccess<T> {
+public class SuccessResponseNoResult {
     private String code;
     private String message;
-    private T result;
 
-    public ResponseSuccess(SuccessCode conditionCode, T result) {
+    public SuccessResponseNoResult(SuccessCode conditionCode) {
         this.code = conditionCode.getCode();
         this.message = conditionCode.getMessage();
-        this.result = result;
     }
 }
