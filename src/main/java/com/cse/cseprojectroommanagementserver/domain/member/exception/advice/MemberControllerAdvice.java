@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.*;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {MemberAuthApiController.class, AdminAuthApiController.class, SignupApiController.class, MemberApiController.class})
 @Slf4j

@@ -17,8 +17,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.BAD_REQUEST_TOKEN_NOT_BEARER;
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.BAD_REQUEST_TOKEN_NOT_PASSED;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @Component
 @Slf4j

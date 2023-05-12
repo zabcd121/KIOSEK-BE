@@ -1,5 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.error.exception;
 
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter

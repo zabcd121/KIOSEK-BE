@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.PENALTY_IMPOSITION_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {AdminPenaltyApiController.class, PenaltyApiController.class})
 @Slf4j

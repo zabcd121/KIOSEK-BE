@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.RESERVATION_POLICY_SEARCH_FAIL;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {AdminReservationPolicyApiController.class})
 @Slf4j

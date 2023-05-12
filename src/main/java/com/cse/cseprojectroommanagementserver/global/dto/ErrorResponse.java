@@ -1,5 +1,6 @@
 package com.cse.cseprojectroommanagementserver.global.dto;
 
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
 
@@ -9,7 +10,7 @@ public class ErrorResponse {
     private String code;
     private String message;
 
-    public static ResponseEntity<ErrorResponse> toResponseEntity(ResConditionCode errorCode) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
         ErrorResponse e = ErrorResponse.builder()
                     .code(errorCode.getCode())
                     .message(errorCode.getMessage())

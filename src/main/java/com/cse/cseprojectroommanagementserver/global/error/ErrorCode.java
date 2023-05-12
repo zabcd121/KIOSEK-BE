@@ -1,9 +1,11 @@
 package com.cse.cseprojectroommanagementserver.global.error;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Getter
 public enum ErrorCode {
 
     /**
@@ -100,8 +102,7 @@ public enum ErrorCode {
     /**
      * Table Deactivation: 10
      */
-    //TABLE_DEACTIVATE_FAIL("1001", "테이블 비활성화 실패"),
-    TABLE_DEACTIVATE_FAIL_DUPLICATED(CONFLICT, "1002", "중복된 비활성화 내역으로 인한 실패"),
+    TABLE_DEACTIVATE_FAIL_DUPLICATED(CONFLICT, "1002", "중복된 비활성화 내역으로 인한 실패");
 
 
 
