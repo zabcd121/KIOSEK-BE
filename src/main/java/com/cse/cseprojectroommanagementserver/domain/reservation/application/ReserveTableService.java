@@ -12,8 +12,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
-import com.cse.cseprojectroommanagementserver.global.util.QRGenerator;
-import com.cse.cseprojectroommanagementserver.global.util.QRNotCreatedException;
+import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +45,7 @@ public class ReserveTableService {
     public Reservation reserve(Long memberId, ReserveReq reserveReq) {
         validateReservation(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
-        QRImage reservationQrImage = null;
-
-        try {
-            reservationQrImage = qrGenerator.createReservationQRCodeImage();
-        } catch (QRNotCreatedException e) {
-            throw new ReservationQRNotCreatedException();
-        }
+        QRImage reservationQrImage = qrGenerator.createReservationQRCodeImage();
 
         return reservationRepository.save(
                 Reservation.createReservation(
@@ -97,7 +90,7 @@ public class ReserveTableService {
 
     private void validateReservation(Long memberId, Long projectTableId, LocalDateTime startAt, LocalDateTime endAt) {
         if(!isPenaltyMember(memberId)
-                && !isDisabledTableAtTime(projectTableId, startAt, endAt)
+                && !isDisabledTable(projectTableId, startAt, endAt)
                 && !isDuplicatedReservation(projectTableId, startAt, endAt)
                 && !isEndAtAfterStartAt(startAt, endAt)) {
             ReservationPolicy reservationPolicy = findReservationPolicy();
@@ -115,7 +108,7 @@ public class ReserveTableService {
         return false;
     }
 
-    private boolean isDisabledTableAtTime(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
+    private boolean isDisabledTable(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
         if(tableDeactivationSearchableRepository.existsBy(tableId, startAt, endAt)) {
             throw new DisabledTableException();
         }
@@ -131,7 +124,7 @@ public class ReserveTableService {
 
     private boolean isEndAtAfterStartAt(LocalDateTime startAt, LocalDateTime endAt) {
         if (endAt.isBefore(startAt)) {
-            throw new InvalidReservationRequestException();
+            throw new WrongReservationRequestException();
         }
         return false;
     }
