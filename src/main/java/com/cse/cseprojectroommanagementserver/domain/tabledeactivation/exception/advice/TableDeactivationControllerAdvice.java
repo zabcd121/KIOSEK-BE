@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.cse.cseprojectroommanagementserver.global.dto.ResConditionCode.TABLE_DEACTIVATE_DUPLICATED;
+import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {AdminTableDeactivationApiController.class})
 @Slf4j
@@ -20,6 +20,6 @@ public class TableDeactivationControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> duplicatedReservationExHandler(DuplicatedDeactivationException ex) {
         log.error("[exceptionHandler] DuplicatedDeactivationException", ex);
-        return ErrorResponse.toResponseEntity(TABLE_DEACTIVATE_DUPLICATED);
+        return ErrorResponse.toResponseEntity(TABLE_DEACTIVATE_FAIL_DUPLICATED);
     }
 }
