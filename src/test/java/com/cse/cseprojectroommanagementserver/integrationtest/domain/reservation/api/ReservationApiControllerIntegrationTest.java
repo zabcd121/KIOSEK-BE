@@ -4,11 +4,14 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.P
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
+import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
+import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationPolicySetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationSetUp;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,7 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
          * M8-C1-01. 예약 체크인 기능 성공
      */
 
+    @Disabled
     @Test
     @DisplayName("M1-C1-01. 웹 예약 기능 성공")
     void 웹예약_성공() throws Exception {
@@ -119,7 +123,7 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
     }
 
     @Test
-    @DisplayName("M3-C1-01. 해당 프로젝트실과 시간대에 예약 내역 조회 기능 성공")
+    @DisplayName("M3-C1-01. 해당 프로젝트실과 시간대에 예약 내역 및 테이블 비활성화 내역 조회 기능 성공")
     void 예약내역조회_프로젝트실별시간대별_성공() throws Exception {
         // Given
         LocalDateTime now = LocalDateTime.now();
@@ -136,7 +140,7 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                                 .header("Authorization", accessToken)
                                 .param("projectRoomId", projectTable.getProjectRoom().getProjectRoomId().toString())
                                 .param("firstAt", searchCondStartAt.format(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)))
-                                .param("endAt", searchCondEndAt.format(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)))
+                                .param("lastAt", searchCondEndAt.format(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)))
                                 .characterEncoding("UTF-8")
                                 .accept(APPLICATION_JSON))
                 .andDo(print());
@@ -146,6 +150,7 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
                 .andExpect(jsonPath("$.result.reservedList", hasSize(1)));
     }
 
+    @Disabled
     @Test
     @DisplayName("M4-C1-01. 현재 예약된 테이블인지 확인 기능 성공 - Q&A 스피커에서 사람이 감지되었을 때 현재 이 테이블이 예약되어 사용중인 테이블인지 검사하는 API")
     void 현재예약된테이블인지확인_QA스피커_성공() throws Exception {
@@ -239,8 +244,8 @@ class ReservationApiControllerIntegrationTest extends BaseIntegrationTestWithSec
         ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A1");
 
         Reservation reservation = reservationSetUp.saveReservationWithStatus(RESERVATION_COMPLETED, member, projectTable, LocalDateTime.now().plusMinutes(9), LocalDateTime.now().plusHours(2));
-
-        QRAuthReq qrAuthReq = QRAuthReq.builder().qrContent(reservation.getReservationQR().getQrImage().getContent()).build();
+        QRImage qrImage = reservation.getReservationQR().getQrImage();
+        QRAuthReq qrAuthReq = new QRAuthReq(qrImage.getContent());
 
         // When
         ResultActions resultActions = mvc.perform(

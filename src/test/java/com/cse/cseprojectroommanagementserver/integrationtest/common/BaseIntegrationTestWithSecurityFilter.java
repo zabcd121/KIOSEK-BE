@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 
 @SpringBootTest
@@ -47,7 +48,7 @@ public class BaseIntegrationTestWithSecurityFilter {
         String loginId = "29999999";
         member = memberSetUp.saveMember(loginId, passwordEncoder.encode("password1!"), "email@kumoh.ac.kr", "홍길동");
 //        member = memberSetUp.findMember("29999999");
-        LoginRes loginRes = authService.login(MemberReqDto.LoginReq.builder().loginId(loginId).password("password1!").build(), RoleType.ROLE_MEMBER);
+        LoginRes loginRes = authService.login(new LoginReq(loginId, "password1!"), RoleType.ROLE_MEMBER);
         accessToken = loginRes.getTokenInfo().getAccessToken();
     }
 }
