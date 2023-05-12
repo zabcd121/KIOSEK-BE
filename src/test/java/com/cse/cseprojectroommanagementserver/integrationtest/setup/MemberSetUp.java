@@ -5,7 +5,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

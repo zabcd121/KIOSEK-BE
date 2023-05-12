@@ -7,10 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 
 public class ReservationReqDto {
 

@@ -4,13 +4,12 @@ import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.mo
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.LOCAL_DATE_TIME_FORMAT;
 
 public class TableDeactivationReqDto {
 

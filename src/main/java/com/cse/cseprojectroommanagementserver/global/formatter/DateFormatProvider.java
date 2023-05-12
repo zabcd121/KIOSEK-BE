@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.util;
+package com.cse.cseprojectroommanagementserver.global.formatter;
 
 public class DateFormatProvider {
     public static final String LOCAL_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";

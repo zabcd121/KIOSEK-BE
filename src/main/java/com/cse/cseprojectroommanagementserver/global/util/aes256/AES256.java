@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.util;
+package com.cse.cseprojectroommanagementserver.global.util.aes256;
 
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,6 @@ public class AES256 {
     }
 
     public String encrypt(String text) {
-        System.out.println("key = " + key);
-        System.out.println("iv = " + iv);
         byte[] encrypted = null;
         try{
             Cipher cipher = Cipher.getInstance(alg);
@@ -53,8 +51,6 @@ public class AES256 {
     }
 
     public String decrypt(String cipherText) throws Exception {
-        System.out.println("key = " + key);
-        System.out.println("iv = " + iv);
 
         byte[] decrypted = null;
 
@@ -72,13 +68,6 @@ public class AES256 {
 
         return new String(decrypted, "UTF-8");
     }
-
-//    private byte[] generateIv() throws Exception {
-//        SecureRandom secureRandom = new SecureRandom();
-//        byte[] iv = new byte[16];
-//        secureRandom.nextBytes(iv);
-//        return iv;
-//    }
 
     private byte[] generateIv() throws Exception {
         File keyFile = new File(ivDir);

@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.LOCAL_DATE_FORMAT;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.LOCAL_DATE_FORMAT;
 
 public class PenaltyResDto {
 

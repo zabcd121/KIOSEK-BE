@@ -1,7 +1,9 @@
-package com.cse.cseprojectroommanagementserver.global.util;
+package com.cse.cseprojectroommanagementserver.global.util.fileupload;
 
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.ImageUploadFailException;
+import com.cse.cseprojectroommanagementserver.domain.complaint.exception.FailedToUploadComplainImageException;
+import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.FailedToUploadReturnImageException;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
+import com.cse.cseprojectroommanagementserver.global.util.fileupload.FailedToUploadImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -30,15 +32,23 @@ public class FileUploadUtil {
     @Value("${fileDir.complains}")
     private String complains;
 
-    public Image uploadReturnsImage(MultipartFile multipartFile) {
-        return uploadFile(multipartFile, returns);
+    public Image uploadReturnsImage(MultipartFile multipartFile) throws FailedToUploadImageException {
+        try {
+            return uploadFile(multipartFile, returns);
+        } catch (FailedToUploadImageException e) {
+            throw new FailedToUploadReturnImageException();
+        }
     }
 
-    public Image uploadComplainsImage(MultipartFile multipartFile) {
-        return uploadFile(multipartFile, complains);
+    public Image uploadComplainsImage(MultipartFile multipartFile) throws FailedToUploadImageException {
+        try {
+            return uploadFile(multipartFile, complains);
+        } catch (FailedToUploadImageException e) {
+            throw new FailedToUploadComplainImageException();
+        }
     }
 
-    private Image uploadFile(MultipartFile multipartFile, String path) {
+    private Image uploadFile(MultipartFile multipartFile, String path) throws FailedToUploadImageException {
         if(multipartFile == null) {
             return null;
         }
@@ -60,7 +70,7 @@ public class FileUploadUtil {
                     .build();
 
         } catch (Exception e) {
-            throw new ImageUploadFailException();
+            throw new FailedToUploadImageException();
         }
     }
 

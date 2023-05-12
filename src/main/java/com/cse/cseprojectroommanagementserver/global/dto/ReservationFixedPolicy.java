@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.util;
+package com.cse.cseprojectroommanagementserver.global.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

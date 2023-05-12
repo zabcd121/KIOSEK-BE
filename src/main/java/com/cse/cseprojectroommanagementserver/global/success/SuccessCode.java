@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.dto;
+package com.cse.cseprojectroommanagementserver.global.success;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

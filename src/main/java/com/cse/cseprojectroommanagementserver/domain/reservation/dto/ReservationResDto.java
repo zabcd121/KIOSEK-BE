@@ -11,7 +11,7 @@ import java.util.List;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tabledeactivation.dto.TableDeactivationResDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 
 public class ReservationResDto {
 

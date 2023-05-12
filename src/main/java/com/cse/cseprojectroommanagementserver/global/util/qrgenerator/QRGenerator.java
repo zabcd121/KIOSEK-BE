@@ -1,5 +1,7 @@
-package com.cse.cseprojectroommanagementserver.global.util;
+package com.cse.cseprojectroommanagementserver.global.util.qrgenerator;
 
+import com.cse.cseprojectroommanagementserver.domain.member.exception.FailedToCreateAccountQRException;
+import com.cse.cseprojectroommanagementserver.domain.reservation.exception.FailedToCreateReservationQRException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -39,17 +41,25 @@ public class QRGenerator {
     private String accountQRDir;
 
     @Value("${fileDir.reservations}")
-    private String reservationQRDir; //    private static final String ACCOUNT_QR_DIR = "/Users/khs/Documents/qrCode";
+    private String reservationQRDir;
 
-    public QRImage createAccountQRCodeImage() throws QRNotCreatedException {
-            return createQRCodeImage(accountQRDir);
+    public QRImage createAccountQRCodeImage() throws FailedToCreateAccountQRException {
+        try{
+            return createQRCodeImage(reservationQRDir);
+        } catch(QRNotCreatedException e) {
+            throw new FailedToCreateAccountQRException();
+        }
     }
 
-    public QRImage createReservationQRCodeImage() throws QRNotCreatedException {
-        return createQRCodeImage(reservationQRDir);
+    public QRImage createReservationQRCodeImage() throws FailedToCreateReservationQRException {
+        try{
+            return createQRCodeImage(reservationQRDir);
+        } catch(QRNotCreatedException e) {
+            throw new FailedToCreateReservationQRException();
+        }
     }
 
-    private QRImage createQRCodeImage(String fixedDir){
+    private QRImage createQRCodeImage(String fixedDir) throws QRNotCreatedException{
         try {
             RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
             String content = generator.generate(30);
@@ -88,7 +98,7 @@ public class QRGenerator {
                     .build();
 
         } catch(WriterException | IOException e) {
-            throw new QRNotCreatedException("qr 코드 생성에 실패했습니다.");
+            throw new QRNotCreatedException();
         }
 
     }

@@ -14,7 +14,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

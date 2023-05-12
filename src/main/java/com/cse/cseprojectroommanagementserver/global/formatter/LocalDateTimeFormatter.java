@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.global.config.formatter;
+package com.cse.cseprojectroommanagementserver.global.formatter;
 
 import org.springframework.format.Formatter;
 

@@ -3,7 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.util.AES256;
+import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

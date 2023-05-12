@@ -2,15 +2,12 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.reservatio
 
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationPolicySetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationSetUp;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.NOT_RETURNED;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.RETURNED;
-import static com.cse.cseprojectroommanagementserver.global.util.DateFormatProvider.*;
+import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormatProvider.*;
 
 @Entity
 @Builder
