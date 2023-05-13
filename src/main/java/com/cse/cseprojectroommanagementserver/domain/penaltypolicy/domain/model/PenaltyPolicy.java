@@ -15,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus.*;
 @Getter
 public class PenaltyPolicy extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long penaltyPolicyId;
 
     @Embedded
@@ -24,6 +24,7 @@ public class PenaltyPolicy extends BaseTimeEntity {
     @Embedded
     private NumberOfSuspensionDay numberOfSuspensionDay;
 
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private AppliedStatus appliedStatus;
 

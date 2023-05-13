@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.m
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,6 +13,8 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxPeriod {
+
+    @Column(nullable = false)
     private Integer maxPeriod; //week
 
     /**

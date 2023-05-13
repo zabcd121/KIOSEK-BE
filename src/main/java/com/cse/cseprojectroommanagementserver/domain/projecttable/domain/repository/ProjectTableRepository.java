@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProjectTableRepository extends JpaRepository<ProjectTable, Long> {
-    List<ProjectTable> findAllByProjectRoom(ProjectRoom projectRoom);
 
     ProjectTable findByTableName(String tableName);
 }

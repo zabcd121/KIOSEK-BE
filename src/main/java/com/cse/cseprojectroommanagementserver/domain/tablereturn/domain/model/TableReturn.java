@@ -20,11 +20,11 @@ import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormat
 @Getter
 public class TableReturn extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tableReturnId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id", unique = true)
+    @JoinColumn(name = "reservation_id", nullable = false, unique = true)
     private Reservation reservation;
 
     @Embedded

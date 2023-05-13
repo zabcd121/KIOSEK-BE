@@ -5,6 +5,7 @@ import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +19,21 @@ public class Member extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @Embedded
+    private Account account;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_qr")
     private AccountQR accountQR;
 
-    @Embedded
-    private Account account;
-
+    @Column(nullable = false, length = 20)
     @Enumerated(value = EnumType.STRING)
     private RoleType roleType;
 
+    @Column(nullable = false, length = 20)
     private String name;
+
+    @Column(unique = true, nullable = false, length = 50)
     private String email;
 
     public void changeAccountQR(AccountQR accountQR) {

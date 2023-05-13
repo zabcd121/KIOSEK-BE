@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.m
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -10,6 +11,8 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxCountPerDay {
+
+    @Column(nullable = false)
     private Integer maxCount;
 
     public boolean checkPolicy(Long countTodayMemberCreatedReservation) {

@@ -15,10 +15,11 @@ import java.time.format.DateTimeFormatter;
 public abstract class BaseTimeEntity {
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false, length = 50)
     protected String createdAt;
 
     @LastModifiedDate
+    @Column(nullable = false, length = 50)
     private String lastModifiedAt;
 
     @PrePersist

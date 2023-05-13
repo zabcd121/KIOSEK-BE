@@ -17,26 +17,28 @@ import static com.cse.cseprojectroommanagementserver.domain.violation.domain.mod
 @Getter
 public class Violation extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long violationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member targetMember;
 
-    @Enumerated(value = EnumType.STRING)
-    private ViolationContent violationContent;
-
-    @Enumerated(value = EnumType.STRING)
-    private ProcessingStatus processingStatus;
-
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id")
+    @JoinColumn(name = "reservation_id", unique = true, nullable = false)
     private Reservation targetReservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "penalty_id")
     private Penalty penalty;
+
+    @Column(nullable = false, length = 30)
+    @Enumerated(value = EnumType.STRING)
+    private ViolationContent violationContent;
+
+    @Column(nullable = false, length = 20)
+    @Enumerated(value = EnumType.STRING)
+    private ProcessingStatus processingStatus;
 
     public static Violation createViolation(Reservation reservation, ViolationContent violationContent) {
         return Violation.builder()
@@ -49,16 +51,11 @@ public class Violation extends BaseTimeEntity {
 
     public void changePenalty(Penalty penalty) {
         if(this.penalty != null) {
-            this.penalty.getViolations().remove(this);
+            this.penalty.getViolationList().remove(this);
         }
         this.penalty = penalty;
-        this.penalty.getViolations().add(this);
+        this.penalty.getViolationList().add(this);
         this.processingStatus = PENALIZED;
     }
-
-//    public void changePenalty(Penalty penalty) {
-//        this.penalty = penalty;
-//        this.processingStatus = PENALIZED;
-//    }
 
 }

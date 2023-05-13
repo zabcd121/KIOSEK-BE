@@ -13,8 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationQR extends BaseTimeEntity {
-    @Id
-    @GeneratedValue
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationQRId;
 
     @OneToOne(mappedBy = "reservationQR", fetch = FetchType.LAZY)

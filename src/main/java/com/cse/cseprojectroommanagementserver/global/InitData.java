@@ -31,9 +31,9 @@ public class InitData {
 
     @PostConstruct
     public void init() throws Exception {
-        //initService.adminInit();
-        //initService.dataInit();
-        //initService.penaltyPolicyDataInit();
+        initService.adminInit();
+        initService.dataInit();
+        initService.penaltyPolicyDataInit();
     }
 
     @Component
@@ -45,8 +45,8 @@ public class InitData {
         private final AES256 aes256;
 
         public void adminInit() {
-            Member admin1 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin1")).password(passwordEncoder.encode("admin17540!")).build()).name("관리자1").roleType(RoleType.ROLE_ADMIN).build();
-            Member admin2 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin2")).password(passwordEncoder.encode("admin27540!")).build()).name("관리자2").roleType(RoleType.ROLE_ADMIN).build();
+            Member admin1 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin1")).password(passwordEncoder.encode("admin17540!")).build()).name("관리자1").email("admin1@kiosek.kr").roleType(RoleType.ROLE_ADMIN).build();
+            Member admin2 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin2")).password(passwordEncoder.encode("admin27540!")).build()).name("관리자2").email("admin2@kiosek.kr").roleType(RoleType.ROLE_ADMIN).build();
             em.persist(admin1);
             em.persist(admin2);
         }
@@ -103,11 +103,7 @@ public class InitData {
         }
 
         public void penaltyPolicyDataInit() {
-            PenaltyPolicy penaltyPolicy = PenaltyPolicy.builder()
-                    .violationCountToImposePenalty(new ViolationCountToImposePenalty(3))
-                    .numberOfSuspensionDay(new NumberOfSuspensionDay(3))
-                    .appliedStatus(AppliedStatus.CURRENTLY)
-                    .build();
+            PenaltyPolicy penaltyPolicy = PenaltyPolicy.createPenaltyPolicy(3, 3);
             em.persist(penaltyPolicy);
         }
 
