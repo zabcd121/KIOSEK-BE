@@ -2,6 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.projectroom.application;
 
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomRepository;
+import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +18,15 @@ import static com.cse.cseprojectroommanagementserver.domain.projectroom.dto.Proj
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProjectRoomSearchService {
-    private final ProjectRoomRepository projectRoomRepository;
-    private final ProjectTableRepository projectTableRepository;
+    private final ProjectRoomSearchableRepository projectRoomSearchableRepository;
 
     public List<ProjectRoomAndTableSearchRes> searchAllProjectRoomAndTable() {
         List<ProjectRoomAndTableSearchRes> projectRoomSearchList = new ArrayList<>();
 
-        for (ProjectRoom projectRoom : projectRoomRepository.findAll()) {
-            List<ProjectTable> projectTableList = projectTableRepository.findAllByProjectRoom(projectRoom);
+        projectRoomSearchableRepository.findAll().forEach(projectRoom -> {
+            List<ProjectTable> projectTableList = projectRoom.getProjectTableList();
             projectRoomSearchList.add(ProjectRoomAndTableSearchRes.of(projectRoom, projectTableList));
-        }
+        });
 
         return projectRoomSearchList;
     }

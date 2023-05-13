@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ProjectRoomRepository extends JpaRepository<ProjectRoom, Long> {
-    ProjectRoom findByRoomName(String roomName);
 }
