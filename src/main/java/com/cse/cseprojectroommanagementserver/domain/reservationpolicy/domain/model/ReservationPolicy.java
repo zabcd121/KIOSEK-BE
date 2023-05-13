@@ -16,7 +16,7 @@ import static com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus.*;
 @Getter
 public class ReservationPolicy extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationPolicyId;
 
     @Embedded
@@ -28,8 +28,8 @@ public class ReservationPolicy extends BaseTimeEntity {
     @Embedded
     private ReservationMaxPeriod reservationMaxPeriod;
 
-
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Enumerated(value = EnumType.STRING)
     private AppliedStatus appliedStatus;
 
     public static ReservationPolicy createReservationPolicy(Integer reservationMaxHourPerOnce, Integer reservationMaxCountPerDay, Integer reservationMaxPeriod) {

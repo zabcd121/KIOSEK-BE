@@ -87,6 +87,12 @@
 </div>
 <br>
 <hr>
+<h1 id="structure">🛢️ ERD</h1>
+<div align="center">
+<img src="https://user-images.githubusercontent.com/68465716/238134761-a61ff74a-f7d7-44ea-95ff-331ffbf3d785.png">
+</div>
+<br>
+<hr>
 <h1 id="issue">설계 및 기술적인 고민 해결</h1>
 <hr>
     <h1 id="video">🎥 주요 기능 시연 영상</h1>

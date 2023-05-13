@@ -31,30 +31,36 @@ public class Reservation extends BaseTimeEntity {
     private Long reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_table_id")
+    @JoinColumn(name = "project_table_id", nullable = false)
     private ProjectTable projectTable;
 
     @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY)
     private TableReturn tableReturn;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_qr_id")
+    @JoinColumn(name = "reservation_qr_id", unique = true, nullable = false)
     private ReservationQR reservationQR;
 
+    @Column(nullable = false, length = 30)
     @Enumerated(value = EnumType.STRING)
     private ReservationStatus reservationStatus;
+
+    @Column(nullable = false, length = 10)
+    @Enumerated(value = EnumType.STRING)
+    private Means means;
+
+    @Column(nullable = false)
     private LocalDateTime startAt;
 
+    @Column(nullable = false)
     private LocalDateTime endAt;
 
+    @Column(nullable = true)
     private LocalDateTime checkInTime;
-
-    @Enumerated(EnumType.STRING)
-    private Means means;
 
     public void setReservationStatus(ReservationStatus reservationStatus) {
         this.reservationStatus = reservationStatus;

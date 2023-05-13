@@ -8,6 +8,7 @@ import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,19 @@ public class Penalty extends BaseTimeEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "penalty", fetch = FetchType.LAZY)
-    private List<Violation> violations = new ArrayList<>();
+    private List<Violation> violationList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false, length = 100)
     private String description;
+
+    @Column(nullable = false)
     private LocalDate startDt;
+
+    @Column(nullable = false)
     private LocalDate endDt;
 
     public void extendEndDate(LocalDate newEndDt) {

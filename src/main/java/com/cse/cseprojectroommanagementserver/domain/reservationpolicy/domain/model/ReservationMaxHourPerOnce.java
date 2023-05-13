@@ -3,6 +3,7 @@ package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.m
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationMaxHourPerOnce {
 
+    @Column(nullable = false)
     private Integer maxHour;
 
     public boolean checkPolicy(LocalDateTime reservationStartAt, LocalDateTime reservationEndAt) {

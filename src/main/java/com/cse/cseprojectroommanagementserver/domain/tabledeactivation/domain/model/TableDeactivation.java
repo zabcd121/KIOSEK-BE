@@ -13,12 +13,11 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TableDeactivation extends BaseTimeEntity {
 
-    @Id @GeneratedValue
-    @Column(name = "table_deactivation_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tableDeactivationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_table_id")
+    @JoinColumn(name = "project_table_id", nullable = false)
     private ProjectTable projectTable;
 
     @Embedded

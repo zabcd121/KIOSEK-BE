@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Size;
 
 //@EqualsAndHashCode
 @AllArgsConstructor
@@ -13,7 +14,12 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Image{
 
+    @Column(nullable = false, length = 50)
     private String fileLocalName;
+
+    @Column(nullable = false, length = 50)
     private String fileOriName;
+
+    @Column(nullable = false, length = 50)
     private String fileUrl;
 }

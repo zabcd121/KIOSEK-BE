@@ -13,13 +13,14 @@ import javax.persistence.*;
 @Getter
 public class ProjectTable extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tableId;
 
+    @Column(unique = true, nullable = false, length = 10)
     private String tableName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_room_id")
+    @JoinColumn(name = "project_room_id", nullable = false)
     private ProjectRoom projectRoom;
 
 }
