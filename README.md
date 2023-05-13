@@ -15,7 +15,8 @@
     <a href="https://github.com/zabcd121/CSE-projectroom-management-Server">BACKEND PROJECT</a>
   </p>
 </div>
-
+<div align=center><h1>🎊 Service Opened 2023.05.01~</h1>
+</div>
 <div align=center><h1>📚 BACKEND STACKS</h1>
 <img src="https://img.shields.io/badge/java-2E64FE?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
@@ -80,8 +81,14 @@
 <br>
 <hr>
 <div style="align-content: center; padding: 0px 200px;">
-<h1 id="structure">🏗️ 서버 내부 구조</h1>
+<h1 id="structure">🏗️ 실제 운영 사진</h1>
+<h3>학과 프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
+<div align="center">
+<img src="https://user-images.githubusercontent.com/68465716/238135350-13f36c4a-5f1d-4d0b-b732-5c621ece02b4.jpeg" width="900" align="center"></img>
+</div>
 <br>
+<hr>
+<h1 id="structure">🏗️ 서버 내부 구조</h1>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/237288889-b163ff56-208a-4ab4-a064-77ce5c9e9564.png" width="900" align="center"></img>
 </div>
