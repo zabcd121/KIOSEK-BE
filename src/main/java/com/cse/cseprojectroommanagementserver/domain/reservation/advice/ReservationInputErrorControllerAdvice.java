@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.domain.reservation.exception.advice;
+package com.cse.cseprojectroommanagementserver.domain.reservation.advice;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.api.ReservationApiController;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorResponse;
@@ -15,7 +15,7 @@ import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {ReservationApiController.class})
 @Slf4j
-public class ReservationControllerAdvice {
+public class ReservationInputErrorControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
