@@ -14,6 +14,7 @@
     <a href="https://github.com/brobac/CSE-projectroom-management">FRONTEND PROJECT</a> ·
     <a href="https://github.com/zabcd121/CSE-projectroom-management-Server">BACKEND PROJECT</a>
   </p>
+<a href="https://kiosek.kr"><p>https://kiosek.kr</p></a>
 </div>
 <div align=center><h1>🎊 Service Opened 2023.05.01~</h1>
 </div>
@@ -92,7 +93,9 @@
 <br>
 <hr>
 <h1 id="issue">❗️이슈 해결 과정 정리 블로그</h1>
-    <a href="https://devpoong.tistory.com/90"><h3>1. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3></a>
+    <h3>1. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3>
+    <a href="https://devpoong.tistory.com/90"><h3>https://devpoong.tistory.com/90</h3></a>
+<h3>https://devpoong.tistory.com/90</h3>
     <a href="https://devpoong.tistory.com/88"><h3>2. AES-256 대칭키 알고리즘을 통한 학번, 이메일 개인정보 암호화</h3></a>
     <a href="https://devpoong.tistory.com/89"><h3>3. 운영환경 구축하기 with Spring Actuator, Micrometer, Prometheus, Grafana</h3></a>
     <a href="https://devpoong.tistory.com/87"><h3>4. Jwt Token 인증방식을 사용하면서 memberId를 path variable로 받는것은 보안적인 이슈가 있다.</h3></a>
