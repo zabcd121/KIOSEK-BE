@@ -82,7 +82,7 @@
 <hr>
 <div style="align-content: center; padding: 0px 200px;">
 <h1 id="structure">🏗️ 실제 운영 사진</h1>
-<h3>학과 프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
+<h3>프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/238135350-13f36c4a-5f1d-4d0b-b732-5c621ece02b4.jpeg" width="900" align="center"></img>
 </div>
