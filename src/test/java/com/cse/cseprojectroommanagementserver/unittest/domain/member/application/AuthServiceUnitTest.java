@@ -6,8 +6,9 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.WrongPasswordException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
@@ -24,7 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -83,10 +83,10 @@ class AuthServiceUnitTest {
     void 로그인_실패_아이디_불일치() {
         // Given
         given(aes256.encrypt(loginReq.getLoginId())).willReturn("encryptId");
-        given(memberSearchableRepository.findByAccountLoginId("encryptId")).willThrow(UsernameNotFoundException.class);
+        given(memberSearchableRepository.findByAccountLoginId("encryptId")).willThrow(NotFoundException.class);
 
         // When, Then
-        assertThrows(UsernameNotFoundException.class, () -> authService.login(loginReq, ROLE_MEMBER));
+        assertThrows(NotFoundException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
 
     @Test
@@ -102,7 +102,7 @@ class AuthServiceUnitTest {
         given(passwordEncoder.matches(loginReq.getPassword(), user.getPassword())).willReturn(false);
 
         // When, Then
-        assertThrows(WrongPasswordException.class, () -> authService.login(loginReq, ROLE_MEMBER));
+        assertThrows(IncorrectException.class, () -> authService.login(loginReq, ROLE_MEMBER));
     }
     
     private void templateOfLoginSuccessTest(RoleType roleType) {

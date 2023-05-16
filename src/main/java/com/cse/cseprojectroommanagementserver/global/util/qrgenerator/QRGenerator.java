@@ -1,8 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.util.qrgenerator;
 
-import com.cse.cseprojectroommanagementserver.domain.member.exception.FailedToCreateAccountQRException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.FailedToCreateReservationQRException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -43,19 +43,19 @@ public class QRGenerator {
     @Value("${fileDir.reservations}")
     private String reservationQRDir;
 
-    public QRImage createAccountQRCodeImage() throws FailedToCreateAccountQRException {
+    public QRImage createAccountQRCodeImage() throws FileSystemException {
         try{
             return createQRCodeImage(reservationQRDir);
         } catch(QRNotCreatedException e) {
-            throw new FailedToCreateAccountQRException();
+            throw new FileSystemException(ErrorCode.FILE_SYSTEM_ERR_ACCOUNT_QR);
         }
     }
 
-    public QRImage createReservationQRCodeImage() throws FailedToCreateReservationQRException {
+    public QRImage createReservationQRCodeImage() throws FileSystemException {
         try{
             return createQRCodeImage(reservationQRDir);
         } catch(QRNotCreatedException e) {
-            throw new FailedToCreateReservationQRException();
+            throw new FileSystemException(ErrorCode.FILE_SYSTEM_ERR_RESERVATION_QR);
         }
     }
 

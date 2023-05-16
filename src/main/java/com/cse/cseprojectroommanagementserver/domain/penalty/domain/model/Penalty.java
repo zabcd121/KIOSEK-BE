@@ -1,10 +1,11 @@
 package com.cse.cseprojectroommanagementserver.domain.penalty.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.penalty.exception.AlreadyStoppedAccountUntilRequestDateException;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.violation.domain.model.Violation;
 import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,7 +45,7 @@ public class Penalty extends BaseTimeEntity {
 
     public void extendEndDate(LocalDate newEndDt) {
         if(newEndDt.isBefore(this.endDt)) {
-            throw new AlreadyStoppedAccountUntilRequestDateException();
+            throw new BusinessRuleException(ErrorCode.ALREADY_SUSPENDED);
         }
         this.endDt = newEndDt;
     }

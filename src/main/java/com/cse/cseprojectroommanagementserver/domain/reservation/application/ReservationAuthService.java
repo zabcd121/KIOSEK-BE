@@ -2,8 +2,9 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.WrongReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +24,11 @@ public class ReservationAuthService {
     @Transactional
     public void checkInWIthReservationQR(QRAuthReq qrAuthReq) {
         Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())
-                .orElseThrow(() -> new WrongReservationQRException());
+                .orElseThrow(() -> new IncorrectException(ErrorCode.INCORRECT_AUTH_CODE));
 
-        boolean isPreviousReservationInUse = reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt());
+        // 이전 사용자가 아직 테이블을 사용중이라면 미리 체크인 불가능
+        boolean isPreviousMemberInUse = reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt());
 
-        findReservation.checkIn(isPreviousReservationInUse);
+        findReservation.checkIn(isPreviousMemberInUse);
     }
 }

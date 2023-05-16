@@ -6,7 +6,8 @@ import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.exception.DuplicatedDeactivationException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +72,7 @@ public class TableDeactivateService {
 
     private boolean isDuplicatedDeactivation(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
         if(tableDeactivationSearchableRepository.existsBy(tableId, startAt, endAt)) {
-            throw new DuplicatedDeactivationException();
+            throw new DuplicationException(ErrorCode.DUPLICATED_TABLE_DEACTIVATION);
         }
 
         return false;

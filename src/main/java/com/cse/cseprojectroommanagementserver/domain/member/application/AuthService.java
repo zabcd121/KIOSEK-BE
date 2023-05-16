@@ -5,6 +5,11 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleTyp
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.ExpiredException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
@@ -17,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +51,7 @@ public class AuthService {
     @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
-        Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new UsernameNotFoundException("memberId : " + loginReq.getLoginId() + " was not found"));
+        Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new NotFoundException(ErrorCode.ID_NOT_FOUND));
 
         Authentication authentication = authenticateMember(member, loginReq.getPassword(), allowedRoleType);
 
@@ -66,7 +70,7 @@ public class AuthService {
         try {
             jwtTokenProvider.validateToken(resolvedRefreshToken);
         } catch (ExpiredJwtException ex) {
-            throw new ExpiredRefreshTokenException();
+            throw new ExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
@@ -74,7 +78,7 @@ public class AuthService {
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
 
         if (!resolvedRefreshToken.equals(findRedisRefreshToken)) {
-            throw new NotFoundRefreshTokenException();
+            throw new NotFoundException(ErrorCode.NOT_FOUND_REFRESH_TOKEN_IN_STORE);
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication);
@@ -108,19 +112,18 @@ public class AuthService {
     }
 
     public LoginMemberInfoRes searchMemberInfoByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundMemberException());
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MEMBER));
 
         return LoginMemberInfoRes.of(member);
     }
 
     public Member searchMemberByAccountQR(String accountQRContents) {
         return memberSearchableRepository.findByAccountQRContents(accountQRContents)
-                .orElseThrow(() -> new WrongAccountQRException());
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ACCOUNT_QR));
     }
 
 
-    private Authentication authenticateMember(Member member, String password, RoleType allowedRoleType){
-
+    private Authentication authenticateMember(Member member, String password, RoleType allowedRoleType) {
         UserDetails userDetails = memberDetailsService.loadUserByUsername(member.getMemberId().toString());
 
         validatePassword(password, userDetails.getPassword());
@@ -128,26 +131,25 @@ public class AuthService {
         String role = "";
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
             role = authority.getAuthority();
-            log.info("role = {}", role);
         }
 
         if(!role.equals(allowedRoleType.toString())) {
-            throw new NoAuthorityToLoginException();
+            throw new UnAuthorizedException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
     }
 
+    private boolean validatePassword(String requestPassword, String originPassword) {
+        if(!passwordEncoder.matches(requestPassword, originPassword)) {
+            throw new IncorrectException(ErrorCode.INCORRECT_PASSWORD);
+        }
+        return true;
+    }
+
     private void saveRefreshTokenInRedis(String refreshToken, Authentication authentication) {
         redisTemplate.opsForValue()
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
-    }
-
-    private boolean validatePassword(String requestPassword, String originPassword) {
-        if(!passwordEncoder.matches(requestPassword, originPassword)) {
-            throw new WrongPasswordException();
-        }
-        return true;
     }
 }

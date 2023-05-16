@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public class ReservationMaxPeriod {
         LocalDateTime maxAvailableDateTimeForReservation = LocalDateTime.of(current.toLocalDate().plusDays(maxPeriod *7+1), LocalTime.of(8, 0));
 
         if(reservationEndDateTime.isAfter(maxAvailableDateTimeForReservation)) {
-            throw new ExceedMaxPeriodEnableReservationException();
+            throw new PolicyInfractionException(ErrorCode.MAX_PERIOD_LIMIT_POLICY_INFRACTION);
         }
         return true;
     }

@@ -1,7 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.TokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -17,7 +18,6 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @Component
 @Slf4j
@@ -68,7 +68,7 @@ public class JwtTokenProvider implements InitializingBean {
      * setAuthenticated(true)로 인스턴스를 생성해주고
      * Spring-Security는 그것을 체크해서 로그인을 처리함
      */
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token) throws NotFoundException {
         Claims claims = getClaims(token);
         UserDetails userDetails = memberDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
@@ -91,20 +91,12 @@ public class JwtTokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            log.error("Invalid JWT signature");
-            throw e;
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token");
-            throw e;
+            throw new TokenException(ErrorCode.INCORRECT_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            System.out.println("expired jwt token");
-            //log.error("Expired JWT token");
-            throw e;
-        } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT token");
-            throw e;
+            throw new TokenException(ErrorCode.EXPIRED_TOKEN);
+        } catch (MalformedJwtException | UnsupportedJwtException e) {
+            throw new TokenException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty.");
             throw e;
         }
     }
@@ -131,11 +123,11 @@ public class JwtTokenProvider implements InitializingBean {
     public String resolveToken(String bearerToken) {
         if(bearerToken == null || bearerToken.equals("")) {
             log.info("bearer token not passed");
-            throw new TokenNotPassedException(BAD_REQUEST_TOKEN_NOT_PASSED.getMessage());
+            throw new TokenException(ErrorCode.HEADER_NULL_TOKEN);
         }
 
         if(!bearerToken.startsWith(BEARER)) {
-            throw new TokenNotBearerException(BAD_REQUEST_TOKEN_NOT_BEARER.getMessage());
+            throw new TokenException(ErrorCode.INVALID_TYPE_TOKEN);
         }
         return bearerToken.substring(7);
     }

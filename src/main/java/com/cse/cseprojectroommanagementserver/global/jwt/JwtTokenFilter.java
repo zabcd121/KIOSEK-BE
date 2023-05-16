@@ -1,12 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.TokenException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,15 +27,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final RedisTemplate redisTemplate;
 
-    /**
-     * JWT를 검증하는 필터
-     * HttpServletRequest 의 Authorization 헤더에서 JWT token을 찾고 그것이 맞는지 확인
-     * UsernamePasswordAuthenticationFilter 앞에서 작동
-     * (JwtTokenFilterConfigurer 참고)
-     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("####doFilterInternal진입");
         try{
             String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
             if (resolvedToken != null && jwtTokenProvider.validateToken(resolvedToken)) {
@@ -47,31 +36,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 if (ObjectUtils.isEmpty(isLogout)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(resolvedToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.info("set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
                 }
             }
 
-        } catch(TokenNotPassedException e) {
+        } catch (NotFoundException | TokenException | JwtException | IllegalArgumentException e) {
             request.setAttribute("exception", e);
-            log.info("catch token not passed exception");
-        } catch (TokenNotBearerException e) {
-            request.setAttribute("exception", e);
-            log.info("TokenNotBearerException");
-        } catch (SignatureException e) {
-            request.setAttribute("exception", e);
-            log.info("SignatureException");
-        } catch (MalformedJwtException e) {
-            request.setAttribute("exception", e);
-            log.info("MalformedJwtException");
-        } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", e);
-            log.info("ExpiredJwtException");
-        } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", e);
-            log.info("UnsupportedJwtException");
-        } catch (JwtException | IllegalArgumentException e) {
-            request.setAttribute("exception", e);
-            log.info("JwtException IllegalArgumentException");
         }
 
         filterChain.doFilter(request, response);

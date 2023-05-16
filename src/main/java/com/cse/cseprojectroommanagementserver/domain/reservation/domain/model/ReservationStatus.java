@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.InvalidReservationStatusCodeException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.InvalidInputException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,31 +23,27 @@ public enum ReservationStatus {
     private final String status;
 
     public static ReservationStatus ofCode(String inputStatusCode) {
-        if(inputStatusCode == null) {
-            throw new InvalidReservationStatusCodeException();
-        }
-
-        for (ReservationStatus rs : ReservationStatus.values()) {
-            if(rs.statusCode.equals(inputStatusCode)) {
-                return rs;
+        if (inputStatusCode != null) {
+            for (ReservationStatus rs : ReservationStatus.values()) {
+                if (rs.statusCode.equals(inputStatusCode)) {
+                    return rs;
+                }
             }
         }
-        throw new InvalidReservationStatusCodeException();
+
+        throw new InvalidInputException(ErrorCode.INVALID_VALUE_RESERVATION_STATUS);
     }
 
     public static ReservationStatus ofStatus(String status) {
-        if(status == null) {
-            throw new InvalidReservationStatusCodeException();
-        }
-
-        for (ReservationStatus rs : ReservationStatus.values()) {
-            if(rs.status.equals(status)) {
-                return rs;
+        if (status != null) {
+            for (ReservationStatus rs : ReservationStatus.values()) {
+                if (rs.status.equals(status)) {
+                    return rs;
+                }
             }
         }
-        throw new InvalidReservationStatusCodeException();
+        throw new InvalidInputException(ErrorCode.INVALID_VALUE_RESERVATION_STATUS);
     }
-
 }
 
 

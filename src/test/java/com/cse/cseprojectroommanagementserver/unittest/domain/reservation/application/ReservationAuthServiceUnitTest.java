@@ -4,12 +4,11 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.P
 import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReservationAuthService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.WrongReservationQRException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +90,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(WrongReservationQRException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(IncorrectException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
     @Test
@@ -118,7 +117,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(true);
 
         // When, Then
-        assertThrows(UnableToCheckInStatusException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
     @Test
@@ -145,7 +144,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(false);
 
         // When, Then
-        assertThrows(UnableToCheckInTimeException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
     @Test
@@ -172,7 +171,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(false);
 
         // When, Then
-        assertThrows(UnableToCheckInTimeException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
 }

@@ -9,16 +9,13 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.application.Res
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DisabledTableException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.DuplicatedReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.StoppedAccountException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.FailedToCreateReservationQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
+import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -113,7 +110,7 @@ class ReserveTableServiceUnitTest {
         reserveTableService.reserve(memberId, reserveReq);
 
         // Then
-        assertDoesNotThrow(() -> FailedToCreateReservationQRException.class);
+        assertDoesNotThrow(() -> FileSystemException.class);
         then(reservationRepository).should(times(1)).save(any());
     }
 
@@ -126,7 +123,7 @@ class ReserveTableServiceUnitTest {
         given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(true);
 
         // When, Then
-        assertThrows(StoppedAccountException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(UnAuthorizedException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -140,7 +137,7 @@ class ReserveTableServiceUnitTest {
 
 
         // When, Then
-        assertThrows(DisabledTableException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -155,7 +152,7 @@ class ReserveTableServiceUnitTest {
 
 
         // When, Then
-        assertThrows(DuplicatedReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(DuplicationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -176,7 +173,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -197,7 +194,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -218,7 +215,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -239,7 +236,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxTimeEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -260,7 +257,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -281,7 +278,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedMaxPeriodEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test
@@ -302,7 +299,7 @@ class ReserveTableServiceUnitTest {
         givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
 
         // When, Then
-        assertThrows(ExceedTodaysMaxCountEnableReservationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
 
