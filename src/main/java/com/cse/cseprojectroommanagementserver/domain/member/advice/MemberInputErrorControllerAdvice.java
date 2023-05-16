@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.domain.member.exception.advice;
+package com.cse.cseprojectroommanagementserver.domain.member.advice;
 
 import com.cse.cseprojectroommanagementserver.domain.member.api.AdminAuthApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.api.MemberApiController;
@@ -18,7 +18,7 @@ import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 
 @RestControllerAdvice(assignableTypes = {MemberAuthApiController.class, AdminAuthApiController.class, SignupApiController.class, MemberApiController.class})
 @Slf4j
-public class MemberControllerAdvice {
+public class MemberInputErrorControllerAdvice {
     
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> methodArgumentExHandler(MethodArgumentNotValidException ex) {
