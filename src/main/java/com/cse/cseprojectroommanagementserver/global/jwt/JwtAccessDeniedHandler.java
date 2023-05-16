@@ -18,7 +18,7 @@ import static com.cse.cseprojectroommanagementserver.global.error.ErrorCode.*;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException{
-        setResponse(response, ACCESS_FAIL_NO_AUTHORITY);
+        setResponse(response, UNAUTHORIZED_MEMBER);
     }
 
     private void setResponse(HttpServletResponse response, ErrorCode exceptionCode) throws IOException {

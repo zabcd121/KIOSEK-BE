@@ -6,10 +6,9 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.FailedToCreateAccountQRException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedEmailException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedLoginIdException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRNotCreatedException;
@@ -109,10 +108,10 @@ public class SignupServiceUnitTest {
     void 회원가입_실패_중복아이디() {
         // Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(DuplicatedLoginIdException.class);
+        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(DuplicationException.class);
 
         // When, Then
-        assertThrows(DuplicatedLoginIdException.class, () -> signupService.signup(signupReq));
+        assertThrows(DuplicationException.class, () -> signupService.signup(signupReq));
     }
 
     @Test
@@ -123,10 +122,10 @@ public class SignupServiceUnitTest {
         given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
 
         given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
-        given(signupRepository.existsByEmail("encryptEmail")).willThrow(DuplicatedEmailException.class);
+        given(signupRepository.existsByEmail("encryptEmail")).willThrow(DuplicationException.class);
 
         // When, Then
-        assertThrows(DuplicatedEmailException.class, () -> signupService.signup(signupReq));
+        assertThrows(DuplicationException.class, () -> signupService.signup(signupReq));
     }
 
     @Test
@@ -146,6 +145,6 @@ public class SignupServiceUnitTest {
         given(qrGenerator.createAccountQRCodeImage()).willThrow(QRNotCreatedException.class);
 
         // When, Then
-        assertThrows(FailedToCreateAccountQRException.class, () -> signupService.signup(signupReq));
+        assertThrows(FileSystemException.class, () -> signupService.signup(signupReq));
     }
 }

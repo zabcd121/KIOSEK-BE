@@ -2,13 +2,14 @@ package com.cse.cseprojectroommanagementserver.domain.tablereturn.application;
 
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotFoundReservationException;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.UnableToReturnStatusException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.NoAuthorityToReturnException;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.repository.TableReturnRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import com.cse.cseprojectroommanagementserver.global.util.fileupload.FileUploadUtil;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,14 @@ public class TableReturnService {
     @Transactional
     public void returnTable(Long memberId, Long reservationId, MultipartFile cleanupPhoto) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
-                .orElseThrow(() -> new NotFoundReservationException());
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_RESERVATION));
 
         if(!isMyReservation(memberId, findReservation)) {
-            throw new NoAuthorityToReturnException();
+            throw new UnAuthorizedException(ErrorCode.UNAUTHORIZED_RETURN);
         }
 
         if(isAlreadyReturnedReservation(reservationId)) {
-            throw new UnableToReturnStatusException();
+            throw new BusinessRuleException(ErrorCode.RETURN_IMPOSSIBLE_STATUS);
         }
 
         Image image = fileUploadUtil.uploadReturnsImage(cleanupPhoto);

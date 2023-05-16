@@ -2,14 +2,15 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCancelStatusException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInStatusException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.UnableToCheckInTimeException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NoAuthorityToCancelException;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,6 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Means.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
-import static com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy.*;
 
 @Entity
 @Builder
@@ -105,19 +105,22 @@ public class Reservation extends BaseTimeEntity {
                 .build();
     }
 
-    public void cancel(Long memberId) {
-        if ((this.reservationStatus != RESERVATION_COMPLETED)) throw new UnableToCancelStatusException();
-        if(!memberId.equals(member.getMemberId())) throw new NoAuthorityToCancelException();
+    public void cancel(Long triedMemberId) {
+        if ((this.reservationStatus != RESERVATION_COMPLETED))
+            throw new BusinessRuleException(ErrorCode.IRREVOCABLE_RESERVATION_STATUS);
+        if (!triedMemberId.equals(member.getMemberId()))
+            throw new UnAuthorizedException(ErrorCode.UNAUTHORIZED_RESERVATION);
 
         this.reservationStatus = CANCELED;
     }
 
-    public void checkIn(boolean isPreviousReservationInUse) {
-        if (isPreviousReservationInUse)
-            throw new UnableToCheckInStatusException(); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
-        else if (LocalDateTime.now().isBefore(this.startAt.minusMinutes(POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
-                || LocalDateTime.now().isAfter(this.startAt.plusMinutes(POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
-            throw new UnableToCheckInTimeException();
+    public void checkIn(boolean isPreviousMemberInUse) {
+        if (isPreviousMemberInUse) throw new BusinessRuleException(ErrorCode.CHECKIN_IMPOSSIBLE_STATUS); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
+        else if (LocalDateTime.now().isBefore(
+                this.startAt.minusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
+                || LocalDateTime.now().isAfter(
+                this.startAt.plusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
+            throw new PolicyInfractionException(ErrorCode.CHECKIN_TIME_POLICY_INFRACTION);
         }
 
         this.checkInTime = LocalDateTime.now();

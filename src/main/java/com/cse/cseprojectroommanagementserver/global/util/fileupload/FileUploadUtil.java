@@ -1,9 +1,8 @@
 package com.cse.cseprojectroommanagementserver.global.util.fileupload;
 
-import com.cse.cseprojectroommanagementserver.domain.complaint.exception.FailedToUploadComplainImageException;
-import com.cse.cseprojectroommanagementserver.domain.tablereturn.exception.FailedToUploadReturnImageException;
 import com.cse.cseprojectroommanagementserver.global.dto.Image;
-import com.cse.cseprojectroommanagementserver.global.util.fileupload.FailedToUploadImageException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -32,19 +31,19 @@ public class FileUploadUtil {
     @Value("${fileDir.complains}")
     private String complains;
 
-    public Image uploadReturnsImage(MultipartFile multipartFile) throws FailedToUploadImageException {
+    public Image uploadReturnsImage(MultipartFile multipartFile) throws FileSystemException {
         try {
             return uploadFile(multipartFile, returns);
         } catch (FailedToUploadImageException e) {
-            throw new FailedToUploadReturnImageException();
+            throw new FileSystemException(ErrorCode.FILE_SYSTEM_ERR_RETURN_IMAGE);
         }
     }
 
-    public Image uploadComplainsImage(MultipartFile multipartFile) throws FailedToUploadImageException {
+    public Image uploadComplainsImage(MultipartFile multipartFile) throws FileSystemException {
         try {
             return uploadFile(multipartFile, complains);
         } catch (FailedToUploadImageException e) {
-            throw new FailedToUploadComplainImageException();
+            throw new FileSystemException(ErrorCode.FILE_SYSTEM_ERR_COMPLAIN_IMAGE);
         }
     }
 

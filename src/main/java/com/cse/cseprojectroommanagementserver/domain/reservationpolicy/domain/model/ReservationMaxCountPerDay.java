@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ public class ReservationMaxCountPerDay {
 
     public boolean checkPolicy(Long countTodayMemberCreatedReservation) {
         if(maxCount <= countTodayMemberCreatedReservation) {
-            throw new ExceedTodaysMaxCountEnableReservationException();
+            throw new PolicyInfractionException(ErrorCode.MAX_COUNT_LIMIT_POLICY_INFRACTION);
         }
         return true;
     }

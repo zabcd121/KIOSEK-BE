@@ -1,8 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.error;
 
-import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessLogicException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.InvalidInputException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.ServerInternalException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.AbstractErrorException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.AbstractBusinessLogicException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -35,26 +34,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 
-    @ExceptionHandler(BusinessLogicException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessLogicException(BusinessLogicException e){
+    @ExceptionHandler(AbstractBusinessLogicException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessLogicException(AbstractBusinessLogicException e){
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 
-    @ExceptionHandler(ServerInternalException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessLogicException(ServerInternalException e){
+    @ExceptionHandler(AbstractErrorException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessLogicException(AbstractErrorException e){
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 
-    @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessLogicException(InvalidInputException e){
-        ErrorCode errorCode = e.getErrorCode();
-        ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
-        return new ResponseEntity<>(response, errorCode.getHttpStatus());
-    }
+//    @ExceptionHandler(InvalidInputException.class)
+//    public ResponseEntity<ErrorResponse> handleBusinessLogicException(InvalidInputException e){
+//        ErrorCode errorCode = e.getErrorCode();
+//        ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
+//        return new ResponseEntity<>(response, errorCode.getHttpStatus());
+//    }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {

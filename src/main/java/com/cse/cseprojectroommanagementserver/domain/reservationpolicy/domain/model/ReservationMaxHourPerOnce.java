@@ -1,6 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model;
 
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -22,7 +23,7 @@ public class ReservationMaxHourPerOnce {
         long timeToAttempt = duration.toHours();
 
         if (this.maxHour < timeToAttempt) {
-            throw new ExceedMaxTimeEnableReservationException();
+            throw new PolicyInfractionException(ErrorCode.MAX_TIME_LIMIT_POLICY_INFRACTION);
         }
         return true;
     }

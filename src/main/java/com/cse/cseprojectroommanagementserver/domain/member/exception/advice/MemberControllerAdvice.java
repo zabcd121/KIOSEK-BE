@@ -4,17 +4,13 @@ import com.cse.cseprojectroommanagementserver.domain.member.api.AdminAuthApiCont
 import com.cse.cseprojectroommanagementserver.domain.member.api.MemberApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.api.MemberAuthApiController;
 import com.cse.cseprojectroommanagementserver.domain.member.api.SignupApiController;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
@@ -40,31 +36,31 @@ public class MemberControllerAdvice {
             if(isNotBlank) {
                 switch(bindResultField) {
                     case "loginId":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_LOGIN_ID_INVALID_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_LOGIN_ID);
                         break;
                     case "password":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_PASSWORD_INVALID_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_PASSWORD);
                         break;
                     case "email":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_EMAIL_INVALID_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_EMAIL);
                         break;
                     case "name":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_NAME_INVALID_TYPE);
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_NAME);
                         break;
                 }
             } else {
                 switch (bindResultField) {
                     case "loginId":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_LOGIN_ID_NULL);
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_LOGIN_ID);
                         break;
                     case "password":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_PASSWORD_NULL);
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_PASSWORD);
                         break;
                     case "email":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_EMAIL_NULL);
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_EMAIL);
                         break;
                     case "name":
-                        responseError = ErrorResponse.toResponseEntity(BAD_REQUEST_NAME_NULL);
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_NAME);
                         break;
                 }
             }

@@ -1,10 +1,7 @@
 package com.cse.cseprojectroommanagementserver.global.jwt;
 
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotBearerException;
-import com.cse.cseprojectroommanagementserver.global.jwt.exception.TokenNotPassedException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
@@ -27,28 +24,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException) throws IOException {
 
-        log.error("Responding with unauthorized error. Message - {}", authException.getMessage());
-
         Exception exception = (Exception) request.getAttribute("exception");
 
         if(exception == null) {
-            log.error("null token");
-            setResponse(response, ACCESS_FAIL_NO_AUTHORITY);
-        } else if(exception instanceof TokenNotPassedException) {
-            log.error(BAD_REQUEST_TOKEN_NOT_PASSED.getMessage());
-            setResponse(response, BAD_REQUEST_TOKEN_NOT_PASSED);
-        } else if(exception instanceof TokenNotBearerException) {
-            log.error(BAD_REQUEST_TOKEN_NOT_BEARER.getMessage());
-            setResponse(response, BAD_REQUEST_TOKEN_NOT_BEARER);
-        } else if(exception instanceof SignatureException) {
-            log.error(BAD_REQUEST_TOKEN_WRONG_SIGNATURE.getMessage());
-            setResponse(response, BAD_REQUEST_TOKEN_WRONG_SIGNATURE);
-        } else if(exception instanceof ExpiredJwtException) {
-            log.error(BAD_REQUEST_TOKEN_EXPIRED.getMessage());
-            setResponse(response, BAD_REQUEST_TOKEN_EXPIRED);
+            setResponse(response, UNAUTHORIZED_MEMBER);
+        } else if(exception instanceof TokenException) {
+            setResponse(response, ((TokenException) exception).getErrorCode());
         } else {
-            log.error(BAD_REQUEST_TOKEN_WRONG_TYPE.getMessage());
-            setResponse(response, BAD_REQUEST_TOKEN_WRONG_TYPE);
+            setResponse(response, UNKNOWN_PROBLEM_TOKEN);
         }
 
         log.error("exception: {}", exception.getMessage());

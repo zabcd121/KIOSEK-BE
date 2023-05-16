@@ -3,10 +3,10 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.NotYetVerifiedAuthCodeException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedEmailException;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.DuplicatedLoginIdException;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthenticatedException;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import io.micrometer.core.annotation.Timed;
@@ -53,7 +53,7 @@ public class SignupService {
 
     public boolean checkAuthCodeIsVerified(String email) {
         if (redisTemplate.opsForValue().get(EV + email) == null) {
-            throw new NotYetVerifiedAuthCodeException();
+            throw new UnAuthenticatedException(ErrorCode.UNAUTHENTICATED_AUTH_CODE);
         }
         redisTemplate.delete(EV + email);
         return true;
@@ -61,14 +61,14 @@ public class SignupService {
 
     public boolean checkDuplicationLoginId(String loginId) {
         if (signupRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
-            throw new DuplicatedLoginIdException();
+            throw new DuplicationException(ErrorCode.DUPLICATED_LOGINID);
         }
         return false;
     }
 
     public boolean checkDuplicationEmail(String email) {
         if (signupRepository.existsByEmail(aes256.encrypt(email))) {
-            throw new DuplicatedEmailException();
+            throw new DuplicationException(ErrorCode.DUPLICATED_EMAIL);
         }
         return false;
     }

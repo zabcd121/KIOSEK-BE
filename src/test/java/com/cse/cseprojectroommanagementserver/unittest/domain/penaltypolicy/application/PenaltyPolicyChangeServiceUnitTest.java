@@ -5,8 +5,8 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.PenaltyPolicy;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.repository.PenaltyPolicyRepository;
-import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.exception.NotFoundPenaltyPolicyException;
 import com.cse.cseprojectroommanagementserver.global.dto.AppliedStatus;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,6 +72,6 @@ class PenaltyPolicyChangeServiceUnitTest {
         given(penaltyPolicyRepository.findById(changeReq.getPenaltyPolicyId())).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(NotFoundPenaltyPolicyException.class, () -> penaltyPolicyChangeService.changePenaltyPolicy(changeReq));
+        assertThrows(NotFoundException.class, () -> penaltyPolicyChangeService.changePenaltyPolicy(changeReq));
     }
 }

@@ -7,11 +7,12 @@ import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.reposit
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.*;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
+import com.cse.cseprojectroommanagementserver.global.error.exception.*;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -103,28 +104,28 @@ public class ReserveTableService {
 
     private boolean isPenaltyMember(Long memberId) {
         if (penaltySearchRepository.existsByMemberId(memberId)) {
-            throw new StoppedAccountException();
+            throw new UnAuthorizedException(ErrorCode.UNAUTHORIZED_PENALTY_MEMBER);
         }
         return false;
     }
 
     private boolean isDisabledTable(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
         if(tableDeactivationSearchableRepository.existsBy(tableId, startAt, endAt)) {
-            throw new DisabledTableException();
+            throw new BusinessRuleException(ErrorCode.DISABLED_TABLE);
         }
         return false;
     }
 
     private boolean isDuplicatedReservation(Long tableId, LocalDateTime startAt, LocalDateTime endAt) {
         if (reservationVerifiableRepository.existsBy(tableId, startAt, endAt)) {
-            throw new DuplicatedReservationException();
+            throw new DuplicationException(ErrorCode.DUPLICATED_RESERVATION);
         }
         return false;
     }
 
     private boolean isEndAtAfterStartAt(LocalDateTime startAt, LocalDateTime endAt) {
         if (endAt.isBefore(startAt)) {
-            throw new WrongReservationRequestException();
+            throw new InvalidInputException(ErrorCode.INVALID_VALUE_ENDAT);
         }
         return false;
     }

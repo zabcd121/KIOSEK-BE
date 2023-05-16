@@ -1,11 +1,6 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.exception.advice;
 
-import com.cse.cseprojectroommanagementserver.domain.member.exception.WrongAccountQRException;
 import com.cse.cseprojectroommanagementserver.domain.reservation.api.ReservationApiController;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.*;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxPeriodEnableReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedMaxTimeEnableReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.exception.ExceedTodaysMaxCountEnableReservationException;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,10 +32,10 @@ public class ReservationControllerAdvice {
 
             switch (bindResultField) {
                 case "startDateTime":
-                    errorResponse = ErrorResponse.toResponseEntity((RESERVE_FAIL_START_TIME_EMPTY));
+                    errorResponse = ErrorResponse.toResponseEntity((INPUT_NULL_STARTAT));
                     break;
                 case "endDateTime":
-                    errorResponse = ErrorResponse.toResponseEntity((RESERVE_FAIL_END_TIME_EMPTY));
+                    errorResponse = ErrorResponse.toResponseEntity((INPUT_NULL_ENDAT));
                     break;
             }
         }

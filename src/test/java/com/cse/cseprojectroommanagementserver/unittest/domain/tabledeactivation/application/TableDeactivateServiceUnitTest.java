@@ -8,7 +8,7 @@ import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.mo
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.model.TableDeactivationInfo;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.exception.DuplicatedDeactivationException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,6 +105,6 @@ class TableDeactivateServiceUnitTest {
         ).willReturn(true);
 
         // When, Then
-        assertThrows(DuplicatedDeactivationException.class, () -> tableDeactivateService.deactivateTables(tableDeactivationReq));
+        assertThrows(DuplicationException.class, () -> tableDeactivateService.deactivateTables(tableDeactivationReq));
     }
 }

@@ -7,8 +7,8 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.application.Res
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NotFoundReservationException;
-import com.cse.cseprojectroommanagementserver.domain.reservation.exception.NoAuthorityToCancelException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +69,7 @@ class ReservationCancelServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(NotFoundReservationException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
+        assertThrows(NotFoundException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
     }
 
     @Test
@@ -118,7 +118,7 @@ class ReservationCancelServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         // When, Then
-        assertThrows(NoAuthorityToCancelException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
+        assertThrows(UnAuthorizedException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
     }
 
     private Reservation getReservationByReservationStatus(Long memberId, Long reservationId, ReservationStatus reservationStatus) {
