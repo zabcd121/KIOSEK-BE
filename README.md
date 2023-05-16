@@ -51,7 +51,10 @@
             <li><a href="#purpose">✅ 시스템 목적</a></li>
             <li><a href="#flow">📱 시스템 주요 Flow</a></li>
             <li><a href="#mainfc">‍🔧 프로젝트실 관리자 주요 기능</a></li>
+            <li><a href="#operation">‍📷️ 실제 키오스크 운영 사진</a></li>
+            <li><a href="#issue">‍❗️이슈 해결 과정 정리 블로그</a></li>
             <li><a href="#structure">🏗️ 서버 내부 구조</a></li>
+            <li><a href="#erd">🛢️ ERD</a></li>
             <li><a href="#video">‍🎥 주요 기능 시연 영상</a></li>
             <li><a href="#ui">🎨 UI 구현</a></li>
         </ol>
@@ -81,12 +84,28 @@
 <br>
 <hr>
 <div style="align-content: center; padding: 0px 200px;">
-<h1 id="structure">🏗️ 실제 운영 사진</h1>
-<h3>프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
+<h1 id="operation">📷️ 실제 키오스크 운영 사진</h1>
+<h3>웹 사이트뿐만 아니라 프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/238135350-13f36c4a-5f1d-4d0b-b732-5c621ece02b4.jpeg" width="900" align="center"></img>
 </div>
 <br>
+<hr>
+<h1 id="issue">❗️이슈 해결 과정 정리 블로그</h1>
+    <a href="https://devpoong.tistory.com/90"><h3>1. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3></a>
+    <a href="https://devpoong.tistory.com/88"><h3>2. AES-256 대칭키 알고리즘을 통한 학번, 이메일 개인정보 암호화</h3></a>
+    <a href="https://devpoong.tistory.com/89"><h3>3. 운영환경 구축하기 with Spring Actuator, Micrometer, Prometheus, Grafana</h3></a>
+    <a href="https://devpoong.tistory.com/87"><h3>4. Jwt Token 인증방식을 사용하면서 memberId를 path variable로 받는것은 보안적인 이슈가 있다.</h3></a>
+    <a href="https://devpoong.tistory.com/84"><h3>5. 하나의 물리 서버에 React 빌드파일과 Spring Boot Jar Tomcat WAS 배포를 위한 NGINX 설정</h3></a>
+    <a href="https://devpoong.tistory.com/86"><h3>6. HTTPS를 적용해야 한다? - https 기본지식, 적용 방법, nginx 설정방법에 대해서 알아보자.</h3></a>
+    <a href="https://devpoong.tistory.com/85"><h3>7. Docker 여러 컨테이너의 볼륨, 네트워크를 간편하게 관리하고 실행하는 방법 (with Docker Compose)</h3></a>
+    <a href="https://devpoong.tistory.com/82"><h3>8. Named Lock을 이용한 중복 예약 동시성 문제 해결</h3></a>
+    <a href="https://devpoong.tistory.com/83"><h3>9.Amd64를 지원하지 않는 Docker Image Error</h3></a>
+    <a href="https://devpoong.tistory.com/81"><h3>10. Spring Security ignore uri를 무시하고 JwtTokenFilter를 계속 거치는 버그 해결</h3></a>
+    <a href="https://devpoong.tistory.com/73"><h3>11. JwtFilter에서 예외 발생시 JwtAuthenticationEntryPoint로 이어지지 않는 문제</h3></a>
+    <a href="https://devpoong.tistory.com/80"><h3>12. application.yml 변경사항이 jar파일에 제대로 적용되지 않는 문제</h3></a>
+    <a href="https://devpoong.tistory.com/74"><h3>13. 자동 반납 처리 및 제재를 위한 스케줄링 기능 구현하기</h3></a>
+    <br>
 <hr>
 <h1 id="structure">🏗️ 서버 내부 구조</h1>
 <div align="center">
@@ -94,25 +113,24 @@
 </div>
 <br>
 <hr>
-<h1 id="structure">🛢️ ERD</h1>
+<h1 id="erd">🛢️ ERD</h1>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/238134761-a61ff74a-f7d7-44ea-95ff-331ffbf3d785.png">
 </div>
 <br>
 <hr>
-<h1 id="issue">설계 및 기술적인 고민 해결</h1>
-<hr>
     <h1 id="video">🎥 주요 기능 시연 영상</h1>
-    <h2> 1️⃣ 예약 </h2>
+    <h2> 1️⃣ 예약 - 웹 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237363611-50fa5d46-1ef7-48b9-8c25-d083c4dab047.gif">
     <br><br>
-    <h2> 2️⃣ 체크인 </h2>
+    <h2> 2️⃣ 체크인 - 키오스크 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237354711-477b7b4c-4f2c-4cba-ace2-a6efcd7530f4.gif">
     <br><br>
-    <h2> 3️⃣ 반납 시연 </h2>
+    <h2> 3️⃣ 반납 시연 - 웹 </h2>
     <img src="https://user-images.githubusercontent.com/68465716/237363643-b9caf7a8-a994-471f-8f19-1b0c2ba420ab.gif">
     <br><br>
-    <h2> 4️⃣ 현장예약 시연 </h2>
+    <h2> 4️⃣ 현장예약 시연 - 키오스크</h2>
+    <p>실제로는 터치 디스플레이 사용</p>
     <img src="https://user-images.githubusercontent.com/68465716/237353578-eb4f7cd4-34d4-4b54-a643-81401d435519.gif">
 <hr>
 <h1 id="ui">🎨 UI 구현</h1>
