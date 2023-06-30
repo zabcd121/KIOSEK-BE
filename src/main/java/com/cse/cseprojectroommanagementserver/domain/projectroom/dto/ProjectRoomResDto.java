@@ -19,6 +19,7 @@ public class ProjectRoomResDto {
         private Integer priority;
         private Long projectRoomId;
         private String roomName;
+        @Builder.Default
         private List<ProjectTableSearchRes> projectTableList = new ArrayList<>();
 
         public static ProjectRoomAndTableSearchRes of(ProjectRoom projectRoom, List<ProjectTable> projectTableList) {

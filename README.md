@@ -86,7 +86,7 @@
 <hr>
 <div style="align-content: center; padding: 0px 200px;">
 <h1 id="operation">📷️ 실제 키오스크 운영 사진</h1>
-<h3>웹 사이트뿐만 아니라 프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
+<h3>예약 웹 서비스 뿐만 아니라 프로젝트 실습실 2곳에서 키오스크 운영 및 관리중</h3>
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/238135350-13f36c4a-5f1d-4d0b-b732-5c621ece02b4.jpeg" width="900" align="center"></img>
 </div>
@@ -119,7 +119,7 @@
     <a href="https://devpoong.tistory.com/73"><p style="font-size: 17px">👉 https://devpoong.tistory.com/73</p></a>
     <h3>13. application.yml 변경사항이 jar파일에 제대로 적용되지 않는 문제</h3>
     <a href="https://devpoong.tistory.com/80"><p style="font-size: 17px">👉 https://devpoong.tistory.com/80</p></a>
-    <h3>15. 자동 반납 처리 및 제재를 위한 스케줄링 기능 구현하기</h3>
+    <h3>14. 자동 반납 처리 및 제재를 위한 스케줄링 기능 구현하기</h3>
     <a href="https://devpoong.tistory.com/74"><p style="font-size: 17px">👉 https://devpoong.tistory.com/74</p></a>
     <br>
 <hr>

@@ -22,6 +22,7 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Account account;
 
+    //TODO: JoinColumn Name 변경 때문인지 확인하기
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_qr")
     private AccountQR accountQR;

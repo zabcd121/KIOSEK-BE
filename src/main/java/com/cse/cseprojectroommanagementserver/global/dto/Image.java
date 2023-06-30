@@ -14,12 +14,12 @@ import javax.validation.constraints.Size;
 @Embeddable
 public class Image{
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String fileLocalName;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String fileOriName;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String fileUrl;
 }

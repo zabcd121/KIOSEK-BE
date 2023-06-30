@@ -32,7 +32,7 @@ public class Violation extends BaseTimeEntity {
     @JoinColumn(name = "penalty_id")
     private Penalty penalty;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50)
     @Enumerated(value = EnumType.STRING)
     private ViolationContent violationContent;
 

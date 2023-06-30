@@ -4,7 +4,6 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.member.exception.*;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import com.cse.cseprojectroommanagementserver.global.error.exception.ExpiredException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;

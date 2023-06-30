@@ -19,11 +19,19 @@ public class ProjectRoomSearchRepository implements ProjectRoomSearchableReposit
 
     private final JPAQueryFactory queryFactory;
 
+//    @Override
+//    public List<ProjectRoom> findAll() {
+//        return queryFactory
+//                .selectFrom(projectRoom)
+//                .join(projectRoom.projectTableList, projectTable).fetchJoin()
+//                .fetch();
+//    }
+
     @Override
     public List<ProjectRoom> findAll() {
         return queryFactory
                 .selectFrom(projectRoom)
-                .join(projectRoom.projectTableList, projectTable).fetchJoin()
+                .distinct()
                 .fetch();
     }
 
