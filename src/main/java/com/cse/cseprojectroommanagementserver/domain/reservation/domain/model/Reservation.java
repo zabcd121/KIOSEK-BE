@@ -42,7 +42,7 @@ public class Reservation extends BaseTimeEntity {
     private TableReturn tableReturn;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_qr_id", unique = true, nullable = false)
+    @JoinColumn(name = "reservation_qr_id")
     private ReservationQR reservationQR;
 
     @Column(nullable = false, length = 30)

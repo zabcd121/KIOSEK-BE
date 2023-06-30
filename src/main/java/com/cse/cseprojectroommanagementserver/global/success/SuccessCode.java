@@ -74,7 +74,12 @@ public enum SuccessCode {
      * Table Deactivation: 10
      */
     TABLE_DEACTIVATE_SUCCESS(CREATED, "1000", "테이블 비활성화 성공"),
-    TABLE_DEACTIVATION_SEARCH_SUCCESS(OK, "1003", "테이블 비활성화 내역 조회 성공");
+    TABLE_DEACTIVATION_SEARCH_SUCCESS(OK, "1003", "테이블 비활성화 내역 조회 성공"),
+
+    /**
+     * Visitor: 11
+     */
+    VISIOR_COUNT_SEARCH_SUCCESS(OK, "1100", "방문자 수 조회 성공");
 
 
     private final HttpStatus httpStatus;

@@ -20,7 +20,7 @@ public class ProjectRoom extends BaseTimeEntity {
     private Long projectRoomId;
 
     @Builder.Default
-    @OneToMany(mappedBy = "projectRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projectRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectTable> projectTableList = new ArrayList<>();
 
     @Column(nullable = false, length = 10)
