@@ -10,7 +10,6 @@
     회의실 예약 및 관리 시스템
     <br />
     <br />
-    <a href="https://east-character-a95.notion.site/KIOSEK-763c315e47394a37aed2b4192207c78bhttps://east-character-a95.notion.site/KIOSEK-763c315e47394a37aed2b4192207c78b">NOTION</a> ·
     <a href="https://github.com/brobac/CSE-projectroom-management">FRONTEND PROJECT</a> ·
     <a href="https://github.com/zabcd121/CSE-projectroom-management-Server">BACKEND PROJECT</a>
   </p>
