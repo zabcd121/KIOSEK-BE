@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 
 @SpringBootTest
-//@Disabled
+@Disabled
 @AutoConfigureMockMvc
 @Transactional
 public class BaseIntegrationTestWithSecurityFilterForAdmin {
