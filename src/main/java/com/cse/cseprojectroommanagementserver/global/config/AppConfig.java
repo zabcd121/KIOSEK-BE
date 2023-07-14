@@ -18,11 +18,11 @@ public class AppConfig implements WebMvcConfigurer {
 
     private final VisitorRecordInterceptor visitorRecordInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(visitorRecordInterceptor)
-                .addPathPatterns("/api/**");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(visitorRecordInterceptor)
+//                .addPathPatterns("/api/**");
+//    }
 
     @Bean
     public LocalDateFormatter localDateFormatter() {

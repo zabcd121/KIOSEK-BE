@@ -55,8 +55,8 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-01. 예약 내역 조회 성공 - 시작일, 마지막일 조건 사용")
     void 예약내역조회_성공_시작일마지막일조건() throws Exception {
         // Given
-        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A3");
         Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
         reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusHours(3), LocalDateTime.now());
@@ -82,8 +82,8 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-02. 예약 내역 조회 성공 - 회원 이름 조건 사용")
     void 예약내역조회_성공_회원이름조건() throws Exception {
         // Given
-        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A3");
         Member member1 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         Member member2 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password2!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "홍길");
         reservationSetUp.saveReservation(member1, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
@@ -109,8 +109,8 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-02. 예약 내역 조회 성공 - 회원 이름 조건 사용")
     void 예약내역조회_성공_로그인ID조건() throws Exception {
         // Given
-        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A3");
         Member member1 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         Member member2 = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password2!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "홍길");
         reservationSetUp.saveReservation(member1, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
@@ -136,13 +136,11 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-04. 예약 내역 조회 성공 - 예약 상태 조건 사용")
     void 예약내역조회_성공_예약상태조건() throws Exception {
         // Given
-        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A3");
         Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         Reservation reservation1 = reservationSetUp.saveReservationWithStatus(ReservationStatus.IN_USE, member, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
-        Reservation reservation2 = reservationSetUp.saveReservationWithStatus(ReservationStatus.CANCELED, member, projectTable, LocalDateTime.now().minusHours(3), LocalDateTime.now());
 
-        ReservationSearchCondition condition = ReservationSearchCondition.builder().startDt(LocalDate.now().minusDays(4)).endDt(LocalDate.now()).build();
         // When
         ResultActions resultActions = mvc.perform(
                         get("/api/admins/v1/reservations")
@@ -162,10 +160,10 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-05. 예약 내역 조회 성공 - 프로젝트실 이름 조건 사용")
     void 예약내역조회_성공_프로젝트실이름조건() throws Exception {
         // Given
-        ProjectRoom projectRoom1 = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectRoom projectRoom2 = projectRoomSetUp.saveProjectRoom("디지털관", "DB134", 2);
-        ProjectTable projectTable1 = projectTableSetUp.saveProjectTable(projectRoom1, "A3");
-        ProjectTable projectTable2 = projectTableSetUp.saveProjectTable(projectRoom2, "A3");
+        ProjectRoom projectRoom1 = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectRoom projectRoom2 = projectRoomSetUp.findProjectRoomByRoomName("DB134");
+        ProjectTable projectTable1 = projectTableSetUp.findProjectTableByTableName("A1");
+        ProjectTable projectTable2 = projectTableSetUp.findProjectTableByTableName( "B3");
         Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         Reservation reservation1 = reservationSetUp.saveReservationWithStatus(ReservationStatus.IN_USE, member, projectTable1, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
         Reservation reservation2 = reservationSetUp.saveReservationWithStatus(ReservationStatus.CANCELED, member, projectTable2, LocalDateTime.now().minusHours(3), LocalDateTime.now());
@@ -190,8 +188,8 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     @DisplayName("C1-06. 예약 내역 조회 성공 - 조건 없음")
     void 예약내역조회_성공_조건없음() throws Exception {
         // Given
-        ProjectRoom projectRoom = projectRoomSetUp.saveProjectRoom("디지털관", "D330", 1);
-        ProjectTable projectTable = projectTableSetUp.saveProjectTable(projectRoom, "A3");
+        ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");
+        ProjectTable projectTable = projectTableSetUp.findProjectTableByTableName("A3");
         Member member = memberSetUp.saveMember(RandomStringUtils.random(8, false, true), "password1!", RandomStringUtils.random(8, true, true) + "@kumoh.ac.kr", "김현석");
         reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusDays(4), LocalDateTime.now().minusDays(4).plusHours(2));
         reservationSetUp.saveReservation(member, projectTable, LocalDateTime.now().minusHours(3), LocalDateTime.now());

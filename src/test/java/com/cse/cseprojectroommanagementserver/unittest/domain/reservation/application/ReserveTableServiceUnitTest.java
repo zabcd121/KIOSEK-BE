@@ -9,6 +9,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.application.Res
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.service.ReservationValidator;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -35,33 +37,21 @@ class ReserveTableServiceUnitTest {
     @InjectMocks
     ReserveTableService reserveTableService;
 
-    @Mock ReservationVerifiableRepository reservationVerifiableRepository;
+    @Mock ReservationValidator reservationValidator;
+
     @Mock ReservationRepository reservationRepository;
-    @Mock PenaltySearchableRepository penaltySearchRepository;
-    @Mock ReservationPolicySearchableRepository reservationPolicySearchableRepository;
     @Mock MemberRepository memberRepository;
     @Mock ProjectTableRepository projectTableRepository;
-    @Mock TableDeactivationSearchableRepository tableDeactivationSearchableRepository;
 
     @Mock QRGenerator qrGenerator;
 
     ReservationPolicy reservationPolicy;
     static final int DAYS_OF_WEEK = 7;
 
-    /** 테스트 케이스
+    /** 테스트 케이스 ( Validator 는 분리하여 테스트 )
      * C1. 예약 성공 - 모두 통과
      * C2. 예약 실패
-         * C2-01. 예약 실패 - 제재중인 회원
-         * C2-02. 예약 실패 - 비활성화된 테이블 선택 (정상 회원, 중복 예약X)
-         * C2-03. 예약 실패 - 중복된 예약 (정상 회원, 활성화된 테이블)
-         *
-         * C2-04. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 PASS
-         * C2-05. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 PASS
-         * C2-06. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 FAIL
-         * C2-07. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 FAIL
-         * C2-08. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 PASS
-         * C2-09. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 FAIL
-         * C2-10. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 FAIL
+         * C2-01. 예약 실패 - 검증 실패 (검증확인은 Validator 단위 테스트에서)
      */
 
     @BeforeEach
@@ -87,17 +77,8 @@ class ReserveTableServiceUnitTest {
                 .startAt(reservationStartAt)
                 .endAt(reservationEndAt)
                 .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
 
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
-        given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
-        given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
-
-        given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId)).willReturn(reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L);
-
+        willDoNothing().given(reservationValidator).validate(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
         given(memberRepository.getReferenceById(memberId)).willReturn(Member.builder().memberId(memberId).build());
         given(projectTableRepository.getReferenceById(reserveReq.getProjectTableId())).willReturn(ProjectTable.builder().tableId(reserveReq.getProjectTableId()).build());
         Reservation savedReservation = Reservation.builder().build();
@@ -112,202 +93,18 @@ class ReserveTableServiceUnitTest {
     }
 
     @Test
-    @DisplayName("C2-01. 예약 실패 - 제재중인 회원")
-    void 예약_실패_제재중인회원() {
+    @DisplayName("C2-01. 예약 실패 - 검증실패")
+    void 예약_실패_검증실패() {
         // Given
         Long memberId = 3L;
         ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(true);
+        willThrow(UnAuthorizedException.class).given(reservationValidator).validate(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
         // When, Then
         assertThrows(UnAuthorizedException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
-    @Test
-    @DisplayName("C2-02. 예약 실패 - 비활성화된 테이블 선택 (정상 회원, 중복 예약X)")
-    void 예약_실패_비활성화된테이블() {
-        // Given
-        Long memberId = 3L;
-        ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
-        given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(true);
 
-
-        // When, Then
-        assertThrows(BusinessRuleException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-03. 예약 실패 - 중복된 예약 (정상 회원, 활성화된 테이블)")
-    void 예약_실패_중복된예약() {
-        // Given
-        Long memberId = 3L;
-        ReserveReq reserveReq = getReserveRequest();
-        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
-        given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
-        given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(true);
-
-
-        // When, Then
-        assertThrows(DuplicationException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-04. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 PASS")
-    void 예약_실패_예약정책위반_최대예약가능시간초과() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-05. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 PASS")
-    void 예약_실패_예약정책위반_최대예약가능시간초과_하루예약가능횟수초과() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.now().plusDays(1L);
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-06. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 FAIL")
-    void 예약_실패_예약정책위반_최대예약가능시간초과_예약불가능한날짜() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더, 현재 예약 불가능한 날짜임
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-07. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 FAIL, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 FAIL")
-    void 예약_실패_예약정책위반_최대예약가능시간초과_하루예약가능횟수초과_예약불가능한날짜() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()+1); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-08. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 PASS")
-    void 예약_실패_예약정책위반_하루예약가능횟수초과() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(4, 0));
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-09. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 PASS, 예약 가능한 날짜 FAIL")
-    void 예약_실패_예약정책위반_예약불가능한날짜() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue() - 1L;
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-    @Test
-    @DisplayName("C2-10. 예약 실패 - 예약 정책 위반 - 최대 예약 가능 시간 PASS, 하루 예약 가능 횟수 FAIL, 예약 가능한 날짜 FAIL")
-    void 예약_실패_예약정책위반_하루예약가능횟수초과_예약불가능한날짜() {
-        // Given
-        LocalDateTime reservationStartAt = LocalDateTime.of(LocalDateTime.now().toLocalDate().plusDays(reservationPolicy.getReservationMaxPeriod().getMaxPeriod() * DAYS_OF_WEEK + 1), LocalTime.of(5, 0));
-        LocalDateTime reservationEndAt = reservationStartAt.plusHours(reservationPolicy.getReservationMaxHourPerOnce().getMaxHour()); // 최대예약가능시간보다 1시간 더
-
-        Long memberId = 3L;
-        ReserveReq reserveReq = ReserveReq.builder()
-                .projectTableId(3L)
-                .startAt(reservationStartAt)
-                .endAt(reservationEndAt)
-                .build();
-        long todayReservationCountByMember = reservationPolicy.getReservationMaxCountPerDay().getMaxCount().longValue(); // 이미 최대횟수만큼 예약함.
-
-        givenTemplateOfReservationPolicyViolationTest(memberId, reserveReq, todayReservationCountByMember);
-
-        // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
-    }
-
-
-    private void givenTemplateOfReservationPolicyViolationTest(Long memberId, ReserveReq reserveReq, Long todayReservationCountByMember) {
-        given(penaltySearchRepository.existsByMemberId(memberId)).willReturn(false);
-        given(tableDeactivationSearchableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
-        given(reservationVerifiableRepository.existsBy(reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt())).willReturn(false);
-
-        given(reservationPolicySearchableRepository.findCurrentlyPolicy()).willReturn(reservationPolicy);
-        given(reservationVerifiableRepository.countCreatedReservationForTodayBy(memberId)).willReturn(todayReservationCountByMember);
-    }
 
     private ReserveReq getReserveRequest() {
         return ReserveReq.builder()

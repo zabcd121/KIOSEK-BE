@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Disabled
 @AutoConfigureMockMvc
 @Transactional
 public class BaseIntegrationTestWithIgnoringURI { // security config에서 ignoring 설정된 api 테스트할 때 사용
