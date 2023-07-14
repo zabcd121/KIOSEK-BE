@@ -33,11 +33,13 @@ public class MemberSetUp {
         );
     }
 
-    public Member saveAdmin(String loginId, String password) {
+    public Member saveAdmin(String loginId, String password, String email, String name) {
         return memberRepository.save(
                 Member.builder()
                         .account(Account.builder().loginId(aes256.encrypt(loginId)).password(password).build())
+                        .email(aes256.encrypt(email))
                         .roleType(ROLE_ADMIN)
+                        .name(name)
                         .build()
 
         );

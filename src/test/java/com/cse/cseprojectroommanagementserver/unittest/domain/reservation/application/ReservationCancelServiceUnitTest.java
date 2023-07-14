@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.application.Res
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
 import org.junit.jupiter.api.DisplayName;
@@ -118,7 +119,7 @@ class ReservationCancelServiceUnitTest {
         given(reservationSearchableRepository.findByReservationId(reqReservationId)).willReturn(Optional.of(findReservation));
 
         // When, Then
-        assertThrows(UnAuthorizedException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
+        assertThrows(BusinessRuleException.class, () -> reservationCancelService.cancelReservation(memberId, reqReservationId));
     }
 
     private Reservation getReservationByReservationStatus(Long memberId, Long reservationId, ReservationStatus reservationStatus) {

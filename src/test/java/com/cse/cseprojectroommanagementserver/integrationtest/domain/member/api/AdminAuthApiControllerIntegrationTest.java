@@ -34,9 +34,10 @@ class AdminAuthApiControllerIntegrationTest extends BaseIntegrationTestWithIgnor
     @DisplayName("M1-C01. 로그인 성공")
     void 관리자로그인_성공() throws Exception {
         // Given
-        Member savedMember = memberSetUp.saveAdmin("20180335", passwordEncoder.encode("password1!"));
+        Member savedMember = memberSetUp.saveAdmin("20180335", passwordEncoder.encode("password1!"), "20180999@kumoh.ac.kr", "홍길동");
         LoginReq loginReq = new LoginReq("20180335", "password1!");
-
+        System.out.println(loginReq.getLoginId());
+        System.out.println(loginReq.getPassword());
         // When
         ResultActions resultActions = mvc.perform(
                         post("/api/admins/v1/login")

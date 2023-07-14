@@ -12,10 +12,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.*;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -137,7 +134,7 @@ class ReserveTableServiceUnitTest {
 
 
         // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reserveTableService.reserve(memberId, reserveReq));
+        assertThrows(BusinessRuleException.class, () -> reserveTableService.reserve(memberId, reserveReq));
     }
 
     @Test

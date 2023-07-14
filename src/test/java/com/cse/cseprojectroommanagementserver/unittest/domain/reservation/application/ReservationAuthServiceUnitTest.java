@@ -7,6 +7,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.domain.reposito
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
+import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.PolicyInfractionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -117,7 +118,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(true);
 
         // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(BusinessRuleException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
     }
 
     @Test

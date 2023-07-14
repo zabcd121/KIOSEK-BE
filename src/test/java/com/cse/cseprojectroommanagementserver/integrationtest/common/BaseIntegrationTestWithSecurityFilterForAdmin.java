@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberReqDto.*;
 
 @SpringBootTest
-@Disabled
+//@Disabled
 @AutoConfigureMockMvc
 @Transactional
 public class BaseIntegrationTestWithSecurityFilterForAdmin {
@@ -46,7 +46,7 @@ public class BaseIntegrationTestWithSecurityFilterForAdmin {
     @BeforeEach
     void setUp() {
         String loginId = RandomStringUtils.random(8, true, true);
-        admin = memberSetUp.saveAdmin(loginId, passwordEncoder.encode("admin1!"));
+        admin = memberSetUp.saveAdmin(loginId, passwordEncoder.encode("admin1!"), "admin1@example.com", "홍길동");
         MemberResDto.LoginRes loginRes = authService.login(new LoginReq(loginId, "admin1!"), RoleType.ROLE_ADMIN);
         accessToken = loginRes.getTokenInfo().getAccessToken();
     }
