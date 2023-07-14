@@ -32,7 +32,7 @@ class ComplaintApiControllerIntegrationTestTest extends BaseIntegrationTestWithS
         ResultActions resultActions = mvc.perform(
                 multipart("/api/v1/complaints")
                         .file(mockMultipartFIleExampleMaker.getMockMultipartFile())
-                        .param("projectRoomId", "4")
+                        .param("projectRoomId", "1")
                         .param("subject", "subject2")
                         .param("content", "content")
                         .header("Authorization", accessToken)
@@ -50,7 +50,7 @@ class ComplaintApiControllerIntegrationTestTest extends BaseIntegrationTestWithS
         // Given, When
         ResultActions resultActions = mvc.perform(
                         multipart("/api/v1/complaints")
-                                .param("projectRoomId", "4")
+                                .param("projectRoomId", "1")
                                 .param("subject", "subject2")
                                 .param("content", "content")
                                 .header("Authorization", accessToken)

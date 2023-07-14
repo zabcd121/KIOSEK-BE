@@ -145,6 +145,6 @@ public class SignupServiceUnitTest {
         given(qrGenerator.createAccountQRCodeImage()).willThrow(QRNotCreatedException.class);
 
         // When, Then
-        assertThrows(FileSystemException.class, () -> signupService.signup(signupReq));
+        assertThrows(QRNotCreatedException.class, () -> signupService.signup(signupReq));
     }
 }
