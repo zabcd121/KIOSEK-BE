@@ -7,7 +7,7 @@
 <h3 align="center">KIOSEK</h3>
 
   <p align="center">
-    금오공과대학교 컴퓨터소프트웨어공학과 프로젝트실 예약 시스템
+    회의실 예약 및 관리 시스템
     <br />
     <br />
     <a href="https://east-character-a95.notion.site/KIOSEK-763c315e47394a37aed2b4192207c78bhttps://east-character-a95.notion.site/KIOSEK-763c315e47394a37aed2b4192207c78b">NOTION</a> ·
