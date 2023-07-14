@@ -52,6 +52,7 @@
             <li><a href="#flow">📱 시스템 주요 Flow</a></li>
             <li><a href="#mainfc">‍🔧 프로젝트실 관리자 주요 기능</a></li>
             <li><a href="#operation">‍📷️ 실제 키오스크 운영 사진</a></li>
+            <li><a href="#diary">📔 프로젝트 회고</a></li>
             <li><a href="#issue">‍❗️이슈 해결 과정 정리 블로그</a></li>
             <li><a href="#structure">🏗️ 서버 내부 구조</a></li>
             <li><a href="#erd">🛢️ ERD</a></li>
@@ -89,6 +90,10 @@
 <div align="center">
 <img src="https://user-images.githubusercontent.com/68465716/238135350-13f36c4a-5f1d-4d0b-b732-5c621ece02b4.jpeg" width="900" align="center"></img>
 </div>
+<br>
+<hr>
+<h1 id="diary"> 프로젝트 회고 </h1>
+  <a href="https://devpoong.tistory.com/105"><p style="font-size: 17px">👉 https://devpoong.tistory.com/105</p></a>
 <br>
 <hr>
 <h1 id="issue">❗️이슈 해결 과정 정리</h1>
