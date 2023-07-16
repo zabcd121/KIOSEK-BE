@@ -103,7 +103,8 @@
     <a href="https://devpoong.tistory.com/90"><p style="font-size: 17px">👉 https://devpoong.tistory.com/90</p></a>
     <h3>2. 중복 예약 동시성 문제 해결과정 정리</h3>
     <p>여러 개의 세션에서 동시에 중복된 예약을 시도할 때 Named Lock을 이용하여 문제를 해결하였습니다.<br>
-        테이블이나 row 단위로 Lock을 거는것이 아닌 Pessimistic Lock과는 다르게 회의실 정보와 예약 시간 메타데이터를 이용하여 Locking 하였습니다.</p>
+        @Synchronized는 AOP 방식으로 동작하기 때문에 여러 세션에서 동시에 중복된 예약을 시도할 때 문제를 해결할 수 없었습니다.<br>
+        테이블이나 row 단위로 Lock을 거는 Pessimistic Lock과는 다르게, Named Lock을 이용하여 회의실 정보와 예약 시간 메타데이터를 이용하여 Locking 하였습니다.</p>
     <a href="https://devpoong.tistory.com/82"><p style="font-size: 17px">👉 https://devpoong.tistory.com/82</p></a>
     <h3>3. 단위 테스트, 통합 테스트에 대한 방향 잡기</h3>
     <p>단위 테스트는 서비스 계층을 대상으로 DB나 파일 시스템, 외부 시스템등의 공유 의존성을 Mocking 하여 끊어내어 진행하였습니다. <br>
