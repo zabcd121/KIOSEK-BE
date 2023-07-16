@@ -40,6 +40,7 @@ public class AutoTableReturnSchedulingService {
     @Scheduled(cron = "0 20,50 * * * *")
     @Transactional
     public void autoTableReturn() {
+        log.info("autoTableReturn");
         List<Reservation> reservationList = reservationSearchableRepository.findReturnWaitingReservations().orElseGet(null);
         List<TableReturn> tableReturnList = new ArrayList<>();
         for (Reservation reservation : reservationList) {
@@ -52,6 +53,7 @@ public class AutoTableReturnSchedulingService {
     @Scheduled(cron = "10 20,50 * * * *")
     @Transactional
     public void autoCancelUnUsedReservation() {
+        log.info("autoCancelUnUsedReservation");
         List<Reservation> unUsedReservationList = reservationSearchableRepository.findUnUsedReservations();
         for (Reservation unUsedReservation : unUsedReservationList) {
             log.debug("autoCancelUnUsedReservation 동작: reservation is unused");
@@ -66,6 +68,7 @@ public class AutoTableReturnSchedulingService {
     @Scheduled(cron = "1 0,30 * * * *")
     @Transactional
     public void changeUsedReservationToReturnWaiting() {
+        log.info("changeUsedReservationToReturnWaiting");
         List<Reservation> reservationList = reservationSearchableRepository.findFinishedButInUseStatusReservations().orElseGet(null);
         for (Reservation reservation : reservationList) {
             reservation.setReservationStatus(RETURN_WAITING);
