@@ -48,7 +48,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
-                .where(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
+                .on(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
                         .and(reservation.startAt.between(firstAt, lastAt)
                                 .and(reservation.reservationStatus.notIn(CANCELED, UN_USED, RETURNED))))
                 .fetch();
@@ -82,7 +82,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .leftJoin(reservation.tableReturn, tableReturn)
                 .join(reservation.projectTable, projectTable)
                 .join(projectTable.projectRoom, projectRoom)
-                .where(reservation.member.memberId.eq(memberId)
+                .on(reservation.member.memberId.eq(memberId)
                         .and(reservation.reservationStatus.in(UN_USED, RETURN_WAITING, NOT_RETURNED, RETURNED, CANCELED)))
                 .orderBy(reservation.startAt.desc())
                 .fetch();
