@@ -31,9 +31,9 @@ public class InitData {
 
     @PostConstruct
     public void init() throws Exception {
-        //initService.adminInit();
-        //initService.dataInit();
-        //initService.penaltyPolicyDataInit();
+        initService.adminInit();
+        initService.dataInit();
+        initService.penaltyPolicyDataInit();
     }
 
     @Component
