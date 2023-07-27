@@ -107,14 +107,13 @@ dependencies {
 
 }
 
-//tasks.withType(Test) {
-//    jacoco.includeNoLocationClasses = true
-//}
-
-//tasks.named('test') {
-//    useJUnitPlatform()
-//    finalizedBy 'jacocoTestReport'
-//}
+task copyPrivate(type: Copy) {
+    copy {
+        from './PDG-privates'
+        include "*.yml"
+        into 'src/main/resources/privates'
+    }
+}
 
 tasks.test {
     useJUnitPlatform()
