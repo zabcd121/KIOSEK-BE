@@ -23,6 +23,5 @@ public class VisitorApiController {
     public SuccessResponse<Integer> getVisitorCount(@ModelAttribute VisitorCountDuringPeriodReq visitorCountDuringPeriodReq) {
         return new SuccessResponse<>(VISIOR_COUNT_SEARCH_SUCCESS, visitorSearchService.searchVisitorCount(visitorCountDuringPeriodReq));
     }
-    
 
 }
