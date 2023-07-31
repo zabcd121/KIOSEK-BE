@@ -2,11 +2,11 @@
 spring:
   config:
     import:
-      - /properties/application-mail.yml
-      - /properties/application-filedir.yml
-      - /properties/application-jwt.yml
-      - /properties/application-monitor.yml
-      - /properties/application-proddb.yml
+      - ./properties/application-mail.yml
+      - ./properties/application-filedir.yml
+      - ./properties/application-jwt.yml
+      - ./properties/application-monitor.yml
+      - ./properties/application-proddb.yml
   profiles:
     active: proddb # dev, prod, test
     include: proddb
