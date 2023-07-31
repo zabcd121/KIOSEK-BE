@@ -109,7 +109,7 @@ dependencies {
 
 task copyPrivate(type: Copy) {
     copy {
-        from './PDG-privates'
+        from './kiosek-config'
         include "*.yml"
         into 'src/main/resources/privates'
     }
