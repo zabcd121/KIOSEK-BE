@@ -36,7 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-application.yml
+
 keystore.p12
 src/test/resources
 Dockerfile
@@ -44,12 +44,12 @@ docker-compose.yml
 src/.DS_Store
 .DS_Store
 src/main/resources/application-devdb.yml
-src/main/resources/application-devdb.yml
 src/main/resources/application-filedir.yml
 src/main/resources/application-jwt.yml
 src/main/resources/application-mail.yml
 src/main/resources/application-testdb.yml
 src/main/resources/application-proddb.yml
+src/main/resources/application-monitor.yml
 src/main/resources/privates
 src/main/resources/privates/**
 yarn.lock
