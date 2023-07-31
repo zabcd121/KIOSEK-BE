@@ -1,5 +1,5 @@
 [submodule "kiosek-config"]
-	path = src/main/resources
+	path = kiosek-config
 	url = https://github.com/zabcd121/kiosek-config
 	branch = master
 
