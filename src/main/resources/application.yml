@@ -1,0 +1,40 @@
+# default
+spring:
+  config:
+    import:
+      classpath:
+      - application-mail.yml
+      - application-filedir.yml
+      - application-jwt.yml
+      - application-monitor.yml
+      - application-proddb.yml
+  profiles:
+    active: proddb # dev, prod, test
+    include: proddb
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 40
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    async:
+      request-timeout: 5000
+
+server:
+  port: 8050
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate:
+#      type.descriptor.sql: trace #show parameter binding
+      #SQL: DEBUG
