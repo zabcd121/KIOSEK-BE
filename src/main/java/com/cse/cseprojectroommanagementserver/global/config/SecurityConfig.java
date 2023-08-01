@@ -58,7 +58,7 @@ public class SecurityConfig {
                         "/api/v1/rooms",
                         "/api/images/**",
                         "/actuator/**",
-                        "/swagger-ui/**"
+                        "/swagger-ui.html"
                 ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
     }
 
