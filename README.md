@@ -87,8 +87,9 @@
         <p style="font-size: 17px"><b>5. 위반내역이 <b>3회</b> 발생할 경우 <b>3일간</b> 예약이 불가능하다.</b></p>
         <hr>
         <h2 id="mainfc">👨🏼‍🔧 회의실 관리자 주요 기능</h2>
+        <p style="font-size: 19px">실제 운영을 위한 관리자 기능을 아래와 같이 제공합니다.</p>
         <p style="font-size: 17px">1. 전체적인 예약 상황 모니터링</p>
-        <p style="font-size: 17px">2. 특식배부와 같은 이유로 테이블을 사용하지 못하도록 해야하는경우 해당 테이블을 특정 기간동안 비활성화</p>
+        <p style="font-size: 17px">2. 회의공간 비활성화 (공간을 사용하지 못하게 해야하는 경우 특정기간 동안 비활성화)</p>
         <p style="font-size: 17px">3. 위반내역 및 제재내역을 확인 및 정지 해제</p>
         <p style="font-size: 17px">4. 예약 정책과 제재 정책을 수정</p>
         <p style="font-size: 17px">5. 사용자의 민원 확인</p>
