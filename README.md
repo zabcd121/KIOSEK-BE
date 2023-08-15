@@ -63,11 +63,11 @@
 <h1 id="structure">🏗️ 운영 서버, 개발 서버 내부 구조 및 사양</h1>
 <h3>(1) 운영서버 : On-premise <br><br>(OS: ubuntu20.04, CPU: i5-6500, RAM: 4GB)</h3>
 <div align="center">
-<img src="https://user-images.githubusercontent.com/68465716/257219243-9e1c2498-d3a7-48ef-a71d-8efc81ba0f32.png" width="1200" height="400" align="center"></img>
+<img src="https://user-images.githubusercontent.com/68465716/257221542-b1e52fb0-8ec8-4991-ae31-1bdb13c70213.png" align="center"></img>
 </div>
 <h3>(2) 개발서버 : AWS Cloud <br><br>(OS: ubuntu20.04, EC2 instance: t2.medium, vCPU: 2, RAM: 4GB)</h3>
 <div align="center">
-<img src="https://user-images.githubusercontent.com/68465716/257219243-9e1c2498-d3a7-48ef-a71d-8efc81ba0f32.png" width="1200" height="400" align="center"></img>
+<img src="https://user-images.githubusercontent.com/68465716/257219243-9e1c2498-d3a7-48ef-a71d-8efc81ba0f32.png" align="center"></img>
 </div>
 <br>
 <hr>
