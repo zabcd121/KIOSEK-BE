@@ -1,11 +1,13 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
+import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -43,14 +45,18 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
     public List<ReservationSearchRes> findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(Long projectRoomId, LocalDateTime firstAt, LocalDateTime lastAt) {
         return queryFactory
                 .select(Projections.fields(ReservationSearchRes.class,
-                        projectTable.tableId.as("projectTableId"), projectTable.tableName,
+                        reservation.projectTable.tableId.as("projectTableId"),
                         reservation.startAt, reservation.endAt, tableReturn.returnedAt, reservation.reservationStatus))
                 .from(reservation)
                 .leftJoin(reservation.tableReturn, tableReturn)
-                .join(reservation.projectTable, projectTable)
-                .on(reservation.projectTable.projectRoom.projectRoomId.eq(projectRoomId)
-                        .and(reservation.startAt.between(firstAt, lastAt)
-                                .and(reservation.reservationStatus.notIn(CANCELED, UN_USED, RETURNED))))
+                .where(reservation.startAt.between(firstAt, lastAt)
+                        .and(reservation.reservationStatus.notIn(CANCELED, UN_USED, RETURNED)
+                                .and(reservation.projectTable.tableId.in(
+                                        JPAExpressions
+                                                .select(projectTable.tableId)
+                                                .from(projectTable)
+                                                .where(projectTable.projectRoom.projectRoomId.eq(projectRoomId))
+                                ))))
                 .fetch();
     }
 

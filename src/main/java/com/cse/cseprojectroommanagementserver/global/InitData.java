@@ -8,6 +8,8 @@ import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.
 import com.cse.cseprojectroommanagementserver.domain.penaltypolicy.domain.model.ViolationCountToImposePenalty;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxCountPerDay;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxHourPerOnce;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationMaxPeriod;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class InitData {
 
     @PostConstruct
     public void init() throws Exception {
+//        initService.reservationInit();
         initService.adminInit();
         initService.dataInit();
         initService.penaltyPolicyDataInit();
@@ -43,6 +47,27 @@ public class InitData {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
         private final AES256 aes256;
+
+        public void reservationInit() {
+
+            for (int i=1; i < 12; i++) {
+                for (int d=1; d < 29; d++) {
+                    for (int j=1; j<24; j++) {
+                        for (int k=0; k<59; k++) {
+                            for (int x=0; x<59; x++) {
+                                LocalDateTime startAt = LocalDateTime.of(2023, d, i, j, k, x);
+                                em.persist(
+                                        Reservation.builder()
+                                                .reservationStatus(ReservationStatus.RESERVATION_COMPLETED)
+                                                .startAt(startAt)
+                                                .endAt(LocalDateTime.of(2023, d, i, j, k, x).plusHours(2))
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public void adminInit() {
             Member admin1 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin1")).password(passwordEncoder.encode("admin17540!")).build()).name("관리자1").email("admin1@kiosek.kr").roleType(RoleType.ROLE_ADMIN).build();
@@ -59,6 +84,22 @@ public class InitData {
 //            em.persist(admin);
             em.persist(member1);
             em.persist(member2);
+//
+//            for (int i=3; i<1000; i++) {
+//                String loginId = "2099";
+//                if (i>100) {
+//                    loginId += "0" + i;
+//                } else {
+//                    loginId += "00" + i;
+//                }
+//                em.persist(Member.createMember(
+//                        Account.builder()
+//                                .loginId(aes256.encrypt(loginId))
+//                                .password(passwordEncoder.encode("abcd12345!"))
+//                                .build(),
+//                        loginId + "@kumoh.ac.kr", "소공이" + i, QRImage.builder()
+//                        .content("231").fileOriName("asdf").fileLocalName("gdsq").fileUrl("evasc").build()));
+//            }
 
             ProjectRoom projectRoom1 = ProjectRoom.builder().buildingName("디지털관").roomName("D330").priority(1).build();
             ProjectRoom projectRoom2 = ProjectRoom.builder().buildingName("디지털관").roomName("DB134").priority(2).build();

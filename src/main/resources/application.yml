@@ -6,10 +6,10 @@ spring:
       - ./properties/application-filedir.yml
       - ./properties/application-jwt.yml
       - ./properties/application-monitor.yml
-      - ./properties/application-proddb.yml
+      - ./properties/application-devdb.yml
   profiles:
-    active: proddb # dev, prod, test
-    include: proddb
+    active: devdb # dev, prod, test
+    include: devdb
 
   servlet:
     multipart:
