@@ -50,7 +50,6 @@ public class ReservationResDto {
     @Getter
     public static class ReservationSearchRes {
         private Long projectTableId;
-        private String tableName;
 
         @DateTimeFormat(pattern = LOCAL_DATE_TIME_FORMAT)
         private LocalDateTime startAt;
@@ -66,7 +65,6 @@ public class ReservationResDto {
         public static ReservationSearchRes of(Reservation reservation) {
             return ReservationSearchRes.builder()
                     .projectTableId(reservation.getProjectTable().getTableId())
-                    .tableName(reservation.getProjectTable().getTableName())
                     .startAt(reservation.getStartAt())
                     .endAt(reservation.getEndAt())
                     .returnedAt(reservation.getTableReturn() != null ? reservation.getTableReturn().getReturnedAt() : null)

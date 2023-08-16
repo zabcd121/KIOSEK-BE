@@ -24,6 +24,9 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.m
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(indexes = {
+        @Index(name = "ix_start_at", columnList = "start_at"),
+        @Index(name = "ix_end_at", columnList = "end_at")})
 public class Reservation extends BaseTimeEntity {
 
     @Id
@@ -53,10 +56,10 @@ public class Reservation extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Means means;
 
-    @Column(nullable = false)
+    @Column(name = "start_at", nullable = false)
     private LocalDateTime startAt;
 
-    @Column(nullable = false)
+    @Column(name = "end_at", nullable = false)
     private LocalDateTime endAt;
 
     @Column(nullable = true)
