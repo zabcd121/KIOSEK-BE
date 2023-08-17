@@ -48,8 +48,9 @@
 <hr>
     <div style="align-content: center; padding: 0px 200px;">
         <ol>
-            <li><a href="#structure">🏗️ 운영 서버, 개발 서버 구조 및 사양</a></li>
             <li><a href="#purpose">✅ 시스템 목적</a></li>
+            <li><a href="#introduce">💁🏻‍ 기여한 부분</a></li>
+            <li><a href="#structure">🏗️ 운영 서버, 개발 서버 구조 및 사양</a></li>
             <li><a href="#flow">📱 시스템 주요 Flow</a></li>
             <li><a href="#mainfc">‍🔧 회의실 관리자 주요 기능</a></li>
             <li><a href="#diary">📔 프로젝트 회고</a></li>
@@ -60,6 +61,26 @@
             <li><a href="#ui">🎨 UI 구현</a></li>
         </ol>
 <hr>
+<h2 id="purpose">✅ 시스템 요약</h2>
+        <p>- 코로나 완화로 인해 오프라인 미팅이 잦아짐에 따라, 회의실 비매너 사용(청결 문제 등)과 자리 점유 등의 문제를 해결하기 위한 플랫폼입니다.</p>
+<p>- 예약 시스템이 도입되면서 발생하는 노쇼와 같은 문제를 해결하기 위해 스케줄러 기능을 통해 체크인되지 않은 예약건에 대해 자동으로 취소처리를 하고 제재를 가하는 절차를 추가하였습니다.</p>
+<p>- 웹 사전예약 또는 키오스크 현장예약을 통해 회의공간을 예약할 수 있습니다.</p>
+<p>- 예약 당 발급된 QR 코드를 통해 체크인을 하는 방식을 선택하여 복잡한 인증 절차를 제거하였습니다.</p>
+<p>- 좌석을 사용하고 나면 깨끗이 치우고 사진을 찍어서 반납하는 절차를 추가함으로써 청결 문제를 해결하였습니다.</p>
+        <hr>
+<h1 id="introduce">💁🏻‍ 기여한 부분</h1>
+<p style="font-size: 16px">1. 팀장 & 백엔드 전체 개발 & Release & Deploy 담당<br><br>
+2. 운영서버(On-premise) 및 개발서버(AWS) 환경 구축<br><br>
+3. Jenkins를 이용한 배포 자동화 구축 & Docker 컨테이너 환경 구축<br><br>
+4. 웹 사이트 예약, 키오스크 현장 예약, QR 체크인, 반납 등의 일반 사용자를 위한 22개의 Rest API 개발<br><br>
+5. 예약 내역 관리, 제재 관리, 회의 공간 비활성화, 예약 및 제재 정책 관리 등의 관리자를 위한 15개의 Rest API 개발<br><br>
+6. 노쇼에 대해서 자동 예약 취소 및 제재 스케줄링 기능 개발<br><br>
+7. 공유의존성 Mocking을 통한 단위 테스트와 공유의존성을 연결한 통합 테스트를 통해 테스트 커버리지 80% 이상 유지<br><br>
+8. Redis를 이용하여 회원가입 인증번호 및 JWT 토큰을 캐싱하여 인증코드 검사, 로그인, 로그아웃 기능 개발<br><br>
+9. 컴퓨팅 자원 및 백엔드 애플리케이션 주요 기능 처리시간 모니터링 환경 구축<br><br>
+10. 대칭키 알고리즘을 이용한 개인정보 암호화<br><br>
+</p>
+
 <h1 id="structure">🏗️ 운영 서버, 개발 서버 내부 구조 및 사양</h1>
 <h3>(1) 운영서버 : On-premise <br><br>(OS: ubuntu20.04, CPU: i5-6500, RAM: 4GB)</h3>
 <div align="center">
@@ -71,11 +92,6 @@
 </div>
 <br>
 <hr>
-        <h2 id="purpose">✅ 시스템 목적</h2>
-        <p>주 목적은 회의실을 예약하고 사용하는데 있어서 편의성을 제공하고자 한다.</p>
-        <p>본 시스템이 부재했던 때에 여러 불편함을 해소하고 사용자 추척이 불가능하여 미흡한 책임감으로 인하여 유지되지 못한 좌석 청결 문제를 해결한다. </p>
-        <p>결국 사용자에게 편의성을 제공하지만 책임감을 부여하여 매너있는 태도로 공공시설을 사용하도록 한다.</p>
-        <hr>
         <h2 id="flow">📱 시스템 주요 Flow</h2>
         <p align="center"><em>참고) 사용자는 https://kiosek.kr 브라우저를 통해 예약하거나 현장에서 키오스크를 통해 현장예약하여 바로 사용할 수 있다.</em></p>
         <p style="font-size: 17px"><b>1. 웹을 통해 실시간으로 회의실 예약 상황을 확인할 수 있고 원하는 시간에 테이블을 예약하면 예약당 QR코드가 발급된다.</b></p>
@@ -158,54 +174,68 @@
 </p>
 </details>
     
-  <a href="https://devpoong.tistory.com/105"><p style="font-size: 17px">👉 https://devpoong.tistory.com/105</p></a>
+  <a href="https://devpoong.tistory.com/105"><p style="font-size: 17px">👉 회고 글 보기
+</a>  
 <br>
 <hr>
 <h1 id="issue">❗️이슈 해결 과정 정리</h1>
-    <h3>1. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3>
+    <h3>1. Index를 이용하여 조회 쿼리 137% 성능 향상기</h3>
+    <p>해당 프로젝트에서는 예약과 관련하여 시간을 많이 다루고 있습니다.<br> 따라서, DATETIME 타입의 컬럼을 범위 비교 또는 동등 비교하여 조회하는 쿼리가 많이 존재합니다.<br>
+    카디널리티, 선택도, 활용도, 수정빈도를 고려하여 시간관련 컬럼을 단일 컬럼 인덱스를 적용하여 기간별 예약 내역 조회 쿼리에 대해 성능을 137%향상시켰습니다.</p>
+    <a href="https://devpoong.tistory.com/121"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>2. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3>
     <p>예외상황마다 각각 하나의 커스텀 예외를 생성하다보니, 커스텀 예외의 수가 너무 많아지는 문제가 있었습니다.<br>
-    이를 해결하기 위해 표준예외를 사용하는 대신 현재 프로젝트에서 주로 발생하는 예외를 대상으로 한번 더 추상화하고 ErrorCode를 추가적으로 인자로 넣어주어 가독성을 높이는 방식으로 구현하였습니다.</p>
-    <a href="https://devpoong.tistory.com/90"><p style="font-size: 17px">👉 https://devpoong.tistory.com/90</p></a>
-    <h3>2. 중복 예약 동시성 문제 해결과정 정리</h3>
+    이를 해결하기 위해 표준예외를 사용하는 대신 현재 프로젝트에서 주로 발생하는 예외를 대상으로 한번 더 추상화하고<br> ErrorCode를 추가적으로 인자로 넣어주어 가독성을 높이는 방식으로 구현하였습니다.</p>
+    <a href="https://devpoong.tistory.com/90"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>3. 중복 예약 동시성 문제 해결과정 정리</h3>
     <p>여러 개의 세션에서 동시에 중복된 예약을 시도할 때 Named Lock을 이용하여 문제를 해결하였습니다.<br>
         @Synchronized는 AOP 방식으로 동작하기 때문에 여러 세션에서 동시에 중복된 예약을 시도할 때 문제를 해결할 수 없었습니다.<br>
         테이블이나 row 단위로 Lock을 거는 Pessimistic Lock과는 다르게, Named Lock을 이용하여 회의실 정보와 예약 시간 메타데이터를 이용하여 Locking 하였습니다.</p>
-    <a href="https://devpoong.tistory.com/82"><p style="font-size: 17px">👉 https://devpoong.tistory.com/82</p></a>
-    <h3>3. 단위 테스트, 통합 테스트에 대한 방향 잡기</h3>
+    <a href="https://devpoong.tistory.com/82"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>4. 단위 테스트, 통합 테스트에 대한 방향 잡기</h3>
     <p>단위 테스트는 서비스 계층을 대상으로 DB나 파일 시스템, 외부 시스템등의 공유 의존성을 Mocking 하여 끊어내어 진행하였습니다. <br>
     반면에 통합테스트는 컨트롤러를 대상으로 테스트 할 수 없는 외부 시스템을 제외하고 공유 의존성을 연결하여 진행하였습니다.</p>
-    <a href="https://devpoong.tistory.com/91"><p style="font-size: 17px">👉 https://devpoong.tistory.com/91</p></a>
-    <h3>4. Scheduler 작업을 이용한 자동 예약 취소•반납 및 제재를 어떻게 구현</h3>
+    <a href="https://devpoong.tistory.com/91"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>5. 배포 자동화 구축기 with Jenkins</h3>
+    <p>계속된 정기 배포, 수시 배포에 수동으로 애플리케이션을 배포함에 따라 발생하는 휴먼 에러 또는 반복작업에 대한 거부감 때문에 <br>
+    Jenkins를 이용하여 배포 자동화를 구축함으로써 배포 환경을 개선하였습니다.<br></p>
+    <a href="https://devpoong.tistory.com/108"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>6. 개발 서버 AWS 클라우드 서비스로 이주기</h3>
+    <p>현재 교내 서버실에 운영서버는 On-Premise 환경으로 배포되어있고, <br>
+    기존에는 개발 서버는 프론트 개발자가 요청할 때마다 제 데스크탑에서 동작시키고 포트포워딩 해주는 방식으로 하였습니다.<br>
+    하지만 해당 방식의 한계를 느꼈고, 개발 서버를 AWS 클라우드 환경에 구축해서 프론트엔드 개발자에게 IAM 계정을 할당하고 필요할 때 자율적으로 사용하도록 협업 환경을 개선하였습니다.<br></p>
+    <a href="https://devpoong.tistory.com/107"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>7. Scheduler 작업을 이용한 자동 예약 취소•반납 및 제재를 어떻게 구현</h3>
     <p>사용자가 특정시간내로 체크인을 하지 않은 경우에는 예약을 취소하고 위반 내역에 추가하고, 좌석 사진과 함께 반납을 하지 않은 경우에도 자동으로 위반 내역에 추가합니다.<br>
     위반내역이 특정횟수에 도달하면 회원 계정을 정지시키는 이러한 프로세스를 구현하기 위해서는 정해진 시간에 특정 작업을 수행하는 Scheduler가 필요했습니다.<br>
     Spring에서는 @Scheduled 어노테이션과 cron 명령을 사용하여 원하는 시간에 작업을 세팅할 수 있었습니다.</p>
-    <a href="https://devpoong.tistory.com/74"><p style="font-size: 17px">👉 https://devpoong.tistory.com/74</p></a>
-    <h3>5. Docker 여러 컨테이너의 볼륨, 네트워크를 간편하게 관리하고 실행하는 방법 (with Docker Compose)</h3>
-    <p>MariaDB, Redis, Spring Boot, Prometheus, Grafana 등의 도커 컨테이너를 네트워크로 연결하고 볼륨을 설정하고 의존관계 및 환경설정을 할 수 있는 방법을 찾아보다가 Docker Compose를 사용하게 되었습니다.<br>
+    <a href="https://devpoong.tistory.com/74"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>8. Docker 여러 컨테이너의 볼륨, 네트워크를 간편하게 관리하고 실행하기</h3>
+    <p>MariaDB, Redis, Spring Boot, Prometheus, Grafana 등의 도커 컨테이너를<br> 네트워크로 연결하고 볼륨을 설정하고 의존관계 및 환경설정을 편리하게 할 수 있도록 개선하기 위해 Docker Compose를 사용하게 되었습니다.<br>
     기존에 각각 직접 docker run 명령에 볼륨 옵션이나 환경설정 등을 부여하다보니 오타 등의 실수가 발생하여 비효율적인 부분이 많았지만,<br>
     docker compose를 이용하여 docker-compose.yml 파일 하나와 docker compose 명령어를 통해 컨테이너 여러개를 한곳에서 관리할 수 있다는 장점으로 비효율적인 작업을 줄일 수 있었습니다.</p>
-    <a href="https://devpoong.tistory.com/85"><p style="font-size: 17px">👉 https://devpoong.tistory.com/85</p></a>
-    <h3>6. 개인정보 암호화 (with AES256)</h3>
+    <a href="https://devpoong.tistory.com/85"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>9. 개인정보 암호화 (with AES256)</h3>
     <p>실제 서비스를 운영하기 위해서는 개인정보를 암호화해야 할 필요가 있었습니다. <br>
     해당 프로젝트에서는 AES256 대칭키 암호 알고리즘을 사용하였습니다.<br> 1단계 앞의 암호문 블록에 평문 블록을 XOR 하여 암호화를 수행하는 CBC Mode를 사용하여 기밀성을 높였습니다.</p>
-    <a href="https://devpoong.tistory.com/88"><p style="font-size: 17px">👉 https://devpoong.tistory.com/88</p></a>
-    <h3>7. Jwt Token 인증방식을 사용하면서 memberId를 path variable로 받고 2차검증하는 비용 절감</h3>
+    <a href="https://devpoong.tistory.com/88"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>10. Jwt Token 인증방식을 사용하면서 memberId를 path variable로 받고 2차검증하는 비용 절감</h3>
     <p>JWT Token 인증방식을 이용하기 때문에 해당 토큰에서 사용자의 식별값을 얻을 수 있으므로 Path variable로 회원의 id를 받아와서 2차검증을 할 필요가 없습니다.<br>
     따라서 로그인 된 회원의 요청시에는 회원 id는 받지 않도록 구현하여 2차검증의 비용을 줄였습니다.</p>
-    <a href="https://devpoong.tistory.com/87"><p style="font-size: 17px">👉 https://devpoong.tistory.com/87</p></a>
-    <h3>8. HTTPS를 적용하기 - Client, CA, Web Server의 키를 주고 받는 과정</h3>
+    <a href="https://devpoong.tistory.com/87"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
+    <h3>11. HTTPS를 적용하기 - Client, CA, Web Server의 키를 주고 받는 과정</h3>
     <p>Presentation Layer에서 TLS 계층을 추가적으로 거치는 HTTPS를 적용하여 중간자 공격으로 부터 데이터를 보호하고자 하였습니다.<br>
     공개키를 이용해 대칭키를 암호화하여 전달한 후에 이 대칭키를 개인키로 복호화하여 복호화된 대칭키를 얻어냅니다.<br>
 이렇게 서로 전달된 대칭키를 이용하여 데이터를 암호화 및 복호화합니다.</p>
-    <a href="https://devpoong.tistory.com/86"><p style="font-size: 17px">👉 https://devpoong.tistory.com/86</p></a>
+    <a href="https://devpoong.tistory.com/86"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
     <br>
     <h2>기타 프로젝트를 진행하면서 작성한 게시글</h2>
     <h3>하나의 물리 서버에 React 빌드파일과 Spring Boot Jar Tomcat WAS 배포를 위한 NGINX 설정</h3>
-    <a href="https://devpoong.tistory.com/84"><p style="font-size: 17px">👉 https://devpoong.tistory.com/84</p></a>
+    <a href="https://devpoong.tistory.com/84"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
     <h3>운영환경 구축하기 with Spring Actuator, Micrometer, Prometheus, Grafana</h3>
-    <a href="https://devpoong.tistory.com/89"><p style="font-size: 17px">👉 https://devpoong.tistory.com/89</p></a>
+    <a href="https://devpoong.tistory.com/89"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
     <h3>application.yml 변경사항이 jar파일에 제대로 적용되지 않는 문제</h3>
-    <a href="https://devpoong.tistory.com/80"><p style="font-size: 17px">👉 https://devpoong.tistory.com/80</p></a>
+    <a href="https://devpoong.tistory.com/80"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
 
 <hr>
 <h1 id="erd">🛢️ ERD</h1>
