@@ -233,7 +233,7 @@
     <h2>기타 프로젝트를 진행하면서 작성한 게시글</h2>
     <h3>하나의 물리 서버에 React 빌드파일과 Spring Boot Jar Tomcat WAS 배포를 위한 NGINX 설정</h3>
     <a href="https://devpoong.tistory.com/84"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
-    <h3>운영환경 구축하기 with Spring Actuator, Micrometer, Prometheus, Grafana</h3>
+    <h3>모니터링환경 구축하기 with Spring Actuator, Micrometer, Prometheus, Grafana</h3>
     <a href="https://devpoong.tistory.com/89"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
     <h3>application.yml 변경사항이 jar파일에 제대로 적용되지 않는 문제</h3>
     <a href="https://devpoong.tistory.com/80"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
