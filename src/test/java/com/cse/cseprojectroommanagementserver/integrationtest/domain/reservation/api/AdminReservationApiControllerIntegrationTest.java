@@ -106,7 +106,7 @@ class AdminReservationApiControllerIntegrationTest extends BaseIntegrationTestWi
     }
 
     @Test
-    @DisplayName("C1-02. 예약 내역 조회 성공 - 회원 이름 조건 사용")
+    @DisplayName("C1-02. 예약 내역 조회 성공 - 로그인 ID 사용")
     void 예약내역조회_성공_로그인ID조건() throws Exception {
         // Given
         ProjectRoom projectRoom = projectRoomSetUp.findProjectRoomByRoomName("D330");

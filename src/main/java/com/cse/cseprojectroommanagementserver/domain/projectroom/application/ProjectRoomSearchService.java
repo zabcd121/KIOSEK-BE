@@ -1,10 +1,7 @@
 package com.cse.cseprojectroommanagementserver.domain.projectroom.application;
 
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.ProjectRoom;
-import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomRepository;
 import com.cse.cseprojectroommanagementserver.domain.projectroom.domain.repository.ProjectRoomSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
