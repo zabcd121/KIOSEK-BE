@@ -18,6 +18,7 @@ import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerato
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.ReserveReq;
+import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.RESERVATION_COUNT;
+import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.RT;
 
 @Service
 @Slf4j
