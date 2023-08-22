@@ -57,7 +57,7 @@ public class AuthService {
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
-        saveRefreshTokenInRedis(refreshToken, authentication);
+        saveRefreshToken(refreshToken, authentication);
 
         return LoginRes.of(
                 TokensDto.of(BEARER + accessToken, BEARER + refreshToken),
@@ -147,7 +147,7 @@ public class AuthService {
         return true;
     }
 
-    private void saveRefreshTokenInRedis(String refreshToken, Authentication authentication) {
+    private void saveRefreshToken(String refreshToken, Authentication authentication) {
         redisTemplate.opsForValue()
                 .set(RT + authentication.getName(), refreshToken, jwtTokenProvider.getExpiration(refreshToken), TimeUnit.MILLISECONDS);
     }
