@@ -181,6 +181,7 @@ public class ReservationSearchRepository implements ReservationSearchableReposit
                 .from(reservation)
                 .join(reservation.member, member)
                 .leftJoin(reservation.tableReturn, tableReturn)
+                .on(reservation.reservationStatus.eq(RETURNED))
                 .join(reservation.projectTable, projectTable)
                 .join(projectTable.projectRoom, projectRoom)
                 .where(

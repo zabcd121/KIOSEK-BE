@@ -9,6 +9,9 @@ import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import java.util.List;
+
 import static com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType.*;
 
 @Component
@@ -19,6 +22,9 @@ public class MemberSetUp {
 
     @Autowired
     private MemberSearchableRepository memberSearchableRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Autowired
     private AES256 aes256;
@@ -45,7 +51,14 @@ public class MemberSetUp {
         );
     }
 
+    public List<Member> findMembersWithOffsetAndLimit(int offset, int limit) {
+        return em.createQuery("select m from Member m", Member.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     public Member findMember(String loginId) {
-        return memberSearchableRepository.findByAccountLoginId(loginId).get();
+        return memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginId)).get();
     }
 }

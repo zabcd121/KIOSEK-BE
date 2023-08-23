@@ -10,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class ReservationSetUp {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private EntityManager em;
 
     public Reservation saveReservation(Member member, ProjectTable projectTable, LocalDateTime startAt, LocalDateTime endAt) {
         QRImage qrImage = QRImage.builder().fileOriName(member.getLoginId()).fileLocalName(member.getLoginId()).fileUrl("/test/").content("content").build();
@@ -28,6 +33,13 @@ public class ReservationSetUp {
         Reservation createdReservation = Reservation.createReservation(member, projectTable, qrImage, startAt, endAt);
         createdReservation.setReservationStatus(reservationStatus);
         return reservationRepository.save(createdReservation);
+    }
+
+    public List<Reservation> findAll() {
+        em.flush();
+        em.clear();
+        return em.createQuery("select r from Reservation r", Reservation.class)
+                .getResultList();
     }
 
     @Transactional

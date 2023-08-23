@@ -42,7 +42,8 @@ public class ReserveTableService {
     private final ProjectTableRepository projectTableRepository;
     private final QRGenerator qrGenerator;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public Reservation reserve(Long memberId, ReserveReq reserveReq) {
         reservationValidator.validate(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());
 
