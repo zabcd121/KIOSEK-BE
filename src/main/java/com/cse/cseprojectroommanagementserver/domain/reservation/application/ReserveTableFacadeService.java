@@ -1,11 +1,10 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
-import com.cse.cseprojectroommanagementserver.domain.reservation.repository.NamedLockReservationRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservation.repository.NamedLockRepository;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.RESERVATION_COUNT;
@@ -14,20 +13,18 @@ import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.R
 @RequiredArgsConstructor
 public class ReserveTableFacadeService {
 
-    private final NamedLockReservationRepository namedLockReservationRepository;
+    private static final int LOCK_TIMEOUT_SECONDS = 3;
+
+    private final NamedLockRepository namedLockRepository;
     private final ReserveTableService reserveTableService;
     private final RedisTemplate redisTemplate;
 
     @Timed("kiosek.reservation")
-    @Transactional
     public void reserve(Long memberId, ReserveReq reserveReq) {
-        String key = reserveReq.getStartAt().toLocalDate().toString() + reserveReq.getProjectTableId();
-        try {
-            namedLockReservationRepository.getLock(key);
-            reserveTableService.reserve(memberId, reserveReq);
-        } finally {
-            namedLockReservationRepository.releaseLock(key);
-            redisTemplate.delete(RESERVATION_COUNT + "*");
-        }
+        String lockName = reserveReq.getStartAt().toLocalDate().toString() + reserveReq.getProjectTableId();
+        namedLockRepository.executeWithLock(lockName, LOCK_TIMEOUT_SECONDS,
+                () -> reserveTableService.reserve(memberId, reserveReq));
+
+        redisTemplate.delete(RESERVATION_COUNT + "*");
     }
 }

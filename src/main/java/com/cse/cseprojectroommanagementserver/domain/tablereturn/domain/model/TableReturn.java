@@ -18,6 +18,7 @@ import static com.cse.cseprojectroommanagementserver.global.formatter.DateFormat
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(indexes = @Index(name = "ix_reservation_id", columnList = "reservation_id"))
 public class TableReturn extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
