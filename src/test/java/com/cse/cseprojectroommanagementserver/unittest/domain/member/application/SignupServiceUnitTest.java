@@ -5,10 +5,9 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleType;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.FileSystemException;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRNotCreatedException;
@@ -38,7 +37,7 @@ public class SignupServiceUnitTest {
     @InjectMocks
     SignupService signupService;
 
-    @Mock SignupRepository signupRepository;
+    @Mock MemberRepository memberRepository;
     @Mock QRGenerator qrGenerator;
     @Spy PasswordEncoder passwordEncoder;
     @Mock RedisTemplate redisTemplate;
@@ -69,10 +68,10 @@ public class SignupServiceUnitTest {
     void 회원가입_성공() {
         //Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+        given(memberRepository.existsByAccountLoginId("encryptId")).willReturn(false);
 
         given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
-        given(signupRepository.existsByEmail("encryptEmail")).willReturn(false);
+        given(memberRepository.existsByEmail("encryptEmail")).willReturn(false);
         ValueOperations valueOperations = mock(ValueOperations.class);
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");
@@ -93,14 +92,14 @@ public class SignupServiceUnitTest {
                 .roleType(RoleType.ROLE_MEMBER)
                 .accountQR(AccountQR.builder().qrImage(qrImage).build())
                 .build();
-        given(signupRepository.save(any())).willReturn(savedMember);
+        given(memberRepository.save(any())).willReturn(savedMember);
 
         //When
         signupService.signup(signupReq);
 
         //Then
         then(qrGenerator).should(times(1)).createAccountQRCodeImage();
-        then(signupRepository).should(times(1)).save(any());
+        then(memberRepository).should(times(1)).save(any());
     }
 
     @Test
@@ -108,7 +107,7 @@ public class SignupServiceUnitTest {
     void 회원가입_실패_중복아이디() {
         // Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willThrow(DuplicationException.class);
+        given(memberRepository.existsByAccountLoginId("encryptId")).willThrow(DuplicationException.class);
 
         // When, Then
         assertThrows(DuplicationException.class, () -> signupService.signup(signupReq));
@@ -119,10 +118,10 @@ public class SignupServiceUnitTest {
     void 회원가입_실패_중복이메일() {
         // Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+        given(memberRepository.existsByAccountLoginId("encryptId")).willReturn(false);
 
         given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
-        given(signupRepository.existsByEmail("encryptEmail")).willThrow(DuplicationException.class);
+        given(memberRepository.existsByEmail("encryptEmail")).willThrow(DuplicationException.class);
 
         // When, Then
         assertThrows(DuplicationException.class, () -> signupService.signup(signupReq));
@@ -133,10 +132,10 @@ public class SignupServiceUnitTest {
     void 회원가입_실패_QR생성실패() {
         // Given
         given(aes256.encrypt(signupReq.getLoginId())).willReturn("encryptId");
-        given(signupRepository.existsByAccountLoginId("encryptId")).willReturn(false);
+        given(memberRepository.existsByAccountLoginId("encryptId")).willReturn(false);
 
         given(aes256.encrypt(signupReq.getEmail())).willReturn("encryptEmail");
-        given(signupRepository.existsByEmail("encryptEmail")).willReturn(false);
+        given(memberRepository.existsByEmail("encryptEmail")).willReturn(false);
         ValueOperations valueOperations = mock(ValueOperations.class);
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
         given(redisTemplate.opsForValue().get(EV + signupReq.getEmail())).willReturn("completed");

@@ -19,6 +19,8 @@ import static com.cse.cseprojectroommanagementserver.global.success.SuccessCode.
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class SignupApiController {
+    private final String SIGNUP_EMAIL_TITLE = "KIOSEK 회원가입 인증 번호";
+
     private final SignupService signupService;
     private final EmailService emailService;
 
@@ -36,13 +38,13 @@ public class SignupApiController {
 
     @GetMapping("/v1/members/signup/authcode")
     public SuccessResponseNoResult sendAuthCodeToEmail(@RequestParam String email) throws MessagingException {
-        emailService.sendEmail(email);
+        emailService.sendSignupAuthCode(email, SIGNUP_EMAIL_TITLE);
 
         return new SuccessResponseNoResult(AUTH_CODE_SEND_SUCCESS);
     }
 
     @PostMapping("/v1/members/signup/authcode")
-    public SuccessResponseNoResult verifyAuthCodeToEmail(@RequestBody @Validated EmailAuthCodeVerifyReq emailAuthCodeReq) {
+    public SuccessResponseNoResult verifySignupAuthCode(@RequestBody @Validated EmailAuthCodeVerifyReq emailAuthCodeReq) {
         emailService.verifyEmailAuthCode(emailAuthCodeReq.getEmail(), emailAuthCodeReq.getCode());
 
         return new SuccessResponseNoResult(AUTH_CODE_VERIFY_SUCCESS);

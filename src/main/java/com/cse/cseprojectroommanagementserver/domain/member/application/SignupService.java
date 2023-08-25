@@ -2,7 +2,7 @@ package com.cse.cseprojectroommanagementserver.domain.member.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.SignupRepository;
+import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
 import com.cse.cseprojectroommanagementserver.global.error.exception.DuplicationException;
@@ -25,7 +25,7 @@ import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.E
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SignupService {
-    private final SignupRepository signupRepository;
+    private final MemberRepository memberRepository;
     private final RedisTemplate redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final QRGenerator qrGenerator;
@@ -47,7 +47,7 @@ public class SignupService {
             Member signupMember = Member.createMember(account,
                     aes256.encrypt(signupReq.getEmail()), signupReq.getName(), accountQRCodeImage);
 
-            signupRepository.save(signupMember);
+            memberRepository.save(signupMember);
         }
     }
 
@@ -60,14 +60,14 @@ public class SignupService {
     }
 
     public boolean checkDuplicationLoginId(String loginId) {
-        if (signupRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
+        if (memberRepository.existsByAccountLoginId(aes256.encrypt(loginId))) {
             throw new DuplicationException(ErrorCode.DUPLICATED_LOGINID);
         }
         return false;
     }
 
     public boolean checkDuplicationEmail(String email) {
-        if (signupRepository.existsByEmail(aes256.encrypt(email))) {
+        if (memberRepository.existsByEmail(aes256.encrypt(email))) {
             throw new DuplicationException(ErrorCode.DUPLICATED_EMAIL);
         }
         return false;

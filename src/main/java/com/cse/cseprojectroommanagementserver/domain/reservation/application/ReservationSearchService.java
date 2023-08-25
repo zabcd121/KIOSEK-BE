@@ -85,12 +85,8 @@ public class ReservationSearchService {
     private List<SearchReservationByPagingRes> decryptPersonalInfoInReservationContent(List<SearchReservationByPagingRes> encryptedContent) {
         return encryptedContent.stream()
                 .map(reservationDto -> {
-                    try {
-                        String decryptedLoginId = aes256.decrypt(reservationDto.getMember().getLoginId());
-                        reservationDto.getMember().setLoginId(decryptedLoginId);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    String decryptedLoginId = aes256.decrypt(reservationDto.getMember().getLoginId());
+                    reservationDto.getMember().setLoginId(decryptedLoginId);
                     return reservationDto;
                 }).collect(Collectors.toList());
     }

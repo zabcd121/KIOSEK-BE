@@ -2,14 +2,15 @@
 spring:
   config:
     import:
-      - ./properties/application-mail.yml
-      - ./properties/application-filedir.yml
-      - ./properties/application-jwt.yml
-      - ./properties/application-monitor.yml
-      - ./properties/application-devdb.yml
+       classpath:
+        - ./application-mail.yml
+        - ./application-filedir.yml
+        - ./application-jwt.yml
+        - ./application-monitor.yml
+        - ./application-prod1.yml
   profiles:
-    active: devdb # dev, prod, test
-    include: devdb
+    active: prod1 # dev, prod, test
+    include: prod1
 
   servlet:
     multipart:

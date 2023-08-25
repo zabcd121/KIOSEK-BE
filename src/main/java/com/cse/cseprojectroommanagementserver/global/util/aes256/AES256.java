@@ -50,10 +50,10 @@ public class AES256 {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
-    public String decrypt(String cipherText) throws Exception {
+    public String decrypt(String cipherText) {
 
         byte[] decrypted = null;
-
+        String decryptedStr = null;
         try {
             Cipher cipher = Cipher.getInstance(alg);
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
@@ -62,11 +62,13 @@ public class AES256 {
 
             byte[] decodedBytes = Base64.getDecoder().decode(cipherText);
             decrypted = cipher.doFinal(decodedBytes);
+
+            decryptedStr = new String(decrypted, "UTF-8");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return new String(decrypted, "UTF-8");
+        return decryptedStr;
     }
 
     private byte[] generateIv() throws Exception {

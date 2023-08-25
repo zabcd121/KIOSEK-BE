@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -84,6 +85,10 @@ public class JwtTokenProvider implements InitializingBean {
 
     public String getSubject(String token) {
         return getClaims(token).getSubject();
+    }
+
+    public Long getSubjectWith(HttpServletRequest request) {
+        return Long.parseLong(getSubject(resolveToken(request.getHeader(AUTHORIZATION_HEADER))));
     }
 
     public boolean validateToken(String token) {

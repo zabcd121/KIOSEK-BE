@@ -27,6 +27,7 @@ public enum SuccessCode {
     TOKEN_REISSUE_SUCCESS(CREATED, "0214", "토큰이 재발급 되었습니다."),
     MEMBER_INFO_REISSUE_SUCCESS(OK, "0215", "회원 정보 재발급"),
     MYPAGE_SEARCH_SUCCESS(OK, "0216", "마이페이지 정보 조회 성공했습니다."),
+    CHANGE_PASSWORD_SUCCESS(OK, "0220", "패스워드 변경에 성공했습니다."),
 
     /**
      * Reservation: 03
