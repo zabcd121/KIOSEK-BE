@@ -52,7 +52,7 @@ public class MemberUpdateService {
     }
 
     private boolean validatePassword(String realPassword, String inputPassword) {
-        if (realPassword != inputPassword) {
+        if (!realPassword.equals(inputPassword)) {
             throw new IncorrectException(INCORRECT_PASSWORD);
         }
         return true;
