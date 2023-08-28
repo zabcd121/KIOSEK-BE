@@ -46,6 +46,10 @@ public class Member extends BaseTimeEntity {
         this.accountQR.setMember(this);
     }
 
+    public void changePassword(String newEncodedPassword) {
+        this.account.changePassword(newEncodedPassword);
+    }
+
     public String getLoginId() {
         return account.getLoginId();
     }

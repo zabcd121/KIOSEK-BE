@@ -49,6 +49,7 @@ src/main/resources/application-jwt.yml
 src/main/resources/application-mail.yml
 src/main/resources/application-testdb.yml
 src/main/resources/application-proddb.yml
+src/main/resources/application-prod1.yml
 src/main/resources/application-monitor.yml
 src/main/resources/privates
 src/main/resources/privates/**

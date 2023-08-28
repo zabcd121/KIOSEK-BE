@@ -48,6 +48,4 @@ public class MemberSearchRepository implements MemberSearchableRepository {
                 .where(member.memberId.eq(memberId))
                 .fetchOne();
     }
-
-
 }

@@ -21,4 +21,8 @@ public class Account {
     @Column(nullable = false, length = 100)
     private String password;
 
+    public void changePassword(String newEncodedPassword) {
+        this.password = newEncodedPassword;
+    }
+
 }

@@ -20,20 +20,28 @@ import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.*
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+    private final String SIGN_UP_CONTEXT = "mail";
+    private final String PASSWORD_RECREATE_CONTEXT = "passwordChange";
+
 
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
     private final RedisTemplate redisTemplate;
 
-//    @Value("${spring.mail.username}")
-//    private String senderEmail;
+    public void sendSignupAuthCode(String toEmail, String title) throws MessagingException {
+        sendAuthCode(toEmail, title, SIGN_UP_CONTEXT);
+    }
 
-    public void sendEmail(String toEmail) throws MessagingException {
+    public void sendPasswordRecreateAuthCode(String toEmail, String title) throws MessagingException {
+        sendAuthCode(toEmail, title, PASSWORD_RECREATE_CONTEXT);
+    }
+
+    private void sendAuthCode(String toEmail, String title, String formName) throws MessagingException {
         if(redisTemplate.opsForValue().get(EM + toEmail) != null) {
             redisTemplate.delete(EM + toEmail);
         }
 
-        MimeMessage emailForm = createEmailForm(toEmail);
+        MimeMessage emailForm = createEmailForm(toEmail, title, formName);
         emailSender.send(emailForm);
     }
 
@@ -71,18 +79,17 @@ public class EmailService {
     }
 
     //메일 양식 작성
-    private MimeMessage createEmailForm(String email) throws MessagingException {
+    private MimeMessage createEmailForm(String email, String title, String formName) throws MessagingException {
 
         String authCode = createCode();//인증 코드 생성
         String setFrom = "kiosek@naver.com"; //email-config에 설정한 자신의 이메일 주소(보내는 사람)
         String toEmail = email; //받는 사람
-        String title = "KIOSEK 회원가입 인증 번호"; //제목
 
         MimeMessage message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, toEmail); //보낼 이메일 설정
         message.setSubject(title); //제목 설정
         message.setFrom(setFrom); //보내는 이메일
-        message.setText(setContext(authCode), "utf-8", "html");
+        message.setText(setContext(authCode, formName), "utf-8", "html");
 
         redisTemplate.opsForValue()
                 .set(EM + toEmail, authCode, 180000L, TimeUnit.MILLISECONDS);
@@ -90,10 +97,10 @@ public class EmailService {
         return message;
     }
 
-    private String setContext(String code) {
+    private String setContext(String code, String formName) {
         Context context = new Context();
         context.setVariable("code", code);
-        return templateEngine.process("mail", context); //mail.html
+        return templateEngine.process(formName, context); //mail.html
     }
 
 }

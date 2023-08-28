@@ -5,10 +5,7 @@ import com.cse.cseprojectroommanagementserver.domain.member.domain.model.RoleTyp
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
-import com.cse.cseprojectroommanagementserver.global.error.exception.ExpiredException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.NotFoundException;
-import com.cse.cseprojectroommanagementserver.global.error.exception.UnAuthorizedException;
+import com.cse.cseprojectroommanagementserver.global.error.exception.*;
 import com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider;
 import com.cse.cseprojectroommanagementserver.global.jwt.MemberDetailsService;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
@@ -50,7 +47,7 @@ public class AuthService {
     @Timed("kiosek.member")
     @Transactional
     public LoginRes login(LoginReq loginReq, RoleType allowedRoleType) {
-        Member member = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginReq.getLoginId())).orElseThrow(() -> new NotFoundException(ErrorCode.ID_NOT_FOUND));
+        Member member = searchMemberByLoginId(loginReq.getLoginId());
 
         Authentication authentication = authenticateMember(member, loginReq.getPassword(), allowedRoleType);
 
@@ -121,6 +118,17 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ACCOUNT_QR));
     }
 
+    public String searchEmailByLoginId(String loginId) {
+        String decryptedEmail = "";
+        decryptedEmail = aes256.decrypt(searchMemberByLoginId(loginId).getEmail());
+
+        return decryptedEmail;
+    }
+
+    private Member searchMemberByLoginId(String loginId) {
+        return memberSearchableRepository.findByAccountLoginId(aes256.encrypt(loginId))
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ID_NOT_FOUND));
+    }
 
     private Authentication authenticateMember(Member member, String password, RoleType allowedRoleType) {
         UserDetails userDetails = memberDetailsService.loadUserByUsername(member.getMemberId().toString());
