@@ -7,7 +7,7 @@
 <h3 align="center">KIOSEK</h3>
 
   <p align="center">
-    회의공간 예약 및 관리 시스템 ( 개발 기간 : 2022.10 ~ 운영중 [서비스 오픈: 2023.05] )
+    회의공간 예약 및 관리 시스템 <br>( 개발 기간 : 2022.10 ~ 운영중 [서비스 오픈: 2023.05] )
     <br />
     <br />
     <a href="https://github.com/brobac/CSE-projectroom-management">FRONTEND PROJECT</a> ·
