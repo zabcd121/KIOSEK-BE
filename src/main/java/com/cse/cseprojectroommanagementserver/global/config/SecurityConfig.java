@@ -58,8 +58,10 @@ public class SecurityConfig {
                         "/api/v1/rooms",
                         "/api/images/**",
                         "/actuator/**",
-                        "/swagger-ui.html"
-                ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations"));
+                        "/swagger-ui.html",
+                        "/api/v1/members/password-authcode",
+                        "/api/v1/members/password/reissuance"
+                ).mvcMatchers(HttpMethod.GET, "/api/v1/reservations", "/api/v1/members/password"));
     }
 
     @Bean

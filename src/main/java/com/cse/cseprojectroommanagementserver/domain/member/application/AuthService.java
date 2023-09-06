@@ -119,8 +119,7 @@ public class AuthService {
     }
 
     public String searchEmailByLoginId(String loginId) {
-        String decryptedEmail = "";
-        decryptedEmail = aes256.decrypt(searchMemberByLoginId(loginId).getEmail());
+        String decryptedEmail = aes256.decrypt(searchMemberByLoginId(loginId).getEmail());
 
         return decryptedEmail;
     }
