@@ -34,10 +34,10 @@ public class InitData {
 
     @PostConstruct
     public void init() throws Exception {
-//        initService.reservationInit();
-        initService.adminInit();
-        initService.dataInit();
-        initService.penaltyPolicyDataInit();
+        //initService.reservationInit();
+        //initService.adminInit();
+        //initService.dataInit();
+        //initService.penaltyPolicyDataInit();
     }
 
     @Component
@@ -50,21 +50,33 @@ public class InitData {
 
         public void reservationInit() {
 
+//            for (int i=1; i < 12; i++) {
+//                for (int d=1; d < 29; d++) {
+//                    for (int j=1; j<24; j++) {
+//                        for (int k=0; k<59; k++) {
+//                            for (int x=0; x<59; x++) {
+//                                LocalDateTime startAt = LocalDateTime.of(2023, d, i, j, k, x);
+//                                em.persist(
+//                                        Reservation.builder()
+//                                                .reservationStatus(ReservationStatus.RESERVATION_COMPLETED)
+//                                                .startAt(startAt)
+//                                                .endAt(LocalDateTime.of(2023, d, i, j, k, x).plusHours(2))
+//                                );
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
             for (int i=1; i < 12; i++) {
-                for (int d=1; d < 29; d++) {
-                    for (int j=1; j<24; j++) {
-                        for (int k=0; k<59; k++) {
-                            for (int x=0; x<59; x++) {
-                                LocalDateTime startAt = LocalDateTime.of(2023, d, i, j, k, x);
-                                em.persist(
-                                        Reservation.builder()
-                                                .reservationStatus(ReservationStatus.RESERVATION_COMPLETED)
-                                                .startAt(startAt)
-                                                .endAt(LocalDateTime.of(2023, d, i, j, k, x).plusHours(2))
-                                );
-                            }
-                        }
-                    }
+                for (int d=1; d < 10; d++) {
+                        LocalDateTime startAt = LocalDateTime.of(2023, d, i, 0, 0, 0);
+                        em.persist(
+                                Reservation.builder()
+                                        .reservationStatus(ReservationStatus.RESERVATION_COMPLETED)
+                                        .startAt(startAt)
+                                        .endAt(LocalDateTime.of(2023, d, i, 0, 0, 0).plusHours(2))
+                        );
                 }
             }
         }
@@ -74,6 +86,9 @@ public class InitData {
             Member admin2 = Member.builder().account(Account.builder().loginId(aes256.encrypt("kitadmin2")).password(passwordEncoder.encode("admin27540!")).build()).name("관리자2").email("admin2@kiosek.kr").roleType(RoleType.ROLE_ADMIN).build();
             em.persist(admin1);
             em.persist(admin2);
+
+            Member me = Member.builder().account(Account.builder().loginId(aes256.encrypt("20180335")).password(passwordEncoder.encode("love1994@")).build()).name("김현석").email(aes256.encrypt("zabcd121@kumoh.ac.kr")).roleType(RoleType.ROLE_MEMBER).build();
+            em.persist(me);
         }
 
         public void dataInit() throws Exception {

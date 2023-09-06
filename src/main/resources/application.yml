@@ -6,15 +6,15 @@ spring:
       - ./application-filedir.yml
       - ./application-jwt.yml
       - ./application-monitor.yml
-      - ./application-proddb.yml
+      - ./application-prod1.yml
 #      - ./properties/application-mail.yml
 #      - ./properties/application-filedir.yml
 #      - ./properties/application-jwt.yml
 #      - ./properties/application-monitor.yml
 #      - ./properties/application-devdb.yml
   profiles:
-    active: proddb # dev, prod, test
-    include: proddb
+    active: prod1 # dev, prod, test
+    include: prod1
 
   servlet:
     multipart:
@@ -36,6 +36,17 @@ server:
   tomcat:
     mbeanregistry:
       enabled: true
+#    threads:
+#      max: 200
+#      min-spare: 10
+#    max-connections: 8192
+#    accept-count: 100
+#    connection-timeout: 20000
+    #max : 쓰레드의 최대 개수
+    #min-spare : 활성화 상태로 유지할 최소 쓰레드의 개수
+    #max-connections : 수립가능한 connection의 총 개수
+    #accept-count : 모든 스레드가 사용 중일때 들어오는 연결 요청 큐의 최대 길이
+    #connection-timeout : timeout 판단 기준 시간, 20초
 
 logging:
   level:

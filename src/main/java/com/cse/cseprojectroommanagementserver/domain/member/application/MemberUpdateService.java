@@ -34,16 +34,13 @@ public class MemberUpdateService {
     public void changePassword(Long memberId, PasswordChangeReq passwordChangeReq) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(UNAUTHORIZED_MEMBER));
-
-        String encodedPassword = encodePassword(passwordChangeReq.getOriginPassword());
-
-        validatePassword(findMember.getPassword(), encodedPassword);
+        validatePassword(passwordChangeReq.getOriginPassword(), findMember.getPassword());
         findMember.changePassword(encodePassword(passwordChangeReq.getNewPassword()));
     }
 
     @Transactional
     public void changePasswordWithNoLogin(PasswordReissueReq passwordReissueReq) {
-        Member findMember = memberSearchableRepository.findByAccountLoginId(passwordReissueReq.getLoginId())
+        Member findMember = memberSearchableRepository.findByAccountLoginId(aes256.encrypt(passwordReissueReq.getLoginId()))
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
 
         checkAuthCodeIsVerified(aes256.decrypt(findMember.getEmail()));
@@ -51,9 +48,9 @@ public class MemberUpdateService {
         findMember.changePassword(encodePassword(passwordReissueReq.getPassword()));
     }
 
-    private boolean validatePassword(String realPassword, String inputPassword) {
-        if (!realPassword.equals(inputPassword)) {
-            throw new IncorrectException(INCORRECT_PASSWORD);
+    private boolean validatePassword(String requestPassword, String originPassword) {
+        if(!passwordEncoder.matches(requestPassword, originPassword)) {
+            throw new IncorrectException(ErrorCode.INCORRECT_PASSWORD);
         }
         return true;
     }
@@ -69,4 +66,6 @@ public class MemberUpdateService {
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
+
+
 }

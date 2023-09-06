@@ -40,6 +40,11 @@ public class MemberInputErrorControllerAdvice {
                         break;
                     case "password":
                         responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_PASSWORD);
+                    case "originPassword":
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_PASSWORD);
+                        break;
+                    case "newPassword":
+                        responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_PASSWORD);
                         break;
                     case "email":
                         responseError = ErrorResponse.toResponseEntity(INVALID_VALUE_EMAIL);
@@ -54,6 +59,12 @@ public class MemberInputErrorControllerAdvice {
                         responseError = ErrorResponse.toResponseEntity(INPUT_NULL_LOGIN_ID);
                         break;
                     case "password":
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_PASSWORD);
+                        break;
+                    case "originPassword":
+                        responseError = ErrorResponse.toResponseEntity(INPUT_NULL_PASSWORD);
+                        break;
+                    case "newPassword":
                         responseError = ErrorResponse.toResponseEntity(INPUT_NULL_PASSWORD);
                         break;
                     case "email":

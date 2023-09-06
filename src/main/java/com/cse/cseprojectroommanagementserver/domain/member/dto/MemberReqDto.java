@@ -111,6 +111,8 @@ public class MemberReqDto {
         private String loginId;
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
+        @Pattern(message = "최소 한개 이상의 대문자 또는 소문자와 숫자, 특수문자를 포함한 8자 이상 16자 이하의 비밀번호를 입력해야 합니다.",
+                regexp = "^(?=.*[a-zA-Z])(?=.*[\\W_])(?=.*\\d)(?!.*\\s).{8,16}$")
         @Size(max = 16)
         private String password;
     }
