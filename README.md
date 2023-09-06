@@ -30,7 +30,7 @@
 <img src="https://img.shields.io/badge/jacoco-B40404?style=for-the-badge&logo=jwt&logoColor=white">
 <img src="https://img.shields.io/badge/jwt-FFCD00?style=for-the-badge&logo=jwt&logoColor=white">
 <br>
-<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-003545?style=for-the-badge&logo=mysql&logoColor=white">
 <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
 <br>
 <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
