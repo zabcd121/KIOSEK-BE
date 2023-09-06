@@ -7,7 +7,7 @@
 <h3 align="center">KIOSEK</h3>
 
   <p align="center">
-    회의실 예약 및 관리 시스템
+    회의공간 예약 및 관리 시스템
     <br />
     <br />
     <a href="https://github.com/brobac/CSE-projectroom-management">FRONTEND PROJECT</a> ·
