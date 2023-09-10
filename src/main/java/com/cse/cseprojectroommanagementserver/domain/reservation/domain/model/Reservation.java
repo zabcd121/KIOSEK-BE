@@ -2,7 +2,6 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.domain.model;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.TableReturn;
 import com.cse.cseprojectroommanagementserver.global.dto.BaseTimeEntity;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
@@ -65,22 +64,6 @@ public class Reservation extends BaseTimeEntity {
     @Column(nullable = true)
     private LocalDateTime checkInTime;
 
-    public void setReservationStatus(ReservationStatus reservationStatus) {
-        this.reservationStatus = reservationStatus;
-    }
-
-    public void setTableReturn(TableReturn tableReturn) {
-        this.tableReturn = tableReturn;
-    }
-
-    public void changeReservationQR(ReservationQR reservationQR) {
-        if (this.reservationQR != null) {
-            this.reservationQR.changeReservation(null);
-        }
-        this.reservationQR = reservationQR;
-        this.reservationQR.changeReservation(this);
-    }
-
     public static Reservation createReservation(Member member, ProjectTable projectTable, QRImage qrImage, LocalDateTime startAt, LocalDateTime endAt) {
         Reservation reservation = Reservation.builder()
                 .member(member)
@@ -108,6 +91,22 @@ public class Reservation extends BaseTimeEntity {
                 .build();
     }
 
+    public void changeReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
+
+    public void changeTableReturn(TableReturn tableReturn) {
+        this.tableReturn = tableReturn;
+    }
+
+    public void changeReservationQR(ReservationQR reservationQR) {
+        if (this.reservationQR != null) {
+            this.reservationQR.changeReservation(null);
+        }
+        this.reservationQR = reservationQR;
+        this.reservationQR.changeReservation(this);
+    }
+
     public void cancel(Long triedMemberId) {
         if ((this.reservationStatus != RESERVATION_COMPLETED))
             throw new BusinessRuleException(ErrorCode.IRREVOCABLE_RESERVATION_STATUS);
@@ -119,15 +118,17 @@ public class Reservation extends BaseTimeEntity {
 
     public void checkIn(boolean isPreviousMemberInUse) {
         if (isPreviousMemberInUse) throw new BusinessRuleException(ErrorCode.CHECKIN_IMPOSSIBLE_STATUS); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
-        else if (LocalDateTime.now().isBefore(
-                this.startAt.minusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
-                || LocalDateTime.now().isAfter(
-                this.startAt.plusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_AFTER.getValue()))) { //시작시간 20분이 지난 후에는 체크인 불가
+        else if (!isCheckInAvailableTime()) {
             throw new PolicyInfractionException(ErrorCode.CHECKIN_TIME_POLICY_INFRACTION);
         }
-
         this.checkInTime = LocalDateTime.now();
         this.reservationStatus = IN_USE;
     }
 
+    private boolean isCheckInAvailableTime() {
+        return LocalDateTime.now().isBefore(
+                this.startAt.minusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
+                || LocalDateTime.now().isAfter(
+                this.startAt.plusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_AFTER.getValue()));  //시작시간 20분이 지난 후에는 체크인 불가
+    }
 }

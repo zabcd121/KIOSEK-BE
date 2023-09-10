@@ -23,7 +23,6 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Account account;
 
-    //TODO: JoinColumn Name 변경 때문인지 확인하기
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_qr")
     private AccountQR accountQR;
@@ -37,6 +36,18 @@ public class Member extends BaseTimeEntity {
 
     @Column(unique = true, nullable = false, length = 50)
     private String email;
+
+    public static Member createMember(Account account, String email, String name, QRImage accountQRCodeImage) {
+        Member member = Member.builder()
+                .account(account)
+                .email(email)
+                .name(name)
+                .roleType(RoleType.ROLE_MEMBER)
+                .build();
+
+        member.changeAccountQR(AccountQR.builder().qrImage(accountQRCodeImage).build());
+        return member;
+    }
 
     public void changeAccountQR(AccountQR accountQR) {
         if(this.accountQR != null) {
@@ -66,17 +77,4 @@ public class Member extends BaseTimeEntity {
 
         return roleList;
     }
-
-    public static Member createMember(Account account, String email, String name, QRImage accountQRCodeImage) {
-        Member member = Member.builder()
-                .account(account)
-                .email(email)
-                .name(name)
-                .roleType(RoleType.ROLE_MEMBER)
-                .build();
-
-        member.changeAccountQR(AccountQR.builder().qrImage(accountQRCodeImage).build());
-        return member;
-    }
-
 }

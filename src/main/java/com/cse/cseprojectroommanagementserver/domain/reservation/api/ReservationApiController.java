@@ -24,7 +24,7 @@ import static com.cse.cseprojectroommanagementserver.global.jwt.JwtTokenProvider
 public class ReservationApiController {
 
     private final ReserveTableService reserveTableService;
-    private final ReserveTableFacadeService reserveTableFacadeService;
+    private final ReserveTableWithLockService reserveTableWithLockService;
     private final ReservationSearchService reservationSearchService;
     private final ReservationCancelService reservationCancelService;
     private final ReservationAuthService reservationAuthService;
@@ -35,7 +35,7 @@ public class ReservationApiController {
     @PostMapping("/v2/reservations")
     public SuccessResponseNoResult reserveByWeb(@RequestBody @Validated ReserveReq reserveReq, HttpServletRequest request) {
         Long memberId = Long.parseLong(jwtTokenProvider.getSubject(jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER))));
-        reserveTableFacadeService.reserve(memberId, reserveReq);
+        reserveTableWithLockService.reserve(memberId, reserveReq);
         return new SuccessResponseNoResult(RESERVE_SUCCESS);
     }
 
@@ -58,7 +58,8 @@ public class ReservationApiController {
     @GetMapping("/v1/reservations")
     public SuccessResponse<ReservedAndTableDeactivationInfoRes> getReservationListByProjectRoom(@RequestParam Long projectRoomId,
                                                                                                 @ModelAttribute FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
-        ReservedAndTableDeactivationInfoRes reservedAndTableDeactivationInfoRes = reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
+        ReservedAndTableDeactivationInfoRes reservedAndTableDeactivationInfoRes =
+                reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
         return new SuccessResponse(RESERVATION_SEARCH_SUCCESS, reservedAndTableDeactivationInfoRes);
     }
 
@@ -85,7 +86,7 @@ public class ReservationApiController {
 
     @PostMapping("/v1/reservations/auth")
     public SuccessResponseNoResult checkInWithReservationQR(@RequestBody @Validated QRAuthReq qrContent) {
-        reservationAuthService.checkInWIthReservationQR(qrContent);
+        reservationAuthService.checkInWithReservationQR(qrContent);
         return new SuccessResponseNoResult(CHECKIN_SUCCESS);
     }
 }

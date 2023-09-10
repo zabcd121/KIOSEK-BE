@@ -2,17 +2,13 @@ package com.cse.cseprojectroommanagementserver.unittest.domain.reservation.appli
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
-import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.service.ReservationValidator;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.validator.ReservationValidator;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.error.exception.*;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;

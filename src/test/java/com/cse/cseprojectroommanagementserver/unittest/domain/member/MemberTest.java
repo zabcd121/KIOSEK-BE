@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.unittest.member;
+package com.cse.cseprojectroommanagementserver.unittest.domain.member;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Account;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.AccountQR;

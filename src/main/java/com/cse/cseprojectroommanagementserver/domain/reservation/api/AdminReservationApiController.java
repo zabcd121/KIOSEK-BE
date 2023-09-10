@@ -21,7 +21,9 @@ public class AdminReservationApiController {
     private final ReservationSearchService reservationSearchService;
 
     @GetMapping("/v1/reservations")
-    public SuccessResponse<Page<SearchReservationByPagingRes>> getReservationList(ReservationSearchCondition searchCondition, Pageable pageable) {
-        return new SuccessResponse(RESERVATION_SEARCH_SUCCESS, reservationSearchService.searchReservationListByConditionAndPageable(searchCondition, pageable));
+    public SuccessResponse<Page<SearchReservationByPagingRes>> getReservationList(ReservationSearchCondition searchCondition,
+                                                                                  Pageable pageable) {
+        return new SuccessResponse(RESERVATION_SEARCH_SUCCESS,
+                reservationSearchService.searchReservationListByConditionAndPageable(searchCondition, pageable));
     }
 }

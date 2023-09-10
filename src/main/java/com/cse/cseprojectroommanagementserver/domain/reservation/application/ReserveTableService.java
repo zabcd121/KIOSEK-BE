@@ -2,37 +2,25 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
-import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.validator.ReservationValidator;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.service.ReservationValidator;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
-import com.cse.cseprojectroommanagementserver.global.error.ErrorCode;
-import com.cse.cseprojectroommanagementserver.global.error.exception.*;
 import com.cse.cseprojectroommanagementserver.global.util.qrgenerator.QRGenerator;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto.ReserveReq;
-import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.RESERVATION_COUNT;
-import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.RT;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReserveTableService {
 
@@ -42,7 +30,6 @@ public class ReserveTableService {
     private final ProjectTableRepository projectTableRepository;
     private final QRGenerator qrGenerator;
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Transactional
     public Reservation reserve(Long memberId, ReserveReq reserveReq) {
         reservationValidator.validate(memberId, reserveReq.getProjectTableId(), reserveReq.getStartAt(), reserveReq.getEndAt());

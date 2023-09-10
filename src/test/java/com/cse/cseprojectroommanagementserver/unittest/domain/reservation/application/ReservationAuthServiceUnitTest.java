@@ -5,7 +5,7 @@ import com.cse.cseprojectroommanagementserver.domain.reservation.application.Res
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.repository.ReservationSearchRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.ReservationQR;
+import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationQR;
 import com.cse.cseprojectroommanagementserver.global.dto.QRImage;
 import com.cse.cseprojectroommanagementserver.global.error.exception.BusinessRuleException;
 import com.cse.cseprojectroommanagementserver.global.error.exception.IncorrectException;
@@ -78,7 +78,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(false);
 
         // When
-        reservationAuthService.checkInWIthReservationQR(qrAuthReq);
+        reservationAuthService.checkInWithReservationQR(qrAuthReq);
 
         // Then
         assertEquals(IN_USE, findReservation.getReservationStatus());
@@ -91,7 +91,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())).willReturn(Optional.ofNullable(null));
 
         // When, Then
-        assertThrows(IncorrectException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(IncorrectException.class, () -> reservationAuthService.checkInWithReservationQR(qrAuthReq));
     }
 
     @Test
@@ -118,7 +118,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(true);
 
         // When, Then
-        assertThrows(BusinessRuleException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(BusinessRuleException.class, () -> reservationAuthService.checkInWithReservationQR(qrAuthReq));
     }
 
     @Test
@@ -145,7 +145,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(false);
 
         // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWithReservationQR(qrAuthReq));
     }
 
     @Test
@@ -172,7 +172,7 @@ class ReservationAuthServiceUnitTest {
         given(reservationVerifiableRepository.existsCurrentlyInUseTableBy(findReservation.getProjectTable().getTableId(), findReservation.getStartAt())).willReturn(false);
 
         // When, Then
-        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWIthReservationQR(qrAuthReq));
+        assertThrows(PolicyInfractionException.class, () -> reservationAuthService.checkInWithReservationQR(qrAuthReq));
     }
 
 }

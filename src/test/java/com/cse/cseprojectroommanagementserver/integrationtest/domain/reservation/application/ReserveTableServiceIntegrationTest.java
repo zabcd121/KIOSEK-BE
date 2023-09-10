@@ -2,11 +2,9 @@ package com.cse.cseprojectroommanagementserver.integrationtest.domain.reservatio
 
 import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
 import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableFacadeService;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableService;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableWithLockService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
-import com.cse.cseprojectroommanagementserver.integrationtest.common.BaseIntegrationTestWithSecurityFilter;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.MemberSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ProjectTableSetUp;
 import com.cse.cseprojectroommanagementserver.integrationtest.setup.ReservationPolicySetUp;
@@ -16,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -46,7 +43,7 @@ class ReserveTableServiceIntegrationTest {
     private MemberSetUp memberSetUp;
 
     @Autowired
-    private ReserveTableFacadeService reserveTableService;
+    private ReserveTableWithLockService reserveTableService;
 
     @Autowired
     private EntityManager em;

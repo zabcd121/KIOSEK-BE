@@ -43,7 +43,6 @@ public class CseProjectRoomManagementServerApplication {
         return new NamedLockRepository(reserveLockDataSource());
     }
 
-
     @Bean
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);

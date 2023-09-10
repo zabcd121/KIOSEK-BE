@@ -43,13 +43,6 @@ public class Penalty extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate endDt;
 
-    public void extendEndDate(LocalDate newEndDt) {
-        if(newEndDt.isBefore(this.endDt)) {
-            throw new BusinessRuleException(ErrorCode.ALREADY_SUSPENDED);
-        }
-        this.endDt = newEndDt;
-    }
-
     public static Penalty createPenalty(Member member, PenaltyPolicy penaltyPolicy, List<Violation> violationList) {
         int unusedCnt = 0;
         int notReturnedCnt = 0;
@@ -70,4 +63,10 @@ public class Penalty extends BaseTimeEntity {
         return penalty;
     }
 
+    public void extendEndDate(LocalDate newEndDt) {
+        if(newEndDt.isBefore(this.endDt)) {
+            throw new BusinessRuleException(ErrorCode.ALREADY_SUSPENDED);
+        }
+        this.endDt = newEndDt;
+    }
 }

@@ -11,7 +11,7 @@ import static com.cse.cseprojectroommanagementserver.global.config.RedisConfig.R
 
 @Service
 @RequiredArgsConstructor
-public class ReserveTableFacadeService {
+public class ReserveTableWithLockService {
 
     private static final int LOCK_TIMEOUT_SECONDS = 3;
 
