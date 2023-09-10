@@ -174,9 +174,7 @@
 나는 그래서 상대방이 의견을 내었고 내가 잠시 생각할 시간이 필요하다면 "좋은 의견이라고 생각하는데 잠시만 머릿속으로 정리해볼게"라고 표현한다. 이러면 상대방은 자신의 의견이 존중받음을 느낄 수 있고, 그 의견에 부정적인 견해를 전달하더라도 "충분히 생각해 보고 한 말이구나"라는 느낌을 받을 수 있다고 생각한다.
 </p>
 </details>
-    
-  <a href="https://devpoong.tistory.com/105"><p style="font-size: 17px">👉 회고 글 보기
-</a>  
+    <a href="https://devpoong.tistory.com/105"><p style="font-size: 17px">👉 회고 글 보기</p></a>
 <br>
 <hr>
 <h1 id="issue">❗️이슈 해결 과정 정리</h1>
