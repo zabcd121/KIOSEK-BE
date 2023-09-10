@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ReservationCancelService {
     private final ReservationSearchableRepository reservationSearchableRepository;
 
     @Timed("kiosek.reservation")
-    @Transactional
     public void cancelReservation(Long memberId, Long reservationId) {
         Reservation findReservation = reservationSearchableRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_RESERVATION));

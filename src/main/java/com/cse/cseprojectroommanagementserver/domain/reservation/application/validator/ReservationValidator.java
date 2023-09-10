@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.domain.reservation.domain.service;
+package com.cse.cseprojectroommanagementserver.domain.reservation.application.validator;
 
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;

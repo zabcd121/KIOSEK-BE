@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.cse.cseprojectroommanagementserver.domain.complaint.dto.ComplaintReqDto.*;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ComplainService {
 
@@ -21,7 +21,6 @@ public class ComplainService {
     private final ProjectRoomRepository projectRoomRepository;
     private final FileUploadUtil fileUploadUtil;
 
-    @Transactional
     public void complain(ComplainReq complainReq) {
         Image image = fileUploadUtil.uploadComplainsImage(complainReq.getPhoto());
 

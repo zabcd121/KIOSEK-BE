@@ -1,14 +1,9 @@
-package com.cse.cseprojectroommanagementserver.domain.reservation.domain.service;
+package com.cse.cseprojectroommanagementserver.unittest.domain.reservation.application;
 
-import com.cse.cseprojectroommanagementserver.domain.member.domain.model.Member;
-import com.cse.cseprojectroommanagementserver.domain.member.domain.repository.MemberRepository;
 import com.cse.cseprojectroommanagementserver.domain.penalty.domain.repository.PenaltySearchableRepository;
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.ProjectTable;
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.repository.ProjectTableRepository;
-import com.cse.cseprojectroommanagementserver.domain.reservation.application.ReserveTableService;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
-import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationVerifiableRepository;
+import com.cse.cseprojectroommanagementserver.domain.reservation.application.validator.ReservationValidator;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationReqDto;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.model.ReservationPolicy;
 import com.cse.cseprojectroommanagementserver.domain.reservationpolicy.domain.repository.ReservationPolicySearchableRepository;

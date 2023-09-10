@@ -13,7 +13,7 @@ import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.Rese
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ReservationAuthService {
 
@@ -21,8 +21,7 @@ public class ReservationAuthService {
     private final ReservationVerifiableRepository reservationVerifiableRepository;
 
     // 체크인은 내가 예약한 테이블이 이전 예약자가 사용을 하고 있지 않을 경우 시작시간 20분전부터 체크인 가능하다.
-    @Transactional
-    public void checkInWIthReservationQR(QRAuthReq qrAuthReq) {
+    public void checkInWithReservationQR(QRAuthReq qrAuthReq) {
         Reservation findReservation = reservationSearchableRepository.findByQRContents(qrAuthReq.getQrContent())
                 .orElseThrow(() -> new IncorrectException(ErrorCode.INCORRECT_AUTH_CODE));
 

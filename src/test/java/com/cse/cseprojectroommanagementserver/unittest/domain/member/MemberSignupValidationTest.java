@@ -1,4 +1,4 @@
-package com.cse.cseprojectroommanagementserver.unittest.member;
+package com.cse.cseprojectroommanagementserver.unittest.domain.member;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

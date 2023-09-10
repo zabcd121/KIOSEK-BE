@@ -31,7 +31,7 @@ public class ReservationSetUp {
     public Reservation saveReservationWithStatus(ReservationStatus reservationStatus, Member member, ProjectTable projectTable, LocalDateTime startAt, LocalDateTime endAt) {
         QRImage qrImage = QRImage.builder().fileOriName(member.getLoginId()).fileLocalName(member.getLoginId()).fileUrl("/test/").content("content").build();
         Reservation createdReservation = Reservation.createReservation(member, projectTable, qrImage, startAt, endAt);
-        createdReservation.setReservationStatus(reservationStatus);
+        createdReservation.changeReservationStatus(reservationStatus);
         return reservationRepository.save(createdReservation);
     }
 

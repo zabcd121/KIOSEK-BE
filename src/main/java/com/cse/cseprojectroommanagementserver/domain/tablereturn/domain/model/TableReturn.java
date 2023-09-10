@@ -56,20 +56,20 @@ public class TableReturn extends BaseTimeEntity {
 
     private void changeReservation(Reservation reservation){
         if(this.reservation != null) {
-            this.reservation.setTableReturn(null);
+            this.reservation.changeTableReturn(null);
         }
         this.reservation = reservation;
-        this.reservation.setTableReturn(this);
-        this.reservation.setReservationStatus(RETURNED);
+        this.reservation.changeTableReturn(this);
+        this.reservation.changeReservationStatus(RETURNED);
     }
 
     private void changeReservationByAutoReturn(Reservation reservation) {
         if(this.reservation != null) {
-            this.reservation.setTableReturn(null);
+            this.reservation.changeTableReturn(null);
         }
         this.reservation = reservation;
-        this.reservation.setTableReturn(this);
-        this.reservation.setReservationStatus(NOT_RETURNED);
+        this.reservation.changeTableReturn(this);
+        this.reservation.changeReservationStatus(NOT_RETURNED);
     }
 
 }

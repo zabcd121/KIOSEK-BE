@@ -22,4 +22,9 @@ public class ReservationSearchCondition {
     private String loginId;
     private String reservationStatus;
     private String roomName;
+
+    public String getConditionKey() {
+        return this.getStartDt().toString() + this.getEndDt().toString()
+                + this.getMemberName()+ this.getReservationStatus() + this.getRoomName() + this.getLoginId();
+    }
 }

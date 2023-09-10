@@ -57,7 +57,7 @@ public class AutoTableReturnSchedulingService {
         List<Reservation> unUsedReservationList = reservationSearchableRepository.findUnUsedReservations();
         for (Reservation unUsedReservation : unUsedReservationList) {
             log.debug("autoCancelUnUsedReservation 동작: reservation is unused");
-            unUsedReservation.setReservationStatus(UN_USED);
+            unUsedReservation.changeReservationStatus(UN_USED);
         }
         addViolationLog(unUsedReservationList, ViolationContent.UN_USED_CONTENT);
     }
@@ -71,7 +71,7 @@ public class AutoTableReturnSchedulingService {
         log.info("changeUsedReservationToReturnWaiting");
         List<Reservation> reservationList = reservationSearchableRepository.findFinishedButInUseStatusReservations().orElseGet(null);
         for (Reservation reservation : reservationList) {
-            reservation.setReservationStatus(RETURN_WAITING);
+            reservation.changeReservationStatus(RETURN_WAITING);
         }
     }
 

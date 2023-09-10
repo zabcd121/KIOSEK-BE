@@ -69,15 +69,14 @@ public class ReservationSearchService {
 
     private Long getTotalReservationCount(ReservationSearchCondition condition) {
         Long totalReservationCount = null;
-        String key = RESERVATION_COUNT + condition.getStartDt() + condition.getEndDt() + condition.getMemberName()+ condition.getReservationStatus() + condition.getRoomName() + condition.getLoginId();
+        String key = RESERVATION_COUNT + condition.getConditionKey();
         Object reservationCountObject = redisTemplate.opsForValue().get(key);
 
         if (reservationCountObject != null) {
-            totalReservationCount = Long.parseLong(reservationCountObject.toString());
-        }else {
-            totalReservationCount = reservationSearchableRepository.countByCondition(condition);
-            redisTemplate.opsForValue().set(key, totalReservationCount.toString(), RESERVATION_COUNT_EXPIRE_TIME, TimeUnit.SECONDS);
+            return Long.parseLong(reservationCountObject.toString());
         }
+        totalReservationCount = reservationSearchableRepository.countByCondition(condition);
+        redisTemplate.opsForValue().set(key, totalReservationCount.toString(), RESERVATION_COUNT_EXPIRE_TIME, TimeUnit.SECONDS);
 
         return totalReservationCount;
     }

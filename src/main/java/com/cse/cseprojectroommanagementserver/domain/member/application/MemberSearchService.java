@@ -37,6 +37,7 @@ public class MemberSearchService {
         Penalty currentPenalty = null;
         if(penaltyList != null) {
             penaltyCount = penaltyList.size();
+            
             currentPenalty = penaltyList.stream()
                     .filter(penalty ->
                             (penalty.getStartDt().isBefore(LocalDate.now()) || penalty.getStartDt().isEqual(LocalDate.now()))
