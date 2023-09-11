@@ -156,7 +156,7 @@ Named Lock의 lock name은 회의실 정보와 예약 시간을 메타데이터�
     <p>페이지를 넘길때마다 비효율적으로 호출되던 Count Query로 인한 성능저하를 해결하기 위해, **Look-Aside** 전략을 이용해 **Redis**에 **총 예약건수를 캐싱**하는 방법을 적용했습니다.<br>
 예약이 들어오면 캐시 데이터를 지워주고 Cache Miss가 발생하면 Count Query를 새로 실행하고 캐싱하는 방식으로 약 34만 개의 데이터를 대상으로 1.7s → 1.1s 로 성능을 약 56% 향상 시켰습니다.  </p>
     <a href="https://devpoong.tistory.com/124"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
-    <h3>4. Custom Exception, ExceptionHandler 설계에서 나쁜 코드에 대한 고민과 리팩토링 과정</h3>
+    <h3>4. Custom Exception 더 나은 설계에 대한 고민과 리팩토링 과정</h3>
     <p>예외상황마다 각각 하나의 커스텀 예외를 생성하다보니, 커스텀 예외의 수가 너무 많아지는 문제가 있었습니다.<br>
     이를 해결하기 위해 표준예외를 사용하는 대신 현재 프로젝트에서 주로 발생하는 예외를 대상으로 한번 더 추상화하고<br> ErrorCode를 추가적으로 인자로 넣어주어 가독성을 높이는 방식으로 구현하였습니다.</p>
     <a href="https://devpoong.tistory.com/90"><p style="font-size: 17px">👉 블로그 글 보기</p></a>
