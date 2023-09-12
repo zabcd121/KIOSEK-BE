@@ -37,14 +37,13 @@ public class MemberSearchService {
         Penalty currentPenalty = null;
         if(penaltyList != null) {
             penaltyCount = penaltyList.size();
-            
+
             currentPenalty = penaltyList.stream()
                     .filter(penalty ->
                             (penalty.getStartDt().isBefore(LocalDate.now()) || penalty.getStartDt().isEqual(LocalDate.now()))
                             && (penalty.getEndDt().isAfter(LocalDate.now()) || penalty.getEndDt().isEqual(LocalDate.now())))
                     .findFirst().orElseGet(() -> null);
         }
-        
 
         return MemberComplexInfoRes.of(member.getAccountQR(), violationsCount, currentPenalty, pastReservationsCount, penaltyCount);
     }
