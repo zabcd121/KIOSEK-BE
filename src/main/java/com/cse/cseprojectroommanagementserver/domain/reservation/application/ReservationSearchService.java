@@ -3,12 +3,10 @@ package com.cse.cseprojectroommanagementserver.domain.reservation.application;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
 import com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationSearchCondition;
 import com.cse.cseprojectroommanagementserver.domain.tabledeactivation.domain.repository.TableDeactivationSearchableRepository;
-import com.cse.cseprojectroommanagementserver.global.config.RedisConfig;
 import com.cse.cseprojectroommanagementserver.global.util.aes256.AES256;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +46,7 @@ public class ReservationSearchService {
     }
 
     @Timed("kiosek.reservation")
-    public ReservedAndTableDeactivationInfoRes searchReservationListByProjectRoom(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
+    public ReservedAndTableDeactivationInfoRes searchReservationListByProjectRoomAndBetweenAT(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
 
         List<ReservationSearchRes> reservedList = reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
 

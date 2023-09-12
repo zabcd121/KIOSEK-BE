@@ -59,7 +59,7 @@ public class ReservationApiController {
     public SuccessResponse<ReservedAndTableDeactivationInfoRes> getReservationListByProjectRoom(@RequestParam Long projectRoomId,
                                                                                                 @ModelAttribute FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
         ReservedAndTableDeactivationInfoRes reservedAndTableDeactivationInfoRes =
-                reservationSearchService.searchReservationListByProjectRoom(projectRoomId, firstAndLastDateTimeReq);
+                reservationSearchService.searchReservationListByProjectRoomAndBetweenAT(projectRoomId, firstAndLastDateTimeReq);
         return new SuccessResponse(RESERVATION_SEARCH_SUCCESS, reservedAndTableDeactivationInfoRes);
     }
 

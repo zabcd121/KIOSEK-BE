@@ -6,15 +6,15 @@ spring:
       - ./application-filedir.yml
       - ./application-jwt.yml
       - ./application-monitor.yml
-      - ./application-prod1.yml
+      - ./application-devdb.yml
 #      - ./properties/application-mail.yml
 #      - ./properties/application-filedir.yml
 #      - ./properties/application-jwt.yml
 #      - ./properties/application-monitor.yml
 #      - ./properties/application-devdb.yml
   profiles:
-    active: prod1 # dev, prod, test
-    include: prod1
+    active: devdb # dev, prod, test
+    include: devdb
 
   servlet:
     multipart:
@@ -32,10 +32,13 @@ spring:
       request-timeout: 5000
 
 server:
-  port: 8050
+  port: 0
   tomcat:
     mbeanregistry:
       enabled: true
+    connection-timeout: 10000
+    threads:
+      max: 100
 
 logging:
   level:

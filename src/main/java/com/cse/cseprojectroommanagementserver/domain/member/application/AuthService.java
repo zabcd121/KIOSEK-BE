@@ -65,10 +65,9 @@ public class AuthService {
     public TokensDto reissueToken(String resolvedRefreshToken) {
         try {
             jwtTokenProvider.validateToken(resolvedRefreshToken);
-        } catch (ExpiredJwtException ex) {
+        } catch (TokenException ex) {
             throw new ExpiredException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
-
         Authentication authentication = jwtTokenProvider.getAuthentication(resolvedRefreshToken);
 
         String findRedisRefreshToken = (String) redisTemplate.opsForValue().get(RT + authentication.getName());
