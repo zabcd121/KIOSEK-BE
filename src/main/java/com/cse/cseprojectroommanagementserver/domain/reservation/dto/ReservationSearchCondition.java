@@ -24,7 +24,26 @@ public class ReservationSearchCondition {
     private String roomName;
 
     public String getConditionKey() {
-        return this.getStartDt().toString() + this.getEndDt().toString()
-                + this.getMemberName()+ this.getReservationStatus() + this.getRoomName() + this.getLoginId();
+        String key = "";
+        if (this.getStartDt() != null) {
+            key += this.startDt.toString();
+        }
+        if (this.getEndDt() != null) {
+            key += this.endDt.toString();
+        }
+        if (this.getMemberName() != null) {
+            key += this.memberName;
+        }
+        if (this.getReservationStatus() != null) {
+            key += this.reservationStatus;
+        }
+        if (this.getRoomName() != null) {
+            key += this.roomName;
+        }
+        if (this.getLoginId() != null) {
+            key += this.loginId;
+        }
+
+        return key;
     }
 }

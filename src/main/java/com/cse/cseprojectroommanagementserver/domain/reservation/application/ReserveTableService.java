@@ -38,7 +38,7 @@ public class ReserveTableService {
 
         return reservationRepository.save(
                 Reservation.createReservation(
-                        memberRepository.getReferenceById(memberId), //성능 향상을 위해 proxy 객체를 넣음
+                        memberRepository.getReferenceById(memberId),
                         projectTableRepository.getReferenceById(reserveReq.getProjectTableId()),
                         reservationQrImage,
                         reserveReq.getStartAt(),
