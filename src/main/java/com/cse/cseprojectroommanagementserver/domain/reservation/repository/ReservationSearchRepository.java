@@ -1,6 +1,5 @@
 package com.cse.cseprojectroommanagementserver.domain.reservation.repository;
 
-import com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.Reservation;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus;
 import com.cse.cseprojectroommanagementserver.domain.reservation.domain.repository.ReservationSearchableRepository;
@@ -28,9 +27,9 @@ import static com.cse.cseprojectroommanagementserver.domain.member.dto.MemberRes
 import static com.cse.cseprojectroommanagementserver.domain.projectroom.domain.model.QProjectRoom.*;
 import static com.cse.cseprojectroommanagementserver.domain.projecttable.domain.model.QProjectTable.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservation.*;
+import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.QReservationQR.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.domain.model.ReservationStatus.*;
 import static com.cse.cseprojectroommanagementserver.domain.reservation.dto.ReservationResDto.*;
-import static com.cse.cseprojectroommanagementserver.domain.reservationqr.domain.model.QReservationQR.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.domain.model.QTableReturn.*;
 import static com.cse.cseprojectroommanagementserver.domain.tablereturn.dto.TableReturnResDto.*;
 import static com.cse.cseprojectroommanagementserver.global.dto.ReservationFixedPolicy.*;

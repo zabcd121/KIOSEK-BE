@@ -48,11 +48,12 @@ public class ReservationSearchService {
     @Timed("kiosek.reservation")
     public ReservedAndTableDeactivationInfoRes searchReservationListByProjectRoomAndBetweenAT(Long projectRoomId, FirstAndLastDateTimeReq firstAndLastDateTimeReq) {
 
-        List<ReservationSearchRes> reservedList = reservationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
+        List<ReservationSearchRes> reservedList = reservationSearchableRepository
+                .findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
 
 
-        List<TableDeactivationSearchRes> tableDeactivationInfo = tableDeactivationSearchableRepository.findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
-
+        List<TableDeactivationSearchRes> tableDeactivationInfo = tableDeactivationSearchableRepository.
+                findAllByProjectRoomIdAndBetweenFirstAtAndLastAt(projectRoomId, firstAndLastDateTimeReq.getFirstAt(), firstAndLastDateTimeReq.getLastAt());
 
         return ReservedAndTableDeactivationInfoRes.of(reservedList, tableDeactivationInfo);
     }
