@@ -118,7 +118,7 @@ public class Reservation extends BaseTimeEntity {
 
     public void checkIn(boolean isPreviousMemberInUse) {
         if (isPreviousMemberInUse) throw new BusinessRuleException(ErrorCode.CHECKIN_IMPOSSIBLE_STATUS); // 체크인 하려는 테이블이 현재 사용중이면 미리 체크인 불가능함.
-        else if (!isCheckInAvailableTime()) {
+        else if (isCheckInAvailableTime()) {
             throw new PolicyInfractionException(ErrorCode.CHECKIN_TIME_POLICY_INFRACTION);
         }
         this.checkInTime = LocalDateTime.now();
@@ -126,6 +126,9 @@ public class Reservation extends BaseTimeEntity {
     }
 
     private boolean isCheckInAvailableTime() {
+        System.out.println("시작시간: " + this.startAt);
+        System.out.println("현재시간: " + LocalDateTime.now());
+        System.out.println("종료시간: " + this.endAt);
         return LocalDateTime.now().isBefore(
                 this.startAt.minusMinutes(ReservationFixedPolicy.POSSIBLE_CHECKIN_TIME_BEFORE.getValue())) //시작시간 20분이상 전에는 체크인 불가
                 || LocalDateTime.now().isAfter(
