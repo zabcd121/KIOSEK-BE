@@ -38,6 +38,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessLogicException(AbstractBusinessLogicException e){
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
+        log.error(e.getMessage());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 
@@ -45,6 +46,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessLogicException(AbstractErrorException e){
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
+        log.error(e.getMessage());
         return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 

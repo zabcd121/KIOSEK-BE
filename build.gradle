@@ -57,6 +57,9 @@ dependencies {
     }
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // 반환 JsonObject 직접 생성 관련
+    implementation group: 'org.json', name: 'json', version: '20220320'
+
     //jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
